@@ -87,8 +87,7 @@ int main(int argc, char** argv) {
 		}
 
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0xCC, 0xEE, 0xDD)); // clear screen
-		SDL_SetColorKey(bmp, SDL_SRCCOLORKEY, SDL_MapRGB(bmp->format, 255, 0, 0));
-        /* On blitte l'image maintenant transparente sur le fond : */
+		SDL_SetColorKey(bmp, SDL_SRCCOLORKEY, SDL_MapRGB(bmp->format, 255, 0, 0)); // set transparency
 		SDL_BlitSurface(bmp, NULL, screen, &dstrect); // draw bitmap
 		SDL_Flip(screen); // update the screen
 
