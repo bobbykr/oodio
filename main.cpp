@@ -12,7 +12,7 @@
 
 uint8_t sawtooth = 0;
 
-void updateaudio(void* udata, uint8_t* stream, int len) {
+void audioCallback(void* udata, uint8_t* stream, int len) {
 	for (; len; len--) {
 		*stream++ = sawtooth++;
 	}
@@ -34,13 +34,14 @@ int main(int argc, char** argv) {
 	audioSpec.format   = AUDIO_S16;
 	audioSpec.channels = 1;
 	audioSpec.samples  = 512;
-	audioSpec.callback = updateaudio;
+	audioSpec.callback = audioCallback;
 
 	if (SDL_OpenAudio(&audioSpec, NULL) < 0) {
 		fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
 		return(-1);
 	};
 
+	// start audio
 	SDL_PauseAudio(0);
 
 	// create a new window
@@ -51,7 +52,7 @@ int main(int argc, char** argv) {
 	}
 
 	// load image
-	SDL_Surface* bmp = SDL_LoadBMP("cb.bmp");
+	SDL_Surface* bmp = SDL_LoadBMP("mario.bmp");
 	if (!bmp) {
 		printf("Unable to load bitmap: %s\n", SDL_GetError());
 		return 1;
