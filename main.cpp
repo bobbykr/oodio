@@ -12,10 +12,11 @@
 
 uint8_t sawtooth0 = 0;
 uint8_t sawtooth1 = 0;
+uint8_t amp = 0;
 
 void audioCallback(void* udata, uint8_t* stream, int len) {
 	for (; len; len--) {
-		*stream++ = (sawtooth0++ >> 5) + (sawtooth1 >> 6);
+		*stream++ = ((sawtooth0++ >> 4) + (sawtooth1 >> 5)) * amp;
 		sawtooth1 += 3;
 	}
 }
@@ -84,6 +85,7 @@ int main(int argc, char** argv) {
 			case SDL_KEYDOWN:
 				// exit if ESCAPE is pressed
 				if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
+				if (event.key.keysym.sym == SDLK_SPACE) amp = amp == 0 ? 255 : 0;
 				break;
 			}
 		}
