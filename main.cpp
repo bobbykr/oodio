@@ -18,7 +18,6 @@ void updateaudio(void* udata, uint8_t* stream, int len) {
 	}
 }
 
-
 int main(int argc, char** argv) {
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
@@ -51,7 +50,7 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	// load an image
+	// load image
 	SDL_Surface* bmp = SDL_LoadBMP("cb.bmp");
 	if (!bmp) {
 		printf("Unable to load bitmap: %s\n", SDL_GetError());
@@ -66,13 +65,15 @@ int main(int argc, char** argv) {
 	// program main loop
 	bool done = false;
 	while (!done) {
+
+		//-------------------------
 		// message processing loop
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			// check for messages
 			switch (event.type) {
-				// exit if the window is closed
 			case SDL_QUIT:
+				// exit if the window is closed
 				done = true;
 				break;
 
@@ -81,32 +82,20 @@ int main(int argc, char** argv) {
 				// exit if ESCAPE is pressed
 				if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
 				break;
-			} // end switch
-		} // end of message processing
+			}
+		}
 
-		// DRAWING STARTS HERE
 		
-		// clear screen
-		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
-
-		// draw bitmap
-		SDL_BlitSurface(bmp, 0, screen, &dstrect);
-
-		// DRAWING ENDS HERE
-
-		// finally, update the screen :)
-		SDL_Flip(screen);
+		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0)); // clear screen
+		SDL_BlitSurface(bmp, 0, screen, &dstrect); // draw bitmap
+		SDL_Flip(screen); // update the screen
 
 		SDL_Delay(100);
 	}
 
-	// close audio
-	SDL_CloseAudio();
-
-	// free loaded bitmap
-	SDL_FreeSurface(bmp);
-
-	// all is well ;)
+	
+	SDL_CloseAudio(); // close audio
+	SDL_FreeSurface(bmp); // free loaded bitmap
 	printf("Exited cleanly\n");
 	return 0;
 }
