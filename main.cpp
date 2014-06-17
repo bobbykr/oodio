@@ -14,7 +14,7 @@ uint8_t sawtooth = 0;
 
 void audioCallback(void* udata, uint8_t* stream, int len) {
 	for (; len; len--) {
-		*stream++ = sawtooth++;
+		*stream++ = sawtooth++ >> 5;
 	}
 }
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
 		printf("Unable to load bitmap: %s\n", SDL_GetError());
 		return 1;
 	}
-	
+
 	// centre the bitmap on screen
 	SDL_Rect dstrect;
 	dstrect.x = (screen->w - bmp->w) / 2;
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		
+
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0)); // clear screen
 		SDL_BlitSurface(bmp, 0, screen, &dstrect); // draw bitmap
 		SDL_Flip(screen); // update the screen
@@ -94,7 +94,7 @@ int main(int argc, char** argv) {
 		SDL_Delay(100);
 	}
 
-	
+
 	SDL_CloseAudio(); // close audio
 	SDL_FreeSurface(bmp); // free loaded bitmap
 	printf("Exited cleanly\n");
