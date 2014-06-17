@@ -10,11 +10,13 @@
 #include <SDL.h>
 #endif
 
-uint8_t sawtooth = 0;
+uint8_t sawtooth0 = 0;
+uint8_t sawtooth1 = 0;
 
 void audioCallback(void* udata, uint8_t* stream, int len) {
 	for (; len; len--) {
-		*stream++ = sawtooth++ >> 5;
+		*stream++ = (sawtooth0++ >> 5) + (sawtooth1 >> 6);
+		sawtooth1 += 3;
 	}
 }
 
@@ -93,7 +95,6 @@ int main(int argc, char** argv) {
 
 		SDL_Delay(100);
 	}
-
 
 	SDL_CloseAudio(); // close audio
 	SDL_FreeSurface(bmp); // free loaded bitmap
