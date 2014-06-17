@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifdef __cplusplus
 	#include <cstdlib>
 #else
@@ -9,15 +10,39 @@
 #include <SDL.h>
 #endif
 
+uint8_t sawtooth = 0;
+
+void updateaudio(void* udata, uint8_t* stream, int len) {
+	for (; len; len--) {
+		*stream++ = sawtooth++;
+	}
+}
+
+
 int main(int argc, char** argv) {
-	// initialize SDL video
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	// initialize SDL video and audio
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		printf("Unable to init SDL: %s\n", SDL_GetError());
 		return 1;
 	}
 
 	// make sure SDL cleans up before exit
 	atexit(SDL_Quit);
+
+	// init audio
+	SDL_AudioSpec audioSpec;
+	audioSpec.freq     = 44100;
+	audioSpec.format   = AUDIO_S16;
+	audioSpec.channels = 1;
+	audioSpec.samples  = 512;
+	audioSpec.callback = updateaudio;
+
+	if (SDL_OpenAudio(&audioSpec, NULL) < 0) {
+		fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+		return(-1);
+	};
+
+	SDL_PauseAudio(0);
 
 	// create a new window
 	SDL_Surface* screen = SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
@@ -71,7 +96,12 @@ int main(int argc, char** argv) {
 
 		// finally, update the screen :)
 		SDL_Flip(screen);
-	} // end main loop
+
+		SDL_Delay(100);
+	}
+
+	// close audio
+	SDL_CloseAudio();
 
 	// free loaded bitmap
 	SDL_FreeSurface(bmp);
