@@ -4,3 +4,6 @@ SDL.dll
 # Ignore build files
 bin/
 obj/
+
+# Ignore files created by Code::Block
+*.depend
