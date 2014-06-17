@@ -1,0 +1,6 @@
+# Ignore SDL binary
+SDL.dll
+
+# Ignore build files
+bin/
+obj/
