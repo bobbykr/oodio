@@ -2,10 +2,15 @@
 
 RenderingContext::RenderingContext(SDL_Surface* ctx) {
 	context = ctx;
+	backgroundColor = SDL_MapRGB(context->format, 0xCC, 0xEE, 0xDD);
 }
 
 void RenderingContext::clear() {
-	SDL_FillRect(context, 0, SDL_MapRGB(context->format, 0xCC, 0xEE, 0xDD));
+	SDL_FillRect(context, 0, backgroundColor);
+}
+
+void RenderingContext::update() {
+	SDL_Flip(context);
 }
 
 void RenderingContext::drawImage(SDL_Surface* img, int x, int y) {

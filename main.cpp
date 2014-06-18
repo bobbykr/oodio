@@ -55,8 +55,8 @@ int main(int argc, char** argv) {
 	RenderingContext ctx(screen);
 
 	// load image
-	SDL_Surface* bmp = SDL_LoadBMP("mario.bmp");
-	if (!bmp) {
+	SDL_Surface* asset = SDL_LoadBMP("mario.bmp");
+	if (!asset) {
 		printf("Unable to load bitmap: %s\n", SDL_GetError());
 		return 1;
 	}
@@ -86,16 +86,15 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		// SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0xCC, 0xEE, 0xDD)); // clear screen
 		ctx.clear();
-		ctx.drawImage(bmp, 32, 16, 16, 16, 200, 200);
-		SDL_Flip(screen); // update the screen
+		ctx.drawImage(asset, 32, 16, 16, 16, 200, 200);
+		ctx.update();
 
 		SDL_Delay(100);
 	}
 
 	SDL_CloseAudio(); // close audio
-	SDL_FreeSurface(bmp); // free loaded bitmap
+	SDL_FreeSurface(asset); // free loaded bitmap
 	printf("Exited cleanly\n");
 	return 0;
 }
