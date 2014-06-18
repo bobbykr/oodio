@@ -10,16 +10,23 @@
 #include <SDL.h>
 #endif
 
-uint8_t sawtooth0 = 0;
-uint8_t sawtooth1 = 0;
+#include "RenderingContext.h"
+
+#define round(x) ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+
+uint16_t sawtooth0 = 0;
+uint16_t sawtooth1 = 0;
 uint8_t amp = 0;
 
 void audioCallback(void* udata, uint8_t* stream, int len) {
-	for (; len; len--) {
-		*stream++ = ((sawtooth0++ >> 4) + (sawtooth1 >> 5)) * amp;
+	for (; len; len-=2) {
+		// *stream++ = ((sawtooth0++ >> 5) + (sawtooth1 >> 4)) * amp;
+		*stream++ = (sawtooth0++ >> 5) * amp;
+		*stream++ = (sawtooth1++ >> 5) * amp;
 		sawtooth1 += 3;
 	}
 }
+
 
 int main(int argc, char** argv) {
 	// initialize SDL video and audio
@@ -35,7 +42,7 @@ int main(int argc, char** argv) {
 	SDL_AudioSpec audioSpec;
 	audioSpec.freq     = 44100;
 	audioSpec.format   = AUDIO_S16;
-	audioSpec.channels = 1;
+	audioSpec.channels = 2;
 	audioSpec.samples  = 512;
 	audioSpec.callback = audioCallback;
 
@@ -54,17 +61,14 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
+	RenderingContext ctx(screen);
+
 	// load image
 	SDL_Surface* bmp = SDL_LoadBMP("mario.bmp");
 	if (!bmp) {
 		printf("Unable to load bitmap: %s\n", SDL_GetError());
 		return 1;
 	}
-
-	// centre the bitmap on screen
-	SDL_Rect dstrect;
-	dstrect.x = (screen->w - bmp->w) / 2;
-	dstrect.y = (screen->h - bmp->h) / 2;
 
 	// program main loop
 	bool done = false;
@@ -81,18 +85,18 @@ int main(int argc, char** argv) {
 				done = true;
 				break;
 
-				// check for keypresses
+			// check for keypresses
 			case SDL_KEYDOWN:
 				// exit if ESCAPE is pressed
 				if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
+				// start / stop sound with spacebar key
 				if (event.key.keysym.sym == SDLK_SPACE) amp = amp == 0 ? 255 : 0;
 				break;
 			}
 		}
 
 		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0xCC, 0xEE, 0xDD)); // clear screen
-		SDL_SetColorKey(bmp, SDL_SRCCOLORKEY, SDL_MapRGB(bmp->format, 255, 0, 0)); // set transparency
-		SDL_BlitSurface(bmp, NULL, screen, &dstrect); // draw bitmap
+		ctx.drawImage(bmp, 32, 16, 16, 16, 200, 200);
 		SDL_Flip(screen); // update the screen
 
 		SDL_Delay(100);
