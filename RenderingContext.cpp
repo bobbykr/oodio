@@ -5,7 +5,6 @@ RenderingContext::RenderingContext(SDL_Surface* ctx) {
 }
 
 void RenderingContext::drawImage(SDL_Surface* img, int x, int y) {
-	SDL_Rect translate;
 	translate.x = x;
 	translate.y = y;
 
@@ -14,13 +13,11 @@ void RenderingContext::drawImage(SDL_Surface* img, int x, int y) {
 }
 
 void RenderingContext::drawImage(SDL_Surface* img, int sx, int sy, int sw, int sh, int tx, int ty) {
-	SDL_Rect clip;
 	clip.x = sx;
 	clip.y = sy;
 	clip.w = sw;
 	clip.h = sh;
 
-	SDL_Rect translate;
 	translate.x = tx;
 	translate.y = ty;
 

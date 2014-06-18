@@ -19,7 +19,8 @@ public:
 private:
 
 	SDL_Surface* context;
-
+	SDL_Rect     clip;
+	SDL_Rect     translate;
 };
 
 #endif
