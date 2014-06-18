@@ -6,4 +6,5 @@ bin/
 obj/
 
 # Ignore files created by Code::Block
+*.cbp
 *.depend
