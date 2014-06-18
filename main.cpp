@@ -51,9 +51,9 @@ int main(int argc, char** argv) {
 	SDL_OpenAudio(&audioSpec, NULL);
 	SDL_PauseAudio(0); // start audio
 
-	SDL_Surface* screen = SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	SDL_Surface* screen = SDL_SetVideoMode(640, 640, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	RenderingContext ctx(screen);
-	ctx.backgroundColor(0xCC, 0xEE, 0xDD);
+	ctx.backgroundColor(0xCE, 0xD2, 0x1C);
 
 	// load image
 	SDL_Surface* asset = SDL_LoadBMP("mario.bmp");
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
 		}
 
 		ctx.clear();
-		ctx.drawImage(asset, 32, 16, 16, 16, 200, 200);
+		ctx.drawImage(asset, 0, 0, 24, 24, 64, 64);
 		ctx.update();
 
 		SDL_Delay(100);
