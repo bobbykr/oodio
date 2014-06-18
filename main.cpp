@@ -55,12 +55,10 @@ int main(int argc, char** argv) {
 	RenderingContext ctx(screen);
 	ctx.backgroundColor(0xCE, 0xD2, 0x1C);
 
-	// load image
+	// load images
 	SDL_Surface* asset = SDL_LoadBMP("mario.bmp");
-	if (!asset) {
-		printf("Unable to load bitmap: %s\n", SDL_GetError());
-		return 1;
-	}
+	SDL_Surface* font  = SDL_LoadBMP("amstradFont.bmp");
+
 
 	// program main loop
 	bool done = false;
@@ -88,7 +86,8 @@ int main(int argc, char** argv) {
 		}
 
 		ctx.clear();
-		ctx.drawImage(asset, 0, 0, 24, 24, 64, 64);
+		ctx.drawImage(asset, 0, 0, 24, 24, 256, 64);
+		ctx.drawImage(font, 0, 0);
 		ctx.update();
 
 		SDL_Delay(100);
