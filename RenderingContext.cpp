@@ -2,11 +2,15 @@
 
 RenderingContext::RenderingContext(SDL_Surface* ctx) {
 	context = ctx;
-	backgroundColor = SDL_MapRGB(context->format, 0xCC, 0xEE, 0xDD);
+	bgColor = SDL_MapRGB(context->format, 0, 0, 0);
+}
+
+void RenderingContext::backgroundColor(int r, int g, int b) {
+	bgColor = SDL_MapRGB(context->format, r, g, b);
 }
 
 void RenderingContext::clear() {
-	SDL_FillRect(context, 0, backgroundColor);
+	SDL_FillRect(context, 0, bgColor);
 }
 
 void RenderingContext::update() {

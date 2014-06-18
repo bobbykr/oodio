@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
 
 	SDL_Surface* screen = SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	RenderingContext ctx(screen);
+	ctx.backgroundColor(0xCC, 0xEE, 0xDD);
 
 	// load image
 	SDL_Surface* asset = SDL_LoadBMP("mario.bmp");
