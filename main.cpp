@@ -10,9 +10,10 @@
 #include <SDL.h>
 #endif
 
+#define round(x) ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+
 #include "RenderingContext.h"
 
-#define round(x) ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
 
 uint16_t sawtooth0 = 0;
 uint16_t sawtooth1 = 0;
@@ -46,21 +47,11 @@ int main(int argc, char** argv) {
 	audioSpec.samples  = 512;
 	audioSpec.callback = audioCallback;
 
-	if (SDL_OpenAudio(&audioSpec, NULL) < 0) {
-		fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-		return(-1);
-	};
 
-	// start audio
-	SDL_PauseAudio(0);
+	SDL_OpenAudio(&audioSpec, NULL);
+	SDL_PauseAudio(0); // start audio
 
-	// create a new window
 	SDL_Surface* screen = SDL_SetVideoMode(640, 480, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
-	if (!screen) {
-		printf("Unable to set 640x480 video: %s\n", SDL_GetError());
-		return 1;
-	}
-
 	RenderingContext ctx(screen);
 
 	// load image
@@ -95,7 +86,8 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0xCC, 0xEE, 0xDD)); // clear screen
+		// SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0xCC, 0xEE, 0xDD)); // clear screen
+		ctx.clear();
 		ctx.drawImage(bmp, 32, 16, 16, 16, 200, 200);
 		SDL_Flip(screen); // update the screen
 

@@ -13,6 +13,7 @@ public:
 
 	RenderingContext(SDL_Surface*);
 
+	void clear();
 	void drawImage(SDL_Surface*, int, int);
 	void drawImage(SDL_Surface*, int, int, int, int, int, int);
 

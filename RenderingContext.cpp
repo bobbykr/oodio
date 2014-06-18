@@ -4,6 +4,10 @@ RenderingContext::RenderingContext(SDL_Surface* ctx) {
 	context = ctx;
 }
 
+void RenderingContext::clear() {
+	SDL_FillRect(context, 0, SDL_MapRGB(context->format, 0xCC, 0xEE, 0xDD));
+}
+
 void RenderingContext::drawImage(SDL_Surface* img, int x, int y) {
 	translate.x = x;
 	translate.y = y;
