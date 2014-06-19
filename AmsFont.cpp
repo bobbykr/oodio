@@ -26,10 +26,12 @@ void AmsFont::locate(int x, int y) {
 void AmsFont::print(char* text) {
 	while (*text) {
 		int c = *text;
+		int posX = (c % 16) * 24;
+		int posY = (c / 16) * 24;
 
 		// TODO
 		SDL_SetColorKey(font, SDL_SRCCOLORKEY, SDL_MapRGB(font->format, 0, 0, 0));
-		ctx->drawImage(font, 24, 24, 24, 24, _x * 24, _y * 24);
+		ctx->drawImage(font, posX, posY, 24, 24, _x * 24, _y * 24);
 
 		text++;
 		_x++;

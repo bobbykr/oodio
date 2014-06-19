@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 	SDL_Surface* asset = SDL_LoadBMP("mario.bmp");
 	AmsFont font("amstradFont.bmp");
 
-	font.print("toto");
+	font.print("This is a TEST...  *+;,<>--------------####0123456789");
 
 
 	// program main loop
