@@ -1,6 +1,7 @@
 #include "AmsFont.h"
 #include "constants.h"
 
+
 AmsFont::AmsFont(char* fileName) {
 	font = SDL_LoadBMP(fileName);
 	SDL_SetColorKey(font, SDL_SRCCOLORKEY, SDL_MapRGB(font->format, 255, 255, 255)); // set transparency
@@ -28,7 +29,7 @@ void AmsFont::print(char* text) {
 		int c = *text;
 
 		// TODO
-		ctx->drawImage(font, 32, 32, 32, 32, _x * 32, _y * 32);
+		ctx->drawImage(font, 24, 24, 24, 24, _x * 24, _y * 24);
 
 		text++;
 		_x++;
