@@ -1,6 +1,8 @@
 #include "AmsFont.h"
 #include "constants.h"
 
+const int MAX_COLUMN = SCREEN_W / 24;
+const int MAX_LINE   = SCREEN_H / 24;
 
 AmsFont::AmsFont(char* fileName) {
 	font = SDL_LoadBMP(fileName);
@@ -15,6 +17,7 @@ AmsFont::~AmsFont() {
 }
 
 SDL_Surface* AmsFont::get() {
+	SDL_SetColorKey(ctx->getContext(), SDL_SRCCOLORKEY, SDL_MapRGB(ctx->getContext()->format, 0, 0, 0));
 	return ctx->getContext();
 };
 
@@ -35,7 +38,7 @@ void AmsFont::print(char* text) {
 
 		text++;
 		_x++;
-		if (_x > 32) {
+		if (_x >= MAX_COLUMN) {
 			_x = 0;
 			_y++;
 		}
