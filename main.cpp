@@ -95,6 +95,5 @@ int main(int argc, char** argv) {
 
 	SDL_CloseAudio(); // close audio
 	SDL_FreeSurface(asset); // free loaded bitmap
-	printf("Exited cleanly\n");
 	return 0;
 }
