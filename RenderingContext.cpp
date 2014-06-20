@@ -5,6 +5,10 @@ RenderingContext::RenderingContext(SDL_Surface* ctx) {
 	bgColor = SDL_MapRGB(context->format, 0, 0, 0);
 }
 
+SDL_Surface* RenderingContext::getContext() {
+	return context;
+}
+
 void RenderingContext::backgroundColor(int r, int g, int b) {
 	bgColor = SDL_MapRGB(context->format, r, g, b);
 }

@@ -7,7 +7,7 @@ Assets::Assets(int s) {
 	list = (SDL_Surface*) malloc(s);
 }
 
-void Assets::load(char* name) {
+void Assets::load(char* fileName) {
 	if (length >= size) throw 0;
-	list[length++] = SDL_LoadBMP(name);
+	list[length++] = SDL_LoadBMP(fileName);
 }

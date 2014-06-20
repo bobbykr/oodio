@@ -19,6 +19,8 @@ public:
 	void drawImage(SDL_Surface*, int, int);
 	void drawImage(SDL_Surface*, int, int, int, int, int, int);
 
+	SDL_Surface* getContext();
+
 private:
 
 	SDL_Surface* context;

@@ -12,7 +12,9 @@
 
 #define round(x) ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
 
+#include "constants.h"
 #include "RenderingContext.h"
+#include "AmsFont.h"
 
 
 uint16_t sawtooth0 = 0;
@@ -51,13 +53,15 @@ int main(int argc, char** argv) {
 	SDL_OpenAudio(&audioSpec, NULL);
 	SDL_PauseAudio(0); // start audio
 
-	SDL_Surface* screen = SDL_SetVideoMode(640, 640, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	SDL_Surface* screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	RenderingContext ctx(screen);
 	ctx.backgroundColor(0xCE, 0xD2, 0x1C);
 
 	// load images
 	SDL_Surface* asset = SDL_LoadBMP("mario.bmp");
-	SDL_Surface* font  = SDL_LoadBMP("amstradFont.bmp");
+	AmsFont font("amstradFont.bmp");
+
+	font.print("This is a TEST...  *+;,<>--------------####0123456789");
 
 
 	// program main loop
@@ -87,7 +91,7 @@ int main(int argc, char** argv) {
 
 		ctx.clear();
 		ctx.drawImage(asset, 0, 0, 24, 24, 256, 64);
-		ctx.drawImage(font, 0, 0);
+		ctx.drawImage(font.get(), 0, 0);
 		ctx.update();
 
 		SDL_Delay(100);
