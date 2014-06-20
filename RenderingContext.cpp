@@ -25,7 +25,7 @@ void RenderingContext::drawImage(SDL_Surface* img, int x, int y) {
 	translate.x = x;
 	translate.y = y;
 
-	SDL_SetColorKey(img, SDL_SRCCOLORKEY, SDL_MapRGB(img->format, 0, 0, 0)); // set transparency
+	SDL_SetColorKey(img, SDL_SRCCOLORKEY, SDL_MapRGB(img->format, 0, 0, 0)); // transparency
 	SDL_BlitSurface(img, NULL, context, &translate); // draw bitmap
 }
 
