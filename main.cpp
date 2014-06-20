@@ -64,6 +64,7 @@ int main(int argc, char** argv) {
 
 	font.print("This is a TEST...\n*+;,<>\n--------------\n####\n0123456789\nABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n!$(){}[]`~|");
 	font.locate(3, 4);
+	font.paper(0);
 	font.print("XXX");
 
 	// program main loop

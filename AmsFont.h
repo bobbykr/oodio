@@ -16,6 +16,7 @@ public:
 	~AmsFont();
 
 	SDL_Surface* get();
+	void paper(int);
 	void locate(int, int);
 	void print(char*);
 	void scroll(int);
@@ -28,6 +29,7 @@ private:
 	int              _y;
 	SDL_Surface*     _clearRect;
 	SDL_Rect         _clearPos;
+	int              _paper[3];
 
 };
 
