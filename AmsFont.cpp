@@ -11,10 +11,12 @@ AmsFont::AmsFont(char* fileName) {
 	ctx = new RenderingContext(surface);
 	_x = 0;
 	_y = 0;
+	_clearRect = SDL_CreateRGBSurface(SDL_HWSURFACE, CHAR_SIZE, CHAR_SIZE, 32, 0, 0, 0, 0);
 }
 
 AmsFont::~AmsFont() {
 	delete ctx;
+	SDL_FreeSurface(_clearRect);
 }
 
 SDL_Surface* AmsFont::get() {
@@ -38,11 +40,17 @@ void AmsFont::print(char* text) {
 			continue;
 		}
 
-		int posX = (c % 16) * CHAR_SIZE;
-		int posY = (c / 16) * CHAR_SIZE;
+		int sourceX = (c % 16) * CHAR_SIZE;
+		int sourceY = (c / 16) * CHAR_SIZE;
+		int destX = _x * CHAR_SIZE;
+		int destY = _y * CHAR_SIZE;
 
-		// TODO : clean background
-		ctx->drawImage(font, posX, posY, CHAR_SIZE, CHAR_SIZE, _x * CHAR_SIZE, _y * CHAR_SIZE);
+		// clear character background
+		_clearPos.x = destX;
+		_clearPos.y = destY;
+		SDL_BlitSurface(_clearRect, NULL, ctx->getContext(), &_clearPos);
+		ctx->drawImage(font, sourceX, sourceY, CHAR_SIZE, CHAR_SIZE, destX, destY);
+		
 
 		if (++_x >= MAX_COLUMN) {
 			_x = 0;

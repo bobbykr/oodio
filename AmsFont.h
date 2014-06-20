@@ -26,6 +26,9 @@ private:
 	SDL_Surface*     font;
 	int              _x;
 	int              _y;
+	SDL_Surface*     _clearRect;
+	SDL_Rect         _clearPos;
+
 };
 
 #endif
