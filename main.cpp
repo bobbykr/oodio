@@ -54,6 +54,7 @@ int main(int argc, char** argv) {
 	SDL_PauseAudio(0); // start audio
 
 	SDL_Surface* screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 16, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	SDL_WM_SetCaption("OODIO", NULL);
 	RenderingContext ctx(screen);
 	ctx.backgroundColor(0xCE, 0xD2, 0x1C);
 
