@@ -48,6 +48,7 @@ void AmsFont::print(char* text) {
 		// clear character background
 		_clearPos.x = destX;
 		_clearPos.y = destY;
+		SDL_FillRect(_clearRect, NULL, SDL_MapRGB(ctx->getContext()->format, 255, 5, 5));
 		SDL_BlitSurface(_clearRect, NULL, ctx->getContext(), &_clearPos);
 		ctx->drawImage(font, sourceX, sourceY, CHAR_SIZE, CHAR_SIZE, destX, destY);
 		
