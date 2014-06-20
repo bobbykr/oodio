@@ -1,7 +1,7 @@
 #include "AmsFont.h"
 #include "constants.h"
 
-#define CHAR_SIZE 24;
+const int CHAR_SIZE  = 24;
 const int MAX_COLUMN = SCREEN_W / CHAR_SIZE;
 const int MAX_LINE   = SCREEN_H / CHAR_SIZE;
 
@@ -30,14 +30,20 @@ void AmsFont::locate(int x, int y) {
 void AmsFont::print(char* text) {
 	while (*text) {
 		int c = *text;
+		text++;
+
+		if (c == '\n') {
+			_x = 0;
+			_y++;
+			continue;
+		}
+
 		int posX = (c % 16) * CHAR_SIZE;
 		int posY = (c / 16) * CHAR_SIZE;
 
-		// TODO
-		// SDL_SetColorKey(font, SDL_SRCCOLORKEY, SDL_MapRGB(font->format, 0, 0, 0));
+		// TODO : clean background
 		ctx->drawImage(font, posX, posY, CHAR_SIZE, CHAR_SIZE, _x * CHAR_SIZE, _y * CHAR_SIZE);
 
-		text++;
 		if (++_x >= MAX_COLUMN) {
 			_x = 0;
 			if (++_y > MAX_LINE) {
@@ -48,10 +54,7 @@ void AmsFont::print(char* text) {
 	}
 }
 
-void AmsFont::chr(int) {
-	// TODO
-}
-
 void AmsFont::scroll(int) {
+	// save current 
 	// TODO
 }

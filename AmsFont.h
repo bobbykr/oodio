@@ -18,7 +18,6 @@ public:
 	SDL_Surface* get();
 	void locate(int, int);
 	void print(char*);
-	void chr(int);
 	void scroll(int);
 
 	RenderingContext* ctx;

@@ -61,8 +61,9 @@ int main(int argc, char** argv) {
 	SDL_Surface* asset = SDL_LoadBMP("mario.bmp");
 	AmsFont font("amstradFont.bmp");
 
-	font.print("This is a TEST...  *+;,<>--------------####0123456789       ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!$(){}[]`~|");
-
+	font.print("This is a TEST...\n*+;,<>\n--------------\n####\n0123456789\nABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n!$(){}[]`~|");
+	font.locate(3, 4);
+	font.print("XXX");
 
 	// program main loop
 	bool done = false;
