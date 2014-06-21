@@ -18,6 +18,7 @@
 #include "Oscillator.h"
 #include "OscRamp.h"
 #include "OscPulse.h"
+#include "OscTri.h"
 #include "FreqSeq.h"
 
 
@@ -25,9 +26,9 @@ int16_t mute = 1;
 float   amp = 0.1;
 
 OscPulse osc1;
-OscPulse osc2;
-OscRamp osc3;
-FreqSeq seq;
+OscTri   osc2;
+OscTri   osc3;
+FreqSeq  seq;
 
 float map(float value, float iMin, float iMax, float oMin, float oMax) {
 	return oMin + (oMax - oMin) * (value - iMin) / (iMax - iMin);
@@ -42,7 +43,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		// update sequencer
 		float f = seq.tic();
 		osc1.freq = f;
-		osc2.freq = f * 3.01;
+		osc2.freq = f / 3.01;
 
 		// update oscillators
 		float o1 = osc1.tic();
@@ -50,7 +51,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		float o3 = osc3.tic();
 
 		// o3 = (1 - o3) / 2;
-		o3 = map(o3, -1, 1, 0.1, 1);
+		o3 = map(o3, -1, 1, 0, 1);
 		osc1.width = o3;
 		osc2.width = o3;
 
@@ -89,9 +90,8 @@ int main(int argc, char** argv) {
 		SDL_OpenAudio(&audioSpec, NULL);
 	}
 
-	osc1.freq = 440;
-	osc2.freq = 444;
-	osc3.freq = 0.4;
+	osc3.freq  = 0.1;
+	osc3.width = 0.2;
 
 	SDL_PauseAudio(0); // start audio
 
