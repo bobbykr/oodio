@@ -8,9 +8,9 @@ public:
 
 	OscRamp();
 	float tic();
-	void  freq(float);
+	// void  freq(float);
 
-	float _freq;
+	float freq;
 	float _phase;
 
 private:

@@ -20,12 +20,17 @@
 
 uint8_t mute = 0;
 
-OscRamp* osc = new OscRamp();
-// osc->freq(220.0);
+OscRamp osc1;
+OscRamp osc2;
 
 void audioCallback(void* udata, uint8_t* stream, int len) {
 	for (; len; len--) {
-		float o = osc->tic();
+		// update oscillators
+		float o1 = osc1.tic();
+		float o2 = osc2.tic();
+
+		// simple mix
+		float o = o1 + o2;
 
 		// trim overload
 		if (o < -1) o = -1;
@@ -57,6 +62,9 @@ int main(int argc, char** argv) {
 		audioSpec.callback = audioCallback;
 		SDL_OpenAudio(&audioSpec, NULL);
 	}
+
+	osc1.freq = 220;
+	osc2.freq = 210;
 
 	SDL_PauseAudio(0); // start audio
 
@@ -95,8 +103,8 @@ int main(int argc, char** argv) {
 				if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
 				// start / stop sound with F1 key
 				else if (event.key.keysym.sym == SDLK_F1) mute = mute == 0 ? 1 : 0;
-				else if (event.key.keysym.sym == SDLK_F2) osc->freq(110);
-				else if (event.key.keysym.sym == SDLK_F3) osc->freq(440);
+				else if (event.key.keysym.sym == SDLK_F2) osc1.freq = 110;
+				else if (event.key.keysym.sym == SDLK_F3) osc1.freq = 440;
 				// keyboard
 				else if (event.key.keysym.sym <= 256 && event.key.keysym.sym >= 0 ) {
 					font.print(event.key.keysym.sym);
