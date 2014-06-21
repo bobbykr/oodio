@@ -15,6 +15,7 @@
 #include "constants.h"
 #include "RenderingContext.h"
 #include "AmsFont.h"
+#include "Oscillator.h"
 #include "OscRamp.h"
 #include "OscPulse.h"
 #include "FreqSeq.h"
@@ -49,10 +50,12 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		float o3 = osc3.tic();
 
 		// o3 = (1 - o3) / 2;
-		o3 = map(o3, -1, 1, 0.2, 1);
+		o3 = map(o3, -1, 1, 0.1, 1);
+		osc1.width = o3;
+		osc2.width = o3;
 
 		// simple mix + amplification
-		float o = (o1 + o3 * o2);
+		float o = (o1 + o2);
 		o *= amp;
 
 		// trim overload
@@ -88,7 +91,7 @@ int main(int argc, char** argv) {
 
 	osc1.freq = 440;
 	osc2.freq = 444;
-	osc3.freq = 5;
+	osc3.freq = 0.4;
 
 	SDL_PauseAudio(0); // start audio
 

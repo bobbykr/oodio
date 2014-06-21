@@ -1,21 +1,18 @@
 #ifndef OSC_RAMP_H
 #define OSC_RAMP_H
+#include "Oscillator.h"
 
 
-class OscRamp {
+class OscRamp : public Oscillator {
 
 public:
 
-	OscRamp();
 	float tic();
 
-	float freq;
-	float phase;
 
-protected:
+private:
 
-	float pos;
-	float cycle;
+
 };
 
 #endif

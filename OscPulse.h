@@ -1,8 +1,8 @@
 #ifndef OSC_PULSE_H
 #define OSC_PULSE_H
-#include "OscRamp.h"
+#include "Oscillator.h"
 
-class OscPulse : public OscRamp {
+class OscPulse : public Oscillator {
 
 public:
 
