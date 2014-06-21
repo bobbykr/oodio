@@ -1,7 +1,7 @@
 #include "AmsFont.h"
 #include "constants.h"
 
-const int CHAR_SIZE  = 24;
+const int CHAR_SIZE  = 8 * PIXEL;
 const int MAX_COLUMN = SCREEN_W / CHAR_SIZE;
 const int MAX_LINE   = SCREEN_H / CHAR_SIZE;
 
@@ -69,8 +69,7 @@ void AmsFont::locate(int x, int y) {
 
 void AmsFont::print(char* text) {
 	while (*text) {
-		int c = *text;
-		text++;
+		int c = *text++;
 
 		if (c == '\n') {
 			_x = 0;
