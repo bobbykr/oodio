@@ -17,6 +17,7 @@ public:
 
 	SDL_Surface* get();
 	void paper(int);
+	void pen(int);
 	void locate(int, int);
 	void print(char*);
 	void scroll(int);
@@ -24,12 +25,13 @@ public:
 	RenderingContext* ctx;
 
 private:
-	SDL_Surface*     font;
-	int              _x;
-	int              _y;
-	SDL_Surface*     _clearRect;
-	SDL_Rect         _clearPos;
-	int              _paper[3];
+	SDL_Surface*      font;
+	int               _x;
+	int               _y;
+	SDL_Surface*      _clearRect;
+	SDL_Rect          _clearPos;
+	int               _paper[3];
+	RenderingContext* _pen;
 
 };
 
