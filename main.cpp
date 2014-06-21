@@ -16,6 +16,7 @@
 #include "RenderingContext.h"
 #include "AmsFont.h"
 #include "OscRamp.h"
+#include "FreqSeq.h"
 
 
 int16_t mute = 0;
@@ -24,12 +25,16 @@ float   amp = 0.1;
 OscRamp osc1;
 OscRamp osc2;
 OscRamp osc3;
+FreqSeq seq;
 
 void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 	int16_t* stream = (int16_t*) stream0;
 
 	for (len >>= 1; len; len--) {
+		// update sequencer
+		osc2.freq = seq.tic();
+
 		// update oscillators
 		float o1 = osc1.tic();
 		float o2 = osc2.tic();
@@ -37,6 +42,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 		// simple mix + amplification
 		float o = o3 * (o1 + o2);
+		// float o = o2;
 		o *= amp;
 
 		// trim overload
