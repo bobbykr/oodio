@@ -18,15 +18,18 @@
 #include "OscRamp.h"
 
 
-uint8_t mute = 0;
-float   amp = 0.1;
+int16_t mute = 0;
+float   amp = 0.2;
 
 OscRamp osc1;
 OscRamp osc2;
 OscRamp osc3;
 
-void audioCallback(void* udata, uint8_t* stream, int len) {
-	for (; len; len--) {
+void audioCallback(void* udata, uint8_t* stream0, int len) {
+
+	int16_t* stream = (int16_t*) stream0;
+
+	for (len >>= 1; len; len--) {
 		// update oscillators
 		float o1 = osc1.tic();
 		float o2 = osc2.tic();
@@ -41,10 +44,10 @@ void audioCallback(void* udata, uint8_t* stream, int len) {
 		if (o >  1) o =  1;
 
 		// convert to output format
-		o = 128 * o;
+		o = 0x8000 * o * mute;
 
 		// write in buffer
-		*stream++ = round(o) * mute;
+		*stream++ = round(o);
 	}
 }
 
@@ -69,7 +72,7 @@ int main(int argc, char** argv) {
 
 	osc1.freq = 440;
 	osc2.freq = 444;
-	osc3.freq = 55;
+	osc3.freq = 110;
 
 	SDL_PauseAudio(0); // start audio
 
@@ -83,13 +86,14 @@ int main(int argc, char** argv) {
 
 	font.paper(19);
 	font.pen(6);
-	font.print("       -----OODIO-----        \n");
+	font.locate(6, 8);
+	font.print(" -----OODIO----- \n");
 	font.paper(1);
 	font.pen(24);
 
 	// program main loop
-	bool done = false;
-	while (!done) {
+	bool run = true;
+	while (run) {
 
 		//-------------------------
 		// message processing loop
@@ -99,13 +103,13 @@ int main(int argc, char** argv) {
 			switch (event.type) {
 			case SDL_QUIT:
 				// exit if the window is closed
-				done = true;
+				run = false;
 				break;
 
 			// check for keypresses
 			case SDL_KEYDOWN:
 				// exit if ESCAPE is pressed
-				if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
+				if (event.key.keysym.sym == SDLK_ESCAPE) run = false;
 				// start / stop sound with F1 key
 				else if (event.key.keysym.sym == SDLK_F1) mute = mute == 0 ? 1 : 0;
 				else if (event.key.keysym.sym == SDLK_F2) osc1.freq = 110;
