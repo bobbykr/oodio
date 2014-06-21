@@ -85,10 +85,9 @@ int main(int argc, char** argv) {
 				// exit if ESCAPE is pressed
 				if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
 				// start / stop sound with spacebar key
-				else if (event.key.keysym.sym == SDLK_SPACE) amp = amp == 0 ? 255 : 0;
+				else if (event.key.keysym.sym == SDLK_F1) amp = amp == 0 ? 255 : 0;
 				// keyboard
 				else if (event.key.keysym.sym <= 256 && event.key.keysym.sym >= 0 ) {
-					// char c = (char) ;
 					font.print(event.key.keysym.sym);
 				}
 				break;
