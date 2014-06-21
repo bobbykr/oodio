@@ -33,16 +33,19 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 	for (len >>= 1; len; len--) {
 		// update sequencer
-		osc2.freq = seq.tic();
+		float f = seq.tic();
+		osc1.freq = f;
+		osc2.freq = f * 3.01;
 
 		// update oscillators
 		float o1 = osc1.tic();
 		float o2 = osc2.tic();
 		float o3 = osc3.tic();
 
+		o3 = (1 - o3) / 2;
+
 		// simple mix + amplification
-		float o = o3 * (o1 + o2);
-		// float o = o2;
+		float o = (o1 + o3 * o2);
 		o *= amp;
 
 		// trim overload
@@ -78,7 +81,7 @@ int main(int argc, char** argv) {
 
 	osc1.freq = 440;
 	osc2.freq = 444;
-	osc3.freq = 5;
+	osc3.freq = 20;
 
 	SDL_PauseAudio(0); // start audio
 

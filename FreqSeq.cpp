@@ -5,7 +5,7 @@ const float rate = (float) SAMPLE_RATE * 2;
 const float cycle = 8;
 
 FreqSeq::FreqSeq() {
-	tempo = 130;
+	tempo = 140; // bpm
 	steps = {440, 220, 261.63, 329.63, 130.81, 220.00, 164.81, 293.66};
 	pos = 0;
 }
