@@ -51,7 +51,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		float o3 = osc3.tic();
 
 		// o3 = (1 - o3) / 2;
-		o3 = map(o3, -1, 1, 0, 1);
+		o3 = map(o3, -1, 1, 0, 0.5);
 		osc1.width = o3;
 		osc2.width = o3;
 
@@ -90,8 +90,8 @@ int main(int argc, char** argv) {
 		SDL_OpenAudio(&audioSpec, NULL);
 	}
 
-	osc3.freq  = 0.1;
-	osc3.width = 0.2;
+	osc3.freq  = 0.03;
+	osc3.width = 0.9;
 
 	SDL_PauseAudio(0); // start audio
 

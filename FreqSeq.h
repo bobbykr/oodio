@@ -9,6 +9,7 @@ public:
 	FreqSeq();
 	float tic();
 
+	float out;
 	float tempo;
 
 private:

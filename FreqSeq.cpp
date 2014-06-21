@@ -16,5 +16,6 @@ float FreqSeq::tic() {
 	int p = (int) pos;
 	// if (p < 0) p = 0;
 	// if (p > 7) p = 7;
-	return steps[p];
+	out = steps[p];
+	return out;
 }

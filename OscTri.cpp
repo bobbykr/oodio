@@ -11,5 +11,6 @@ OscTri::OscTri() {
 float OscTri::tic() {
 	pos += (cycle * freq) / rate;
 	if (pos > cycle) pos -= cycle;
-	return 1 - 2 * ((pos < width) ? pos / width : 1 - (pos - width) / (1 - width));
+	out = 1 - 2 * ((pos < width) ? pos / width : 1 - (pos - width) / (1 - width));
+	return out;
 }

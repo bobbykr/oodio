@@ -12,6 +12,7 @@ public:
 
 	float freq;
 	float phase;
+	float out;
 
 protected:
 

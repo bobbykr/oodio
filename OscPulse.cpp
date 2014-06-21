@@ -11,5 +11,6 @@ OscPulse::OscPulse() {
 float OscPulse::tic() {
 	pos += (cycle * freq) / rate;
 	if (pos > cycle) pos -= cycle;
-	return (pos > width) ? 1 : 0;
+	out = (pos > width) ? 1 : 0;
+	return out;
 }
