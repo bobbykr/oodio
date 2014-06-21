@@ -14,7 +14,7 @@ float FreqSeq::tic() {
 	pos += cycle * tempo / (240 * rate);
 	if (pos > cycle) pos -= cycle;
 	int p = (int) pos;
-	if (p < 0) p = 0;
-	if (p > 7) p = 7;
+	// if (p < 0) p = 0;
+	// if (p > 7) p = 7;
 	return steps[p];
 }

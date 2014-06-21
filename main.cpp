@@ -16,16 +16,22 @@
 #include "RenderingContext.h"
 #include "AmsFont.h"
 #include "OscRamp.h"
+#include "OscPulse.h"
 #include "FreqSeq.h"
 
 
-int16_t mute = 0;
+int16_t mute = 1;
 float   amp = 0.1;
 
-OscRamp osc1;
-OscRamp osc2;
+OscPulse osc1;
+OscPulse osc2;
 OscRamp osc3;
 FreqSeq seq;
+
+float map(float value, float iMin, float iMax, float oMin, float oMax) {
+	return oMin + (oMax - oMin) * (value - iMin) / (iMax - iMin);
+}
+
 
 void audioCallback(void* udata, uint8_t* stream0, int len) {
 
@@ -42,7 +48,8 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		float o2 = osc2.tic();
 		float o3 = osc3.tic();
 
-		o3 = (1 - o3) / 2;
+		// o3 = (1 - o3) / 2;
+		o3 = map(o3, -1, 1, 0.2, 1);
 
 		// simple mix + amplification
 		float o = (o1 + o3 * o2);
@@ -81,7 +88,7 @@ int main(int argc, char** argv) {
 
 	osc1.freq = 440;
 	osc2.freq = 444;
-	osc3.freq = 20;
+	osc3.freq = 5;
 
 	SDL_PauseAudio(0); // start audio
 
@@ -95,8 +102,8 @@ int main(int argc, char** argv) {
 
 	font.paper(19);
 	font.pen(6);
-	font.locate(6, 8);
-	font.print(" -----OODIO----- \n");
+	font.locate(5, 8);
+	font.print(" -----OO/D/IO----- \n");
 	font.paper(1);
 	font.pen(24);
 

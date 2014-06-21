@@ -12,7 +12,7 @@ public:
 	float freq;
 	float phase;
 
-private:
+protected:
 
 	float pos;
 	float cycle;
