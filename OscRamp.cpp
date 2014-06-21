@@ -1,12 +1,13 @@
 #include "OscRamp.h"
 #include "constants.h"
 
-const float rate = (float) SAMPLE_RATE * 2;
+const float rate  = (float) SAMPLE_RATE;
+
 
 float OscRamp::tic() {
-	pos += (cycle * freq) / rate;
-	if (pos > cycle) pos -= cycle;
-	out = pos - 1;
+	pos += freq / rate;
+	if (pos > 1) pos -= 1;
+	out = 2 * pos - 1;
 	return out;
 }
 

@@ -7,15 +7,16 @@ class FreqSeq {
 public:
 
 	FreqSeq();
+	~FreqSeq();
 	float tic();
 
 	float out;
 	float tempo;
 
 private:
-
-	float pos;
-	float steps[8];
+	int    length;
+	float  pos;
+	float* steps;
 };
 
 #endif

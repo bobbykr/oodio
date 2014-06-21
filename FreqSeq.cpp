@@ -1,18 +1,34 @@
 #include "FreqSeq.h"
 #include "constants.h"
 
-const float rate = (float) SAMPLE_RATE * 2;
-const float cycle = 8;
+const float rate = (float) SAMPLE_RATE;
+
 
 FreqSeq::FreqSeq() {
-	tempo = 140; // bpm
-	steps = {440, 220, 261.63, 329.63, 130.81, 220.00, 164.81, 293.66};
-	pos = 0;
+	tempo  = 140; // bpm
+	pos    = 0;
+	length = 8;
+	steps  = new float[length];
+
+	// TODO: add a method to set step by note number
+	steps[0] = 440;
+	steps[1] = 220;
+	steps[2] = 261.63;
+	steps[3] = 329.63;
+	steps[4] = 130.81;
+	steps[5] = 220.00;
+	steps[6] = 164.81;
+	steps[7] = 293.66;
 }
 
+FreqSeq::~FreqSeq() {
+	delete[] steps;
+}
+
+
 float FreqSeq::tic() {
-	pos += cycle * tempo / (240 * rate);
-	if (pos > cycle) pos -= cycle;
+	pos += length * tempo / (120 * rate);
+	if (pos > length) pos -= length;
 	int p = (int) pos;
 	// if (p < 0) p = 0;
 	// if (p > 7) p = 7;

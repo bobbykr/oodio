@@ -17,7 +17,6 @@ public:
 protected:
 
 	float pos;
-	float cycle;
 };
 
 #endif
