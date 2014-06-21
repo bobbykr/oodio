@@ -10,23 +10,32 @@
 #include <SDL.h>
 #endif
 
-#define round(x) ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+#define round(x) ((x)>=0?(int)((x)+0.5):(int)((x)-0.5))
 
 #include "constants.h"
 #include "RenderingContext.h"
 #include "AmsFont.h"
+#include "OscRamp.h"
 
 
-uint16_t sawtooth0 = 0;
-uint16_t sawtooth1 = 0;
-uint8_t amp = 0;
+uint8_t mute = 0;
+
+OscRamp* osc = new OscRamp();
+// osc->freq(220.0);
 
 void audioCallback(void* udata, uint8_t* stream, int len) {
-	for (; len; len-=2) {
-		// *stream++ = ((sawtooth0++ >> 5) + (sawtooth1 >> 4)) * amp;
-		*stream++ = (sawtooth0++ >> 5) * amp;
-		*stream++ = (sawtooth1++ >> 5) * amp;
-		sawtooth1 += 3;
+	for (; len; len--) {
+		float o = osc->tic();
+
+		// trim overload
+		if (o < -1) o = -1;
+		if (o >  1) o =  1;
+
+		// convert to output format
+		o = 16 * (o + 1);
+
+		// write in buffer
+		*stream++ = round(o) * mute;
 	}
 }
 
@@ -41,9 +50,9 @@ int main(int argc, char** argv) {
 	// init audio
 	{
 		SDL_AudioSpec audioSpec;
-		audioSpec.freq     = 44100;
+		audioSpec.freq     = SAMPLE_RATE;
 		audioSpec.format   = AUDIO_S16;
-		audioSpec.channels = 2;
+		audioSpec.channels = 1;
 		audioSpec.samples  = 512;
 		audioSpec.callback = audioCallback;
 		SDL_OpenAudio(&audioSpec, NULL);
@@ -84,8 +93,10 @@ int main(int argc, char** argv) {
 			case SDL_KEYDOWN:
 				// exit if ESCAPE is pressed
 				if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
-				// start / stop sound with spacebar key
-				else if (event.key.keysym.sym == SDLK_F1) amp = amp == 0 ? 255 : 0;
+				// start / stop sound with F1 key
+				else if (event.key.keysym.sym == SDLK_F1) mute = mute == 0 ? 1 : 0;
+				else if (event.key.keysym.sym == SDLK_F2) osc->freq(110);
+				else if (event.key.keysym.sym == SDLK_F3) osc->freq(440);
 				// keyboard
 				else if (event.key.keysym.sym <= 256 && event.key.keysym.sym >= 0 ) {
 					font.print(event.key.keysym.sym);
