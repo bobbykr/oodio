@@ -19,7 +19,7 @@
 
 
 int16_t mute = 0;
-float   amp = 0.2;
+float   amp = 0.1;
 
 OscRamp osc1;
 OscRamp osc2;
@@ -36,7 +36,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		float o3 = osc3.tic();
 
 		// simple mix + amplification
-		float o = o1 + o2 + o3;
+		float o = o3 * (o1 + o2);
 		o *= amp;
 
 		// trim overload
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
 
 	osc1.freq = 440;
 	osc2.freq = 444;
-	osc3.freq = 110;
+	osc3.freq = 5;
 
 	SDL_PauseAudio(0); // start audio
 
