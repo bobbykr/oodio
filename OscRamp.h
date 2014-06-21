@@ -8,15 +8,14 @@ public:
 
 	OscRamp();
 	float tic();
-	// void  freq(float);
 
 	float freq;
-	float _phase;
+	float phase;
 
 private:
 
-	float _pos;
-	float _cycle;
+	float pos;
+	float cycle;
 };
 
 #endif
