@@ -22,10 +22,13 @@ AmsFont::AmsFont(char* fileName) {
 
 AmsFont::~AmsFont() {
 	delete ctx;
-	SDL_FreeSurface(_clearRect);
+	// free loaded bitmap
+	SDL_FreeSurface(font);
+	// free other surfaces
+	SDL_FreeSurface(_clearRect); 
 }
 
-SDL_Surface* AmsFont::get() {
+SDL_Surface* AmsFont::getImage() {
 	SDL_SetColorKey(ctx->getContext(), SDL_SRCCOLORKEY, SDL_MapRGB(ctx->getContext()->format, 0, 0, 0));
 	return ctx->getContext();
 }
@@ -67,37 +70,40 @@ void AmsFont::locate(int x, int y) {
 	_y = y;
 }
 
+void AmsFont::print(char c) {
+	if (c == '\n') {
+		_x = 0;
+		_y++;
+		return;
+	}
+
+	int sourceX = (c % 16) * CHAR_SIZE;
+	int sourceY = (c / 16) * CHAR_SIZE;
+	int destX = _x * CHAR_SIZE;
+	int destY = _y * CHAR_SIZE;
+
+	// clear character background
+	_clearPos.x = destX;
+	_clearPos.y = destY;
+	// paper color
+	SDL_FillRect(_clearRect, NULL, SDL_MapRGB(ctx->getContext()->format, _paper[0], _paper[1], _paper[2]));
+	SDL_BlitSurface(_clearRect, NULL, ctx->getContext(), &_clearPos);
+	// draw character
+	ctx->drawImage(_pen->getContext(), sourceX, sourceY, CHAR_SIZE, CHAR_SIZE, destX, destY);
+	
+	if (++_x >= MAX_COLUMN) {
+		_x = 0;
+		if (++_y > MAX_LINE) {
+			_y--;
+			scroll(1);
+		}
+	}
+}
+
 void AmsFont::print(char* text) {
 	while (*text) {
 		int c = *text++;
-
-		if (c == '\n') {
-			_x = 0;
-			_y++;
-			continue;
-		}
-
-		int sourceX = (c % 16) * CHAR_SIZE;
-		int sourceY = (c / 16) * CHAR_SIZE;
-		int destX = _x * CHAR_SIZE;
-		int destY = _y * CHAR_SIZE;
-
-		// clear character background
-		_clearPos.x = destX;
-		_clearPos.y = destY;
-		// paper color
-		SDL_FillRect(_clearRect, NULL, SDL_MapRGB(ctx->getContext()->format, _paper[0], _paper[1], _paper[2]));
-		SDL_BlitSurface(_clearRect, NULL, ctx->getContext(), &_clearPos);
-		// draw character
-		ctx->drawImage(_pen->getContext(), sourceX, sourceY, CHAR_SIZE, CHAR_SIZE, destX, destY);
-		
-		if (++_x >= MAX_COLUMN) {
-			_x = 0;
-			if (++_y > MAX_LINE) {
-				_y--;
-				scroll(1);
-			}
-		}
+		print(c);
 	}
 }
 

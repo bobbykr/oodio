@@ -15,10 +15,11 @@ public:
 	AmsFont(char*);
 	~AmsFont();
 
-	SDL_Surface* get();
+	SDL_Surface* getImage();
 	void paper(int);
 	void pen(int);
 	void locate(int, int);
+	void print(char);
 	void print(char*);
 	void scroll(int);
 
