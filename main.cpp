@@ -10,7 +10,7 @@
 #include <SDL.h>
 #endif
 
-#define round(x) ((x)>=0?(int)((x)+0.5):(int)((x)-0.5))
+#define round(x) ((x)>=0?(int16_t)((x)+0.5):(int16_t)((x)-0.5))
 
 #include "constants.h"
 #include "RenderingContext.h"
@@ -19,25 +19,29 @@
 
 
 uint8_t mute = 0;
+float   amp = 0.1;
 
 OscRamp osc1;
 OscRamp osc2;
+OscRamp osc3;
 
 void audioCallback(void* udata, uint8_t* stream, int len) {
 	for (; len; len--) {
 		// update oscillators
 		float o1 = osc1.tic();
 		float o2 = osc2.tic();
+		float o3 = osc3.tic();
 
-		// simple mix
-		float o = o1 + o2;
+		// simple mix + amplification
+		float o = o1 + o2 + o3;
+		o *= amp;
 
 		// trim overload
 		if (o < -1) o = -1;
 		if (o >  1) o =  1;
 
 		// convert to output format
-		o = 16 * (o + 1);
+		o = 128 * o;
 
 		// write in buffer
 		*stream++ = round(o) * mute;
@@ -63,8 +67,9 @@ int main(int argc, char** argv) {
 		SDL_OpenAudio(&audioSpec, NULL);
 	}
 
-	osc1.freq = 220;
-	osc2.freq = 210;
+	osc1.freq = 440;
+	osc2.freq = 444;
+	osc3.freq = 55;
 
 	SDL_PauseAudio(0); // start audio
 
