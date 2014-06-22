@@ -138,6 +138,11 @@ int main(int argc, char** argv) {
 					font.print(event.key.keysym.sym);
 				}
 				break;
+
+			case SDL_MOUSEMOTION:
+				font.locate(event.motion.x / (8 * PIXEL), event.motion.y / (8 * PIXEL));
+				font.print('*');
+				break;
 			}
 		}
 
