@@ -15,6 +15,7 @@
 #include "constants.h"
 #include "RenderingContext.h"
 #include "AmsFont.h"
+#include "Button.h"
 #include "Oscillator.h"
 #include "OscRamp.h"
 #include "OscPulse.h"
@@ -71,6 +72,10 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 	}
 }
 
+void playStop() {
+	mute = mute == 0 ? 1 : 0;
+}
+
 
 int main(int argc, char* argv[]) {
 	// initialize SDL video and audio
@@ -102,6 +107,8 @@ int main(int argc, char* argv[]) {
 
 	// load images
 	AmsFont font("amstradFont.bmp");
+	Button  btn(5, 5, "start/stop");
+	btn.onClic(&playStop);
 
 	font.paper(19);
 	font.pen(6);
@@ -109,8 +116,10 @@ int main(int argc, char* argv[]) {
 		font.print(argv[i]);
 		font.print("\n");
 	}
+	btn.draw(&font);
 	font.paper(1);
 	font.pen(24);
+	
 
 	// program main loop
 	bool run = true;
@@ -132,7 +141,7 @@ int main(int argc, char* argv[]) {
 				// exit if ESCAPE is pressed
 				if (event.key.keysym.sym == SDLK_ESCAPE) run = false;
 				// start / stop sound with F1 key
-				else if (event.key.keysym.sym == SDLK_F1) mute = mute == 0 ? 1 : 0;
+				else if (event.key.keysym.sym == SDLK_F1) playStop();
 				else if (event.key.keysym.sym == SDLK_F2) osc1.freq = 110;
 				else if (event.key.keysym.sym == SDLK_F3) osc1.freq = 440;
 				// keyboard
@@ -143,7 +152,11 @@ int main(int argc, char* argv[]) {
 
 			case SDL_MOUSEMOTION:
 				// font.locate(event.motion.x / (8 * PIXEL), event.motion.y / (8 * PIXEL));
+				// font.paper(-1);
 				// font.print('*');
+				break;
+			case SDL_MOUSEBUTTONUP:
+				btn.clic(event.button.x, event.button.y);
 				break;
 			}
 		}
