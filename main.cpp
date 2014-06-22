@@ -112,8 +112,8 @@ int main(int argc, char* argv[]) {
 
 	// load images
 	AmsFont font("amstradFont.bmp");
-	Button  btn(5, 5, "start/stop");
-	Slider  sld(5, 7, 10, 0.01, 5);
+	Button  btn(5, 3, "start/stop");
+	Slider  sld(5, 5, 10, 0.1, 2);
 	btn.onClic(&playStop);
 	sld.onChange(&changeLfo);
 

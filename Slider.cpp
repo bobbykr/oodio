@@ -9,6 +9,7 @@ Slider::Slider(int _x, int _y, int _width, float _min, float _max) {
 	width  = _width;
 	min    = _min;
 	max    = _max;
+	value  = _min + (_max - _min) * 0.5;
 
 	cb     = NULL;
 	tapped = false;
@@ -24,8 +25,7 @@ void Slider::clic(int mouseX, int mouseY) {
 
 void Slider::move(int mouseX, int mouseY) {
 	if (!tapped) return;
-	mouseX -= x * PIXEL;
-	float v = ((float)(width * PIXEL) / (float) mouseX) * (max - min) + min;
+	float v = min + (max - min) * ((float)(mouseX - x * (8 * PIXEL)) / (float)((width - 1) * (8 * PIXEL)));
 	if (v < min) v = min;
 	if (v > max) v = max;
 	value = v;
@@ -43,18 +43,16 @@ void Slider::draw(AmsFont* ctx) {
 	ctx->paper(4);
 
 
-	int pos = (int) ((float) width * ((value - min) / (max - min)));
+	int pos = (int) ((float) (width - 1) * ((value - min) / (max - min)));
 	for (int i = 0; i < width; i++) {
 		if (i == pos) {
-			ctx->paper(5);
+			ctx->paper(24);
 			ctx->print(" ");
 			ctx->paper(4);
 		} else {
 			ctx->print(" ");
 		}
 	}
-	ctx->paper(-1);
-	ctx->print(pos);
 }
 
 void Slider::onChange(void (*callback) (float)) {
