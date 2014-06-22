@@ -72,7 +72,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 }
 
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return 1;
 
@@ -105,8 +105,10 @@ int main(int argc, char** argv) {
 
 	font.paper(19);
 	font.pen(6);
-	font.locate(5, 8);
-	font.print(" -----OO/D/IO----- \n");
+	for (int i = 0; i < argc; i++) {
+		font.print(argv[i]);
+		font.print("\n");
+	}
 	font.paper(1);
 	font.pen(24);
 
@@ -140,8 +142,8 @@ int main(int argc, char** argv) {
 				break;
 
 			case SDL_MOUSEMOTION:
-				font.locate(event.motion.x / (8 * PIXEL), event.motion.y / (8 * PIXEL));
-				font.print('*');
+				// font.locate(event.motion.x / (8 * PIXEL), event.motion.y / (8 * PIXEL));
+				// font.print('*');
 				break;
 			}
 		}
