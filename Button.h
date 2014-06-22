@@ -11,7 +11,7 @@ public:
 
 	void clic(int, int);
 	void draw(AmsFont*);
-	void onClic(void (*_cb) ());
+	void onClic(void (*)());
 
 private:
 	char*    name;
@@ -19,7 +19,7 @@ private:
 	int      y;
 	int      width;
 	int      pen;
-	void (*cb) ();
+	void    (*cb) ();
 };
 
 #endif

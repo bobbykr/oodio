@@ -16,6 +16,7 @@
 #include "RenderingContext.h"
 #include "AmsFont.h"
 #include "Button.h"
+#include "Slider.h"
 #include "Oscillator.h"
 #include "OscRamp.h"
 #include "OscPulse.h"
@@ -76,6 +77,10 @@ void playStop() {
 	mute = mute == 0 ? 1 : 0;
 }
 
+void changeLfo(float value) {
+	osc3.freq = value;
+}
+
 
 int main(int argc, char* argv[]) {
 	// initialize SDL video and audio
@@ -108,7 +113,9 @@ int main(int argc, char* argv[]) {
 	// load images
 	AmsFont font("amstradFont.bmp");
 	Button  btn(5, 5, "start/stop");
+	Slider  sld(5, 7, 10, 0.01, 5);
 	btn.onClic(&playStop);
+	sld.onChange(&changeLfo);
 
 	font.paper(19);
 	font.pen(6);
@@ -119,7 +126,7 @@ int main(int argc, char* argv[]) {
 	btn.draw(&font);
 	font.paper(1);
 	font.pen(24);
-	
+
 
 	// program main loop
 	bool run = true;
@@ -154,14 +161,20 @@ int main(int argc, char* argv[]) {
 				// font.locate(event.motion.x / (8 * PIXEL), event.motion.y / (8 * PIXEL));
 				// font.paper(-1);
 				// font.print('*');
+				sld.move(event.motion.x, event.motion.y);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				btn.clic(event.button.x, event.button.y);
+				sld.clic(event.button.x, event.button.y);
 				break;
 			case SDL_MOUSEBUTTONUP:
-				btn.clic(event.button.x, event.button.y);
+				sld.unclic(event.button.x, event.button.y);
 				break;
 			}
 		}
 
 		ctx.clear();
+		sld.draw(&font);
 		ctx.drawImage(font.getImage(), 0, 0);
 		ctx.update();
 
