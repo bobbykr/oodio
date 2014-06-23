@@ -195,5 +195,6 @@ int main(int argc, char* argv[]) {
 	}
 
 	SDL_CloseAudio(); // close audio
+
 	return 0;
 }
