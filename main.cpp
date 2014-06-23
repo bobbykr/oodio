@@ -21,16 +21,18 @@
 #include "OscRamp.h"
 #include "OscPulse.h"
 #include "OscTri.h"
+#include "CombFilter.h"
 #include "FreqSeq.h"
 
-
+bool    filterActive = true;
 int16_t mute = 1;
 float   amp = 0.1;
 
-OscPulse osc1;
-OscTri   osc2;
-OscTri   osc3;
-FreqSeq  seq;
+OscPulse   osc1;
+OscTri     osc2;
+OscTri     osc3;
+CombFilter fltr;
+FreqSeq    seq;
 
 float map(float value, float iMin, float iMax, float oMin, float oMax) {
 	return oMin + (oMax - oMin) * (value - iMin) / (iMax - iMin);
@@ -59,6 +61,9 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 		// simple mix + amplification
 		float o = (o1 + o2);
+
+		// apply filter
+		if (filterActive) o = fltr.tic(o);
 		o *= amp;
 
 		// trim overload
@@ -75,6 +80,10 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 void playStop() {
 	mute = mute == 0 ? 1 : 0;
+}
+
+void activateFilter() {
+	filterActive = !filterActive;
 }
 
 void changeLfo(float value) {
@@ -113,8 +122,10 @@ int main(int argc, char* argv[]) {
 	// load images
 	AmsFont font("amstradFont.bmp");
 	Button  btn(5, 3, "start/stop");
-	Slider  sld(5, 5, 10, 0.1, 2);
+	Button  btnf(5, 5, "filter");
+	Slider  sld(5, 7, 10, 0.1, 2);
 	btn.onClic(&playStop);
+	btnf.onClic(&activateFilter);
 	sld.onChange(&changeLfo);
 
 	font.paper(19);
@@ -124,6 +135,7 @@ int main(int argc, char* argv[]) {
 		font.print("\n");
 	}
 	btn.draw(&font);
+	btnf.draw(&font);
 	font.paper(1);
 	font.pen(24);
 
@@ -165,6 +177,7 @@ int main(int argc, char* argv[]) {
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				btn.clic(event.button.x, event.button.y);
+				btnf.clic(event.button.x, event.button.y);
 				sld.clic(event.button.x, event.button.y);
 				break;
 			case SDL_MOUSEBUTTONUP:
