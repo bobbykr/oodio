@@ -16,6 +16,8 @@ public:
 	void clear();
 	void update();
 	void backgroundColor(int, int, int);
+	void transparency(int, int, int);
+	void drawImage(SDL_Surface*);
 	void drawImage(SDL_Surface*, int, int);
 	void drawImage(SDL_Surface*, int, int, int, int, int, int);
 
@@ -27,6 +29,7 @@ private:
 	SDL_Rect     clip;
 	SDL_Rect     translate;
 	uint32_t     bgColor;
+	int          _transparency[3];
 };
 
 #endif
