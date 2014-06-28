@@ -3,15 +3,22 @@
 
 class FastFilter {
 
-public:
+private:
 
-	FastFilter();
-    float tic(float);
+public:
 
 	float out;
 	float s;
 
-private:
+	FastFilter() {
+		out = 0.0;
+		s   = 0.1;
+	};
+
+    float tic(float in) {
+		out = in * s + out * (1 - s);
+		return out;
+	};
 
 };
 
