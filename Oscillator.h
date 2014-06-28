@@ -7,7 +7,6 @@
 class Oscillator {
 
 protected:
-	// float rate;
 	float pos;
 
 public:
@@ -16,7 +15,6 @@ public:
 	float out;
 
 	Oscillator() {
-		// rate  = (float)SAMPLE_RATE;
 		freq  = 440.0;
 		phase = 0.0;
 		pos   = 0.0;

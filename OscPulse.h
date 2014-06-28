@@ -17,7 +17,7 @@ public:
 	};
 
     float tic() {
-		pos += freq / 44100;
+		pos += freq / SAMPLE_RATE;
 		if (pos > 1) pos -= 1;
 		out = (pos > width) ? 1 : 0;
 		return out;
