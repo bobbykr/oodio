@@ -1,5 +1,5 @@
 #include "FreqSeq.h"
-#include "constants.h"
+#include "../../constants.h"
 #include <math.h>
 
 double noteToFreq(double noteNumber) {

@@ -17,13 +17,13 @@
 #include "AmsFont.h"
 #include "Button.h"
 #include "Slider.h"
-#include "Oscillator.h"
-#include "OscRamp.h"
-#include "OscPulse.h"
-#include "OscTri.h"
-#include "FastFilter.h"
-#include "Analog4Poles.h"
-#include "FreqSeq.h"
+#include "src/oscillator/Oscillator.h"
+#include "src/oscillator/OscRamp.h"
+#include "src/oscillator/OscPulse.h"
+#include "src/oscillator/OscTri.h"
+#include "src/filter/FastFilter.h"
+#include "src/filter/Analog4Poles.h"
+#include "src/sequencer/FreqSeq.h"
 
 bool    filterActive = true;
 int16_t mute = 1;

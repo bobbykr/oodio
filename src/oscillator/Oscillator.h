@@ -1,7 +1,7 @@
 #ifndef OSCILLATOR_H
 #define OSCILLATOR_H
 
-#include "constants.h"
+#include "../../constants.h"
 
 
 class Oscillator {
