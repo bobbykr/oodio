@@ -1,9 +1,8 @@
 #ifndef OSC_TRI_H
 #define OSC_TRI_H
-#include "Oscillator.h"
-#include "constants.h"
 
-const float rate = (float) SAMPLE_RATE;
+#include "Oscillator.h"
+
 
 class OscTri : public Oscillator {
 private:
@@ -16,7 +15,7 @@ public:
 	};
 
     float tic() {
-		pos += freq / rate;
+		pos += freq / 44100;
 		if (pos > 1) pos -= 1;
 		out = 1 - 2 * ((pos < width) ? pos / width : 1 - (pos - width) / (1 - width));
 		return out;

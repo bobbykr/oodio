@@ -1,9 +1,8 @@
 #ifndef OSC_PULSE_H
 #define OSC_PULSE_H
-#include "Oscillator.h"
-#include "constants.h"
 
-const float rate = (float) SAMPLE_RATE;
+#include "Oscillator.h"
+
 
 class OscPulse : public Oscillator {
 
@@ -18,7 +17,7 @@ public:
 	};
 
     float tic() {
-		pos += freq / rate;
+		pos += freq / 44100;
 		if (pos > 1) pos -= 1;
 		out = (pos > width) ? 1 : 0;
 		return out;
