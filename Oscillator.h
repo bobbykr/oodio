@@ -4,19 +4,27 @@
 
 class Oscillator {
 
+protected:
+
+	float pos;
+
 public:
-
-	Oscillator();
-	// virtual ~Oscillator();
-	virtual float tic();
-
 	float freq;
 	float phase;
 	float out;
 
-protected:
+	Oscillator() {
+		freq  = 440.0;
+		phase = 0.0;
+		pos   = 0.0;
+		out   = 0.0;
+	};
 
-	float pos;
+	// virtual ~Oscillator();
+
+	virtual float tic() {
+		return 0.0;
+	};
 };
 
 #endif
