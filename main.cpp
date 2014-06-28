@@ -134,8 +134,8 @@ int main(int argc, char* argv[]) {
 	Button  btn(5, 3, "start/stop");
 	Button  btnf(5, 5, "filter");
 	Slider  sld(5, 7, 10, 0.1, 2);
-	Slider  cut(12, 5, 30, 0.0, 0.5);
-	Slider  res(16, 3, 26, 0.0, 0.9);
+	Slider  cut(12, 5, 30, 0.0, 1.0);
+	Slider  res(16, 3, 26, 0.0, 0.7);
 	btn.onClic(&playStop);
 	btnf.onClic(&activateFilter);
 	sld.onChange(&changeLfo);

@@ -19,7 +19,7 @@ public:
     double tic() {
 		pos += freq / SAMPLE_RATE;
 		if (pos > 1) pos -= 1;
-		out = (pos > width) ? 1 : 0;
+		out = (pos > width) ? 1 : -1;
 		return out;
 	};
 };
