@@ -10,13 +10,13 @@ private:
 
 public:
 
-	float width;
+	double width;
 
 	OscPulse() {
 		width = 0.5;
 	};
 
-    float tic() {
+    double tic() {
 		pos += freq / SAMPLE_RATE;
 		if (pos > 1) pos -= 1;
 		out = (pos > width) ? 1 : 0;

@@ -2,7 +2,7 @@
 #include "constants.h"
 
 
-Slider::Slider(int _x, int _y, int _width, float _min, float _max) {
+Slider::Slider(int _x, int _y, int _width, double _min, double _max) {
 	if (min == max) throw 0;
 	x      = _x;
 	y      = _y;
@@ -25,7 +25,7 @@ void Slider::clic(int mouseX, int mouseY) {
 
 void Slider::move(int mouseX, int mouseY) {
 	if (!tapped) return;
-	float v = min + (max - min) * ((float)(mouseX - x * (8 * PIXEL)) / (float)((width - 1) * (8 * PIXEL)));
+	double v = min + (max - min) * ((double)(mouseX - x * (8 * PIXEL)) / (double)((width - 1) * (8 * PIXEL)));
 	if (v < min) v = min;
 	if (v > max) v = max;
 	value = v;
@@ -43,7 +43,7 @@ void Slider::draw(AmsFont* ctx) {
 	ctx->paper(4);
 
 
-	int pos = (int) ((float) (width - 1) * ((value - min) / (max - min)));
+	int pos = (int) ((double) (width - 1) * ((value - min) / (max - min)));
 	for (int i = 0; i < width; i++) {
 		if (i == pos) {
 			ctx->paper(24);
@@ -55,6 +55,6 @@ void Slider::draw(AmsFont* ctx) {
 	}
 }
 
-void Slider::onChange(void (*callback) (float)) {
+void Slider::onChange(void (*callback) (double)) {
 	cb = callback;
 }

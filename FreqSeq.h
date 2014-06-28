@@ -5,16 +5,16 @@
 class FreqSeq {
 private:
 	int    length;
-	float  pos;
-	float* steps;
+	double  pos;
+	double* steps;
 
 public:
-	float out;
-	float tempo;
+	double out;
+	double tempo;
 
 	FreqSeq();
 	~FreqSeq();
-	float tic();
+	double tic();
 };
 
 #endif

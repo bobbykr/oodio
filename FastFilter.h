@@ -7,15 +7,15 @@ private:
 
 public:
 
-	float out;
-	float s;
+	double out;
+	double s;
 
 	FastFilter() {
 		out = 0.0;
 		s   = 0.1;
 	};
 
-    float tic(float in) {
+    double tic(double in) {
 		out = in * s + out * (1 - s);
 		return out;
 	};

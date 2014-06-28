@@ -8,13 +8,13 @@ class OscTri : public Oscillator {
 private:
 
 public:
-	float width;
+	double width;
 
 	OscTri() {
 		width = 0.5;
 	};
 
-    float tic() {
+    double tic() {
 		pos += freq / SAMPLE_RATE;
 		if (pos > 1) pos -= 1;
 		out = 1 - 2 * ((pos < width) ? pos / width : 1 - (pos - width) / (1 - width));

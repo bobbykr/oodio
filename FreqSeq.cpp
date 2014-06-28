@@ -2,7 +2,7 @@
 #include "constants.h"
 #include <math.h>
 
-float noteToFreq(float noteNumber) {
+double noteToFreq(double noteNumber) {
 	return 440 * pow(2, (noteNumber - 69) / 12);
 }
 
@@ -10,7 +10,7 @@ FreqSeq::FreqSeq() {
 	tempo  = 140; // bpm
 	pos    = 0;
 	length = 8;
-	steps  = new float[length];
+	steps  = new double[length];
 
 	// TODO: add a method to set step by note number
 	steps[0] = noteToFreq(69); //440;
@@ -28,7 +28,7 @@ FreqSeq::~FreqSeq() {
 }
 
 
-float FreqSeq::tic() {
+double FreqSeq::tic() {
 	pos += length * tempo / (120 * SAMPLE_RATE);
 	if (pos > length) pos -= length;
 	int p = (int) pos;

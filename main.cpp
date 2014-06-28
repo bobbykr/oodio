@@ -27,7 +27,7 @@
 
 bool    filterActive = true;
 int16_t mute = 1;
-float   amp = 0.1;
+double   amp = 0.1;
 
 OscPulse   osc1;
 OscTri     osc2;
@@ -36,7 +36,7 @@ OscTri     osc3;
 Analog4Poles fltr;
 FreqSeq    seq;
 
-float map(float value, float iMin, float iMax, float oMin, float oMax) {
+double map(double value, double iMin, double iMax, double oMin, double oMax) {
 	return oMin + (oMax - oMin) * (value - iMin) / (iMax - iMin);
 }
 
@@ -47,14 +47,14 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 	for (len >>= 1; len; len--) {
 		// update sequencer
-		float f = seq.tic();
+		double f = seq.tic();
 		osc1.freq = f;
 		osc2.freq = f / 3.01;
 
 		// update oscillators
-		float o1 = osc1.tic();
-		float o2 = osc2.tic();
-		float o3 = osc3.tic();
+		double o1 = osc1.tic();
+		double o2 = osc2.tic();
+		double o3 = osc3.tic();
 
 		// o3 = (1 - o3) / 2;
 		o3 = map(o3, -1, 1, 0, 0.5);
@@ -62,7 +62,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		osc2.width = o3;
 
 		// simple mix + amplification
-		float o = (o1 + o2);
+		double o = (o1 + o2);
 
 		// apply filter
 		if (filterActive) o = fltr.tic(o);
@@ -88,15 +88,15 @@ void activateFilter() {
 	filterActive = !filterActive;
 }
 
-void cutoff(float value) {
+void cutoff(double value) {
 	fltr.freq = value;
 }
 
-void resonance(float value) {
+void resonance(double value) {
 	fltr.reso = value;
 }
 
-void changeLfo(float value) {
+void changeLfo(double value) {
 	osc3.freq = value;
 }
 
