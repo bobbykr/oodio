@@ -4,38 +4,31 @@
 class CombFilter {
 
 private:
-	double  delay1[100];
-	double  delay2[100];
-
-	int    posIn;
-	int    posOut;
+	double delay1;
+	double delay2;
 
 public:
 	double out;
-	double feedbackGain;
-	double feedforwardGain;
+
+	double gain;
+	double feedback;
+	double feedforward;
 
 	CombFilter() {
-		out             =  0;
-		feedbackGain    =  0.4;
-		feedforwardGain = -0.4;
+		out         = 0.0;
+		delay1      = 0.0;
+		delay2      = 0.0;
 
-		for (int i = 0; i < 100; i++) {
-			delay1[i] = 0;
-			delay2[i] = 0;
-		}
-		posIn  = 0;
-		posOut = 1;
+		gain        = 0.2;
+		feedback    = 0.4;
+		feedforward = 0.4;
+
 	};
 
     double tic(double in) {
-		delay2[posIn] = out;
-		out = in + feedforwardGain * delay1[posOut] + feedbackGain * delay2[posOut];
-		delay1[posIn] = in;
-		posIn++;
-		posOut++;
-		if (posIn  >= 100) posIn  = 0;
-		if (posOut >= 100) posOut = 0;
+		delay2 = out;
+		out = in * gain + feedforward * delay1 - feedback * delay2;
+		delay1 = in;
 		return out;
 	};
 };
