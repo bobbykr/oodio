@@ -21,7 +21,7 @@
 #include "OscRamp.h"
 #include "OscPulse.h"
 #include "OscTri.h"
-#include "CombFilter.h"
+#include "FastFilter.h"
 #include "FreqSeq.h"
 
 bool    filterActive = true;
@@ -31,7 +31,7 @@ float   amp = 0.1;
 OscPulse   osc1;
 OscTri     osc2;
 OscTri     osc3;
-CombFilter fltr;
+FastFilter fltr;
 FreqSeq    seq;
 
 float map(float value, float iMin, float iMax, float oMin, float oMax) {
@@ -86,6 +86,10 @@ void activateFilter() {
 	filterActive = !filterActive;
 }
 
+void cutoff(float value) {
+	fltr.s = value;
+}
+
 void changeLfo(float value) {
 	osc3.freq = value;
 }
@@ -124,9 +128,11 @@ int main(int argc, char* argv[]) {
 	Button  btn(5, 3, "start/stop");
 	Button  btnf(5, 5, "filter");
 	Slider  sld(5, 7, 10, 0.1, 2);
+	Slider  cut(12, 5, 30, 0.0, 0.5);
 	btn.onClic(&playStop);
 	btnf.onClic(&activateFilter);
 	sld.onChange(&changeLfo);
+	cut.onChange(&cutoff);
 
 	font.paper(19);
 	font.pen(6);
@@ -174,20 +180,24 @@ int main(int argc, char* argv[]) {
 				// font.paper(-1);
 				// font.print('*');
 				sld.move(event.motion.x, event.motion.y);
+				cut.move(event.motion.x, event.motion.y);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				btn.clic(event.button.x, event.button.y);
 				btnf.clic(event.button.x, event.button.y);
 				sld.clic(event.button.x, event.button.y);
+				cut.clic(event.button.x, event.button.y);
 				break;
 			case SDL_MOUSEBUTTONUP:
 				sld.unclic(event.button.x, event.button.y);
+				cut.unclic(event.button.x, event.button.y);
 				break;
 			}
 		}
 
 		ctx.clear();
 		sld.draw(&font);
+		cut.draw(&font);
 		ctx.drawImage(font.getImage(), 0, 0);
 		ctx.update();
 
