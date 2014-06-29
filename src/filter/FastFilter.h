@@ -8,15 +8,15 @@ private:
 public:
 
 	double out;
-	double s;
+	double freq;
 
 	FastFilter() {
-		out = 0.0;
-		s   = 0.1;
+		out  = 0.0;
+		freq = 0.1;
 	};
 
     double tic(double in) {
-		out = in * s + out * (1 - s);
+		out = in * freq + out * (1 - freq);
 		return out;
 	};
 

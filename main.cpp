@@ -25,16 +25,16 @@
 #include "src/filter/Analog4Poles.h"
 #include "src/sequencer/FreqSeq.h"
 
-bool    filterActive = true;
-int16_t mute = 1;
+bool     filterActive = true;
+int16_t  mute = 1;
 double   amp = 0.1;
 
-OscPulse   osc1;
-OscTri     osc2;
-OscTri     osc3;
-// FastFilter fltr;
+OscPulse     osc1;
+OscTri       osc2;
+OscTri       osc3;
+FastFilter   glide;
 Analog4Poles fltr;
-FreqSeq    seq;
+FreqSeq      seq;
 
 double map(double value, double iMin, double iMax, double oMin, double oMax) {
 	return oMin + (oMax - oMin) * (value - iMin) / (iMax - iMin);
@@ -48,6 +48,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 	for (len >>= 1; len; len--) {
 		// update sequencer
 		double f = seq.tic();
+		f = glide.tic(f);
 		osc1.freq = f;
 		osc2.freq = f / 3.01;
 
@@ -65,7 +66,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		double o = (o1 + o2);
 
 		// apply filter
-		if (filterActive) o = fltr.tic(o);
+		if (filterActive) o = o - fltr.tic(o);
 		o *= amp;
 
 		// trim overload
@@ -121,6 +122,7 @@ int main(int argc, char* argv[]) {
 
 	osc3.freq  = 0.03;
 	osc3.width = 0.9;
+	glide.freq = 0.005;
 
 	SDL_PauseAudio(0); // start audio
 
