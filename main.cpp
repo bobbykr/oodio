@@ -23,6 +23,7 @@
 #include "src/oscillator/OscTri.h"
 #include "src/filter/FastFilter.h"
 #include "src/filter/Analog4Poles.h"
+#include "src/filter/RCFilter.h"
 #include "src/sequencer/FreqSeq.h"
 
 bool     filterActive = true;
@@ -33,7 +34,7 @@ OscPulse     osc1;
 OscTri       osc2;
 OscTri       osc3;
 FastFilter   glide;
-Analog4Poles fltr;
+RCFilter     fltr;
 FreqSeq      seq;
 
 double map(double value, double iMin, double iMax, double oMin, double oMax) {
@@ -66,7 +67,8 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		double o = (o1 + o2);
 
 		// apply filter
-		if (filterActive) o = o - fltr.tic(o);
+		// if (filterActive) o = o - fltr.tic(o);
+		if (filterActive) o = fltr.tic(o);
 		o *= amp;
 
 		// trim overload
@@ -90,7 +92,8 @@ void activateFilter() {
 }
 
 void cutoff(double value) {
-	fltr.freq = value;
+	// fltr.freq = value;
+	fltr.cutoff = value;
 }
 
 void resonance(double value) {
