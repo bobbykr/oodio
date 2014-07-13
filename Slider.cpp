@@ -29,6 +29,8 @@ void Slider::move(int mouseX, int mouseY) {
 	if (v < min) v = min;
 	if (v > max) v = max;
 	value = v;
+	if (cb == NULL) return;
+	cb(value);
 }
 
 void Slider::unclic(int mouseX, int mouseY) {

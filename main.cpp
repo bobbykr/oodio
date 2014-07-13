@@ -41,6 +41,9 @@ FastFilter   glide;
 RCFilter     fltr;
 FreqSeq      seq;
 
+double       fltrRawCutoff = 0.0;
+FastFilter   fltrSmoothCutoff;
+
 double map(double value, double iMin, double iMax, double oMin, double oMax) {
 	return oMin + (oMax - oMin) * (value - iMin) / (iMax - iMin);
 }
@@ -51,6 +54,9 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 	int16_t* stream = (int16_t*) stream0;
 
 	for (len >>= 1; len; len--) {
+		// update controls
+		fltr.cutoff = fltrSmoothCutoff.tic(fltrRawCutoff);
+
 		// update sequencer
 		double f = seq.tic();
 		f = glide.tic(f);
@@ -96,8 +102,9 @@ void activateFilter() {
 }
 
 void cutoff(double value) {
+	fltrRawCutoff = value;
 	// fltr.freq = value;
-	fltr.cutoff = value;
+	// fltr.cutoff = value;
 }
 
 void resonance(double value) {
@@ -153,6 +160,7 @@ int main(int argc, char* argv[]) {
 	osc3.freq  = 0.03;
 	osc3.width = 0.9;
 	glide.freq = 0.005;
+	fltrSmoothCutoff.freq = 0.001;
 
 	SDL_PauseAudio(0); // start audio
 
