@@ -1,5 +1,5 @@
 #include "Launchpad.h"
-#include <string.h>    // for string comparaison
+#include <string.h>
 
 #include <stdint.h>
 #ifdef __cplusplus
@@ -8,7 +8,7 @@
 	#include <stdlib.h>
 #endif
 
-/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Constructor
  */
 Launchpad::Launchpad() {
@@ -18,7 +18,7 @@ Launchpad::Launchpad() {
 	midiOutOpened = false;
 }
 
-/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Detructor.
  * If midi are open, reset and close them.
  */
@@ -35,35 +35,31 @@ Launchpad::~Launchpad() {
 	}
 }
 
-/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Midi in message callback function
  */
-void CALLBACK MidiInCb(HMIDIIN device, uint16_t msg, Launchpad* launchpad, uint32_t param1, uint32_t param2) {
-	switch (msg) {
-	case MIM_OPEN:
-		// TODO
-		break;
-	case MIM_CLOSE:
-		// TODO
-		break;
-	case MIM_DATA:
-		// TODO
-		launchpad->plot(1,1,3,3);
-		break;
-	case MIM_LONGDATA:
-		// TODO
-		break;
-	case MIM_ERROR:
-	case MIM_LONGERROR:
-		// TODO
-		break;
-	}
+void CALLBACK MidiInCb(HMIDIIN device, uint16_t msg, Launchpad* launchpad,
+						uint32_t data, uint32_t timestamp) {
 
-	// TODO
+	// TODO: also handle MIM_LONGDATA (system exclusive)
+	if (msg != MIM_DATA) return;
+
+	int chan = (data >> 0)  & 0x0F; // channel.           should be 0 or 1.
+	int type = (data >> 4)  & 0x0F; // event type.        should be noteOn (9)
+	int note = (data >> 8)  & 0xFF; // midi note number.
+	int velo = (data >> 16) & 0x8F; // velocity.          should be 0 or 127
+
+	int x = note % 16;
+	int y = note / 16;
+
+	// TODO: store note in buffer
+
+	if (velo == 0) launchpad->plot(x, y, 0, 0); // key release
+	else           launchpad->plot(x, y, 3, 3); // key pressed
 };
 
 
-/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Initialise midi in and out.
  */
 void Launchpad::initMidi() {
@@ -98,7 +94,7 @@ void Launchpad::initMidi() {
 	}
 }
 
-/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Lid a button in the launchpad matrix.
  * Parameters must respect the defined preconditions.
  *
