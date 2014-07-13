@@ -21,6 +21,7 @@ public:
 	void locate(int, int);
 	void print(char);
 	void print(char*);
+	void printNumber(int);
 	void scroll(int);
 
 	RenderingContext* ctx;

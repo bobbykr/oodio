@@ -107,6 +107,22 @@ void AmsFont::print(char* text) {
 	}
 }
 
+void AmsFont::printNumber(int number) {
+	if (number == 0) {
+		print("0");
+		return;
+	}
+	if (number < 0) {
+		print("-");
+		number = -number;
+	}
+	while (number) {
+		char digit = (number % 10) + 48;
+		number = number / 10;
+		print(digit);
+	}
+}
+
 void AmsFont::scroll(int) {
 	// save current 
 	// TODO
