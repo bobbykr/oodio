@@ -10,6 +10,9 @@
 #include <SDL.h>
 #endif
 
+#include <windows.h>     // required before including mmsystem
+#include <mmsystem.h>    // multimedia functions for windows
+
 #define round(x) ((x)>=0?(int16_t)((x)+0.5):(int16_t)((x)-0.5))
 
 #include "constants.h"
@@ -106,6 +109,23 @@ void changeLfo(double value) {
 
 
 int main(int argc, char* argv[]) {
+
+	// initialize MIDI
+	HMIDIOUT device;
+	int midiport = 0;
+	int midiNumDevices = midiOutGetNumDevs();
+	if (midiOutOpen(&device, midiport, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR) return 1;
+	union {
+		uint32_t word;
+		uint8_t  data[4];
+	} midiMsg;
+
+	midiMsg.data[0] = 0x90; // note-on
+	midiMsg.data[1] = 1;    // key number
+	midiMsg.data[2] = 78;   // velocity
+	midiMsg.data[3] = 0;    // unused
+	midiOutShortMsg(device, midiMsg.word);
+
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return 1;
 
@@ -153,6 +173,8 @@ int main(int argc, char* argv[]) {
 		font.print(argv[i]);
 		font.print("\n");
 	}
+	font.print("midi devices: ");
+	font.printNumber(midiNumDevices);
 	btn.draw(&font);
 	btnf.draw(&font);
 	font.paper(1);
@@ -221,7 +243,12 @@ int main(int argc, char* argv[]) {
 		SDL_Delay(40); // 25 FPS
 	}
 
-	SDL_CloseAudio(); // close audio
+	// close audio
+	SDL_CloseAudio();
+
+	// close midi
+	midiOutReset(device);
+	midiOutClose(device);
 
 	return 0;
 }

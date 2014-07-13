@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="AmsFont.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1826" topLine="54" />
+	</File>
+	<File name="Button.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="49" topLine="0" />
+	</File>
+	<File name="Button.h" open="0" top="0" tabpos="0">
+		<Cursor position="164" topLine="0" />
+	</File>
+	<File name="RenderingContext.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="156" topLine="0" />
+	</File>
+	<File name="RenderingContext.h" open="0" top="0" tabpos="0">
+		<Cursor position="174" topLine="0" />
+	</File>
+	<File name="Slider.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1142" topLine="43" />
+	</File>
+	<File name="constants.h" open="0" top="0" tabpos="0">
+		<Cursor position="63" topLine="0" />
+	</File>
+	<File name="main.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="475" topLine="13" />
+	</File>
+	<File name="src\filter\RCFilter.h" open="0" top="0" tabpos="0">
+		<Cursor position="484" topLine="9" />
+	</File>
+	<File name="src\oscillator\Oscillator.h" open="0" top="0" tabpos="0">
+		<Cursor position="62" topLine="0" />
+	</File>
+	<File name="src\sequencer\FreqSeq.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="222" topLine="3" />
+	</File>
+</CodeBlocks_layout_file>
