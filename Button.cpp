@@ -8,7 +8,7 @@ Button::Button(int _x, int _y, char* _name) {
 	name  = _name;
 	cb    = NULL;
 	width = 0;
-	pen   = 24;
+	color = 24;
 	while (*_name++) width++;
 }
 
@@ -24,8 +24,8 @@ void Button::clic(int clicX, int clicY) {
 
 void Button::draw(AmsFont* ctx) {
 	ctx->locate(x, y);
-	ctx->paper(4);
-	ctx->pen(pen);
+	ctx->paper(color);
+	ctx->pen(1);
 	ctx->print(name);
 }
 

@@ -70,7 +70,7 @@ void AmsFont::locate(int x, int y) {
 	_y = y;
 }
 
-void AmsFont::print(char c) {
+void AmsFont::print(unsigned char c) {
 	if (c == '\n') {
 		_x = 0;
 		_y++;

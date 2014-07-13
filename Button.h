@@ -18,7 +18,7 @@ private:
 	int      x;
 	int      y;
 	int      width;
-	int      pen;
+	int      color;
 	void    (*cb) ();
 };
 

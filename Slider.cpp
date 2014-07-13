@@ -40,17 +40,14 @@ void Slider::unclic(int mouseX, int mouseY) {
 
 void Slider::draw(AmsFont* ctx) {
 	ctx->locate(x, y);
-	ctx->paper(4);
-
+	ctx->paper(1);
 
 	int pos = (int) ((double) (width - 1) * ((value - min) / (max - min)));
 	for (int i = 0; i < width; i++) {
 		if (i == pos) {
-			ctx->paper(24);
-			ctx->print(" ");
-			ctx->paper(4);
+			ctx->print(0x05);
 		} else {
-			ctx->print(" ");
+			ctx->print(0x9A);
 		}
 	}
 }

@@ -19,7 +19,7 @@ public:
 	void paper(int);
 	void pen(int);
 	void locate(int, int);
-	void print(char);
+	void print(unsigned char);
 	void print(char*);
 	void printNumber(int);
 	void scroll(int);
