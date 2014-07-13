@@ -113,7 +113,8 @@ int main(int argc, char* argv[]) {
 	// initialize MIDI
 	HMIDIOUT device;
 	int deviceId = 4; // TODO: hardcoded device Id: launchpad 
-	int midiNumDevices = midiOutGetNumDevs();
+	int midiOutNumDevices = midiOutGetNumDevs();
+	int midiInNumDevices  = midiInGetNumDevs();
 	if (midiOutOpen(&device, deviceId, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR) return 1;
 	union {
 		uint32_t word;
@@ -156,11 +157,11 @@ int main(int argc, char* argv[]) {
 
 	// load images
 	AmsFont font("amstradFont.bmp");
-	Button  btn(5, 13, "start/stop");
-	Button  btnf(5, 15, "filter");
-	Slider  sld(5, 17, 10, 0.1, 2);
-	Slider  cut(12, 15, 30, 0.0, 1.0);
-	Slider  res(16, 13, 26, 0.0, 0.7);
+	Button  btn(5, 23, "start/stop");
+	Button  btnf(5, 25, "filter");
+	Slider  sld(5, 27, 10, 0.1, 2);
+	Slider  cut(12, 25, 30, 0.0, 1.0);
+	Slider  res(16, 23, 26, 0.0, 0.7);
 	btn.onClic(&playStop);
 	btnf.onClic(&activateFilter);
 	sld.onChange(&changeLfo);
@@ -168,9 +169,23 @@ int main(int argc, char* argv[]) {
 	res.onChange(&resonance);
 
 	font.paper(24); font.pen(1);
-	font.print("---------- CONNECTED MIDI DEVICES ----------\n\n");
+	font.print("-------- CONNECTED MIDI OUT DEVICES ---------\n");
 	font.paper(1); font.pen(24);
-	for (int i = 0; i < midiNumDevices; i++) {
+	for (int i = 0; i < midiOutNumDevices; i++) {
+		font.print(" ");
+		font.printNumber(i);
+		font.print(": ");
+		MIDIOUTCAPS deviceInfo;
+		midiOutGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
+		font.print(deviceInfo.szPname);
+		font.print("\n");
+	}
+	font.print("\n");
+	font.paper(24); font.pen(1);
+	font.print("-------- CONNECTED MIDI IN DEVICES ----------\n");
+	font.paper(1); font.pen(24);
+	// FIXME: `<=` test because otherwise launchpad does not show up in the list
+	for (int i = 0; i <= midiInNumDevices; i++) {
 		font.print(" ");
 		font.printNumber(i);
 		font.print(": ");
