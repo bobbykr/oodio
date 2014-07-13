@@ -181,16 +181,16 @@ int main(int argc, char* argv[]) {
 		font.print("\n");
 	}
 	font.print("\n");
+
 	font.paper(24); font.pen(1);
 	font.print("-------- CONNECTED MIDI IN DEVICES ----------\n");
 	font.paper(1); font.pen(24);
-	// FIXME: `<=` test because otherwise launchpad does not show up in the list
-	for (int i = 0; i <= midiInNumDevices; i++) {
+	for (int i = 0; i < midiInNumDevices; i++) {
 		font.print(" ");
 		font.printNumber(i);
 		font.print(": ");
-		MIDIOUTCAPS deviceInfo;
-		midiOutGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
+		MIDIINCAPS deviceInfo;
+		midiInGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
 		font.print(deviceInfo.szPname);
 		font.print("\n");
 	}
