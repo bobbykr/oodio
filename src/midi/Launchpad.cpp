@@ -1,12 +1,6 @@
 #include "Launchpad.h"
 #include <string.h>
 
-#include <stdint.h>
-#ifdef __cplusplus
-	#include <cstdlib>
-#else
-	#include <stdlib.h>
-#endif
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Constructor
@@ -16,6 +10,7 @@ Launchpad::Launchpad() {
 	midiOut = NULL;
 	midiInOpened  = false;
 	midiOutOpened = false;
+	for (int i = 0; i < 64; i++) grid[i] = 0;
 }
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -54,8 +49,8 @@ void CALLBACK MidiInCb(HMIDIIN device, uint16_t msg, Launchpad* launchpad,
 
 	// TODO: store note in buffer
 
-	if (velo == 0) launchpad->plot(x, y, 0, 0); // key release
-	else           launchpad->plot(x, y, 3, 3); // key pressed
+	if (velo == 0) launchpad->clear(x, y);             // key release
+	else           launchpad->plot(x, y, 3, 3, false); // key pressed
 };
 
 
@@ -94,6 +89,7 @@ void Launchpad::initMidi() {
 	}
 }
 
+
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Lid a button in the launchpad matrix.
  * Parameters must respect the defined preconditions.
@@ -102,13 +98,33 @@ void Launchpad::initMidi() {
  * @param {int} y     - y position of button to lid. y : [0..8]
  * @param {int} red   - red color amount.   red   : [0..3]
  * @param {int} green - green color amount. green : [0..3]
+ *
+ * @param {bool} cache - is color cached in memory.
+ */
+void Launchpad::plot(int x, int y, int red, int green, bool cache) {
+	if (!midiOutOpened) return;
+	uint16_t velocity = red + green * 16;
+	uint32_t msg = 0x90 | (x + y * 16) << 8 | velocity << 16;
+	midiOutShortMsg(midiOut, msg);
+
+	// save state
+	if (!cache) return;
+	grid[x + y * 8] = velocity;
+}
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Plot and cache.
  */
 void Launchpad::plot(int x, int y, int red, int green) {
+	plot(x, y, red, green, true);
+}
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Lid back a button according to the cached value.
+ */
+void Launchpad::clear(int x, int y) {
 	if (!midiOutOpened) return;
-	uint32_t msg = 0x90; // key-on
-	// note number
-	msg |= (x + y * 16) << 8;
-	// velocity
-	msg |= (red + green * 16) << 16;
+	uint16_t velocity = grid[x + y * 8];
+	uint32_t msg = 0x90 | (x + y * 16) << 8 | velocity << 16;
 	midiOutShortMsg(midiOut, msg);
 }
