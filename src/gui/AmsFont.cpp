@@ -1,5 +1,5 @@
 #include "AmsFont.h"
-#include "constants.h"
+#include "../../constants.h"
 
 const int CHAR_SIZE  = 8 * PIXEL;
 const int MAX_COLUMN = SCREEN_W / CHAR_SIZE;
@@ -25,7 +25,7 @@ AmsFont::~AmsFont() {
 	// free loaded bitmap
 	SDL_FreeSurface(font);
 	// free other surfaces
-	SDL_FreeSurface(_clearRect); 
+	SDL_FreeSurface(_clearRect);
 }
 
 SDL_Surface* AmsFont::getImage() {
@@ -90,7 +90,7 @@ void AmsFont::print(unsigned char c) {
 	SDL_BlitSurface(_clearRect, NULL, ctx->getContext(), &_clearPos);
 	// draw character
 	ctx->drawImage(_pen->getContext(), sourceX, sourceY, CHAR_SIZE, CHAR_SIZE, destX, destY);
-	
+
 	if (++_x >= MAX_COLUMN) {
 		_x = 0;
 		if (++_y > MAX_LINE) {
@@ -124,6 +124,6 @@ void AmsFont::printNumber(int number) {
 }
 
 void AmsFont::scroll(int) {
-	// save current 
+	// save current
 	// TODO
 }

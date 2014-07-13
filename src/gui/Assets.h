@@ -18,8 +18,8 @@ public:
 	void load(char*);
 
 private:
-	int size
+	int size;
 
-};
+}
 
 #endif

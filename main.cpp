@@ -16,10 +16,10 @@
 #define round(x) ((x)>=0?(int16_t)((x)+0.5):(int16_t)((x)-0.5))
 
 #include "constants.h"
-#include "RenderingContext.h"
-#include "AmsFont.h"
-#include "Button.h"
-#include "Slider.h"
+#include "src/gui/RenderingContext.h"
+#include "src/gui/AmsFont.h"
+#include "src/gui/Button.h"
+#include "src/gui/Slider.h"
 #include "src/oscillator/Oscillator.h"
 #include "src/oscillator/OscRamp.h"
 #include "src/oscillator/OscPulse.h"

@@ -1,5 +1,5 @@
 #include "Slider.h"
-#include "constants.h"
+#include "../../constants.h"
 
 
 Slider::Slider(int _x, int _y, int _width, double _min, double _max) {
