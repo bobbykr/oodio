@@ -12,6 +12,8 @@
  * Constructor
  */
 Launchpad::Launchpad() {
+	midiIn  = NULL;
+	midiOut = NULL;
 	midiInOpened  = false;
 	midiOutOpened = false;
 }
@@ -22,6 +24,7 @@ Launchpad::Launchpad() {
  */
 Launchpad::~Launchpad() {
 	if (midiInOpened) {
+		midiInStop(midiIn);
 		midiInReset(midiIn);
 		midiInClose(midiIn);
 	}
@@ -31,6 +34,33 @@ Launchpad::~Launchpad() {
 		midiOutClose(midiOut);
 	}
 }
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Midi in message callback function
+ */
+void CALLBACK MidiInCb(HMIDIIN device, uint16_t msg, Launchpad* launchpad, uint32_t param1, uint32_t param2) {
+	switch (msg) {
+	case MIM_OPEN:
+		// TODO
+		break;
+	case MIM_CLOSE:
+		// TODO
+		break;
+	case MIM_DATA:
+		// TODO
+		launchpad->plot(1,1,3,3);
+		break;
+	case MIM_LONGDATA:
+		// TODO
+		break;
+	case MIM_ERROR:
+	case MIM_LONGERROR:
+		// TODO
+		break;
+	}
+
+	// TODO
+};
 
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -47,8 +77,9 @@ void Launchpad::initMidi() {
 		MIDIINCAPS deviceInfo;
 		midiInGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
 		if (strcmp(deviceInfo.szPname, "Launchpad") == 0) {
-			if (midiInOpen(&midiIn, i, 0, 0, CALLBACK_NULL) == MMSYSERR_NOERROR) {
+			if (midiInOpen(&midiIn, i, (DWORD)MidiInCb, (DWORD)this, CALLBACK_FUNCTION) == MMSYSERR_NOERROR) {
 				midiInOpened = true;
+				midiInStart(midiIn);
 			};
 			break;
 		};

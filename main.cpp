@@ -136,7 +136,7 @@ int main(int argc, char* argv[]) {
 	launchpad.initMidi();
 	for (int x = 0; x < 4; x++) {
 		for (int y = 0; y < 4; y++) {
-			launchpad.plot(x, y, x, y);
+			launchpad.plot(x * 2, y * 2, x, y);
 		}
 	}
 
