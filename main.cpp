@@ -156,25 +156,30 @@ int main(int argc, char* argv[]) {
 
 	// load images
 	AmsFont font("amstradFont.bmp");
-	Button  btn(5, 3, "start/stop");
-	Button  btnf(5, 5, "filter");
-	Slider  sld(5, 7, 10, 0.1, 2);
-	Slider  cut(12, 5, 30, 0.0, 1.0);
-	Slider  res(16, 3, 26, 0.0, 0.7);
+	Button  btn(5, 13, "start/stop");
+	Button  btnf(5, 15, "filter");
+	Slider  sld(5, 17, 10, 0.1, 2);
+	Slider  cut(12, 15, 30, 0.0, 1.0);
+	Slider  res(16, 13, 26, 0.0, 0.7);
 	btn.onClic(&playStop);
 	btnf.onClic(&activateFilter);
 	sld.onChange(&changeLfo);
 	cut.onChange(&cutoff);
 	res.onChange(&resonance);
 
-	font.paper(19);
-	font.pen(6);
-	for (int i = 0; i < argc; i++) {
-		font.print(argv[i]);
+	font.paper(24); font.pen(1);
+	font.print("---------- CONNECTED MIDI DEVICES ----------\n\n");
+	font.paper(1); font.pen(24);
+	for (int i = 0; i < midiNumDevices; i++) {
+		font.print(" ");
+		font.printNumber(i);
+		font.print(": ");
+		MIDIOUTCAPS deviceInfo;
+		midiOutGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
+		font.print(deviceInfo.szPname);
 		font.print("\n");
 	}
-	font.print("midi devices: ");
-	font.printNumber(midiNumDevices);
+	
 	btn.draw(&font);
 	btnf.draw(&font);
 	font.paper(1);
