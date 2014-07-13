@@ -28,6 +28,7 @@
 #include "src/filter/Analog4Poles.h"
 #include "src/filter/RCFilter.h"
 #include "src/sequencer/FreqSeq.h"
+#include "src/midi/Launchpad.h"
 
 bool     filterActive = true;
 int16_t  mute = 1;
@@ -111,10 +112,8 @@ void changeLfo(double value) {
 int main(int argc, char* argv[]) {
 
 	// initialize MIDI
-	HMIDIOUT device;
-	int deviceId = 4; // TODO: hardcoded device Id: launchpad 
-	int midiOutNumDevices = midiOutGetNumDevs();
-	int midiInNumDevices  = midiInGetNumDevs();
+	/*HMIDIOUT device;
+	int deviceId = 4; // TODO: hardcoded device Id: launchpad
 	if (midiOutOpen(&device, deviceId, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR) return 1;
 	union {
 		uint32_t word;
@@ -125,7 +124,12 @@ int main(int argc, char* argv[]) {
 	midiMsg.data[1] = 1;    // key number
 	midiMsg.data[2] = 78;   // velocity
 	midiMsg.data[3] = 0;    // unused
-	midiOutShortMsg(device, midiMsg.word);
+	midiOutShortMsg(device, midiMsg.word);*/
+	Launchpad launchpad;
+	launchpad.initMidi();
+	launchpad.plot(0, 0, 3, 3);
+	launchpad.plot(1, 1, 3, 0);
+	launchpad.plot(2, 2, 0, 3);
 
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return 1;
@@ -168,6 +172,8 @@ int main(int argc, char* argv[]) {
 	cut.onChange(&cutoff);
 	res.onChange(&resonance);
 
+	int midiOutNumDevices = midiOutGetNumDevs();
+	int midiInNumDevices  = midiInGetNumDevs();
 	font.paper(24); font.pen(1);
 	font.print("-------- CONNECTED MIDI OUT DEVICES ---------\n");
 	font.paper(1); font.pen(24);
@@ -194,7 +200,7 @@ int main(int argc, char* argv[]) {
 		font.print(deviceInfo.szPname);
 		font.print("\n");
 	}
-	
+
 	btn.draw(&font);
 	btnf.draw(&font);
 	font.paper(1);
@@ -267,8 +273,8 @@ int main(int argc, char* argv[]) {
 	SDL_CloseAudio();
 
 	// close midi
-	midiOutReset(device);
-	midiOutClose(device);
+	// midiOutReset(device);
+	// midiOutClose(device);
 
 	return 0;
 }
