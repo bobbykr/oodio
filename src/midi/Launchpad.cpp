@@ -77,6 +77,7 @@ void Launchpad::initMidi() {
  * @param {int} green - green color amount. green : [0..3]
  */
 void Launchpad::plot(int x, int y, int red, int green) {
+	if (!midiOutOpened) return;
 	uint32_t msg = 0x90; // key-on
 	// note number
 	msg |= (x + y * 16) << 8;

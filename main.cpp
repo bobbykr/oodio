@@ -127,9 +127,11 @@ int main(int argc, char* argv[]) {
 	midiOutShortMsg(device, midiMsg.word);*/
 	Launchpad launchpad;
 	launchpad.initMidi();
-	launchpad.plot(0, 0, 3, 3);
-	launchpad.plot(1, 1, 3, 0);
-	launchpad.plot(2, 2, 0, 3);
+	for (int x = 0; x < 4; x++) {
+		for (int y = 0; y < 4; y++) {
+			launchpad.plot(x, y, x, y);
+		}
+	}
 
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return 1;
