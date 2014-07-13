@@ -112,9 +112,9 @@ int main(int argc, char* argv[]) {
 
 	// initialize MIDI
 	HMIDIOUT device;
-	int midiport = 0;
+	int deviceId = 4; // TODO: hardcoded device Id: launchpad 
 	int midiNumDevices = midiOutGetNumDevs();
-	if (midiOutOpen(&device, midiport, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR) return 1;
+	if (midiOutOpen(&device, deviceId, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR) return 1;
 	union {
 		uint32_t word;
 		uint8_t  data[4];
