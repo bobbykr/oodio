@@ -170,7 +170,7 @@ int main(int argc, char* argv[]) {
 	ctx.backgroundColor(0, 0, 127);
 
 	// load images
-	AmsFont font("amstradFont.bmp");
+	AmsFont font("img/amstradFont.bmp");
 	Button  btn(5, 23, "start/stop");
 	Button  btnf(5, 25, "filter");
 	Slider  sld(5, 27, 10, 0.1, 2);
