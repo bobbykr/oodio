@@ -15,7 +15,7 @@ public:
 		freq = 0.1;
 	};
 
-    double tic(double in) {
+    inline double tic(double in) {
 		out = in * freq + out * (1 - freq);
 		return out;
 	};

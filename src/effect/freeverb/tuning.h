@@ -1,8 +1,10 @@
-// Reverb model tuning values
-//
-// Written by Jezar at Dreampoint, June 2000
-// http://www.dreampoint.co.uk
-// This code is public domain
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Reverb model tuning values
+ *
+ * Written by Jezar at Dreampoint, June 2000
+ * http://www.dreampoint.co.uk
+ * This code is public domain
+ */
 
 #ifndef TUNING_H
 #define TUNING_H

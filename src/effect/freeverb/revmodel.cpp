@@ -1,11 +1,17 @@
-// Reverb model implementation
-//
-// Written by Jezar at Dreampoint, June 2000
-// http://www.dreampoint.co.uk
-// This code is public domain
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Reverb model implementation
+ *
+ * Written by Jezar at Dreampoint, June 2000
+ * http://www.dreampoint.co.uk
+ * This code is public domain
+ */
 
 #include "revmodel.hpp"
 
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Constructor
+ */
 revmodel::revmodel() {
 	// Tie the components to their buffers
 	combL[0].setbuffer(bufcombL1, combtuningL1);
@@ -34,14 +40,15 @@ revmodel::revmodel() {
 	allpassR[3].setbuffer(bufallpassR4, allpasstuningR4);
 
 	// Set default values
-	allpassL[0].setfeedback(0.5f);
-	allpassR[0].setfeedback(0.5f);
-	allpassL[1].setfeedback(0.5f);
-	allpassR[1].setfeedback(0.5f);
-	allpassL[2].setfeedback(0.5f);
-	allpassR[2].setfeedback(0.5f);
-	allpassL[3].setfeedback(0.5f);
-	allpassR[3].setfeedback(0.5f);
+	allpassL[0].feedback = 0.5f;
+	allpassR[0].feedback = 0.5f;
+	allpassL[1].feedback = 0.5f;
+	allpassR[1].feedback = 0.5f;
+	allpassL[2].feedback = 0.5f;
+	allpassR[2].feedback = 0.5f;
+	allpassL[3].feedback = 0.5f;
+	allpassR[3].feedback = 0.5f;
+
 	setwet(initialwet);
 	setroomsize(initialroom);
 	setdry(initialdry);
@@ -53,6 +60,10 @@ revmodel::revmodel() {
 	mute();
 }
 
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Mute
+ */
 void revmodel::mute() {
 	if (getmode() >= freezemode) return;
 
@@ -67,6 +78,10 @@ void revmodel::mute() {
 	}
 }
 
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Calculate output REPLACING anything already there
+ */
 void revmodel::processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip) {
 	float outL, outR, input;
 
@@ -75,13 +90,13 @@ void revmodel::processreplace(float *inputL, float *inputR, float *outputL, floa
 		input = (*inputL + *inputR) * gain;
 
 		// Accumulate comb filters in parallel
-		for(int i = 0; i < numcombs; i++) {
+		for (int i = 0; i < numcombs; i++) {
 			outL += combL[i].process(input);
 			outR += combR[i].process(input);
 		}
 
 		// Feed through allpasses in series
-		for(i = 0; i < numallpasses; i++) {
+		for (i = 0; i < numallpasses; i++) {
 			outL = allpassL[i].process(outL);
 			outR = allpassR[i].process(outR);
 		}
@@ -98,6 +113,9 @@ void revmodel::processreplace(float *inputL, float *inputR, float *outputL, floa
 	}
 }
 
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Calculate output MIXING with anything already there
+ */
 void revmodel::processmix(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip) {
 	float outL,outR,input;
 
@@ -130,9 +148,10 @@ void revmodel::processmix(float *inputL, float *inputR, float *outputL, float *o
 	}
 }
 
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Recalculate internal values after parameter change.
+ */
 void revmodel::update() {
-// Recalculate internal values after parameter change
-
 	int i;
 
 	wet1 = wet * (width / 2 + 0.5f);
@@ -149,8 +168,8 @@ void revmodel::update() {
 	}
 
 	for (i = 0; i < numcombs; i++) {
-		combL[i].setfeedback(roomsize1);
-		combR[i].setfeedback(roomsize1);
+		combL[i].feedback = roomsize1;
+		combR[i].feedback = roomsize1;
 	}
 
 	for (i = 0; i < numcombs; i++) {
@@ -159,10 +178,13 @@ void revmodel::update() {
 	}
 }
 
-// The following get/set functions are not inlined, because
-// speed is never an issue when calling them, and also
-// because as you develop the reverb model, you may
-// wish to take dynamic action when they are called.
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * The following get/set functions are not inlined, because
+ * speed is never an issue when calling them, and also
+ * because as you develop the reverb model, you may
+ * wish to take dynamic action when they are called.
+ */
 
 void revmodel::setroomsize(float value) {
 	roomsize = (value * scaleroom) + offsetroom;

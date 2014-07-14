@@ -21,7 +21,7 @@ public:
 	void setCutoff(int value);
 	void setReso(int value);
 
-	double tic(double in) {
+	inline double tic(double in) {
 		state = (1 - reso * cutoff) * state - cutoff * out + cutoff * in;
 		out   = (1 - reso * cutoff) * out   + cutoff * state;
 		return out;
