@@ -36,7 +36,7 @@ public:
 	 * Empty data from buffer
 	 */
 	void mute() {
-		for (int i = 0; i < bufsize; i++) buffer[i] = 0;
+		for (int i = 0; i < bufsize; i++) buffer[i] = 0.0;
 	};
 
 	/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄

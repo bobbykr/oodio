@@ -40,14 +40,14 @@ revmodel::revmodel() {
 	allpassR[3].setbuffer(bufAllpassR4, allpassTuningR4);
 
 	// Set default values
-	allpassL[0].feedback = 0.5f;
-	allpassR[0].feedback = 0.5f;
-	allpassL[1].feedback = 0.5f;
-	allpassR[1].feedback = 0.5f;
-	allpassL[2].feedback = 0.5f;
-	allpassR[2].feedback = 0.5f;
-	allpassL[3].feedback = 0.5f;
-	allpassR[3].feedback = 0.5f;
+	allpassL[0].feedback = 0.5;
+	allpassR[0].feedback = 0.5;
+	allpassL[1].feedback = 0.5;
+	allpassR[1].feedback = 0.5;
+	allpassL[2].feedback = 0.5;
+	allpassR[2].feedback = 0.5;
+	allpassL[3].feedback = 0.5;
+	allpassR[3].feedback = 0.5;
 
 	setWet(initialWet);
 	setRoomSize(initialRoom);
@@ -86,7 +86,8 @@ void revmodel::processReplace(double *inputL, double *inputR, double *outputL, d
 	double outL, outR, input;
 
 	while (numSamples-- > 0) {
-		outL  = outR = 0;
+		outL  = 0.0;
+		outR  = 0.0;
 		input = (*inputL + *inputR) * gain;
 
 		// Accumulate comb filters in parallel
@@ -121,8 +122,8 @@ void revmodel::processMix(double *inputL, double *inputR, double *outputL, doubl
 	double outL, outR, input;
 
 	while (numSamples-- > 0) {
-		outL  = 0;
-		outR  = 0;
+		outL  = 0.0;
+		outR  = 0.0;
 		input = (*inputL + *inputR) * gain;
 
 		// Accumulate comb filters in parallel
@@ -157,8 +158,8 @@ void revmodel::processMix(double *inputL, double *inputR, double *outputL, doubl
  * @param {double*} outputR -
  */
 void revmodel::tic(double input, double* outputL, double* outputR) {
-	double outL = 0;
-	double outR = 0;
+	double outL = 0.0;
+	double outR = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
@@ -188,8 +189,8 @@ void revmodel::tic(double input, double* outputL, double* outputR) {
  * @param {double*} outputR -
  */
 void revmodel::tic(double inputL, double inputR, double* outputL, double* outputR) {
-	double outL = 0;
-	double outR = 0;
+	double outL = 0.0;
+	double outR = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
@@ -217,12 +218,12 @@ void revmodel::tic(double inputL, double inputR, double* outputL, double* output
 void revmodel::update() {
 	int i;
 
-	wet1 = wet * (width / 2 + 0.5f);
+	wet1 = wet * (width / 2 + 0.5);
 	wet2 = wet * ((1 - width) / 2);
 
 	if (mode >= freezeMode) {
-		roomSize1 = 1;
-		damp1     = 0;
+		roomSize1 = 1.0;
+		damp1     = 0.0;
 		gain      = muted;
 	} else {
 		roomSize1 = roomSize;

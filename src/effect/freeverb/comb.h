@@ -24,7 +24,7 @@ public:
 	double	feedback;
 
 	comb() {
-		filterstore = 0;
+		filterstore = 0.0;
 		bufidx      = 0;
 	};
 
@@ -34,7 +34,7 @@ public:
 	};
 
 	void mute() {
-		for (int i = 0; i < bufsize; i++) buffer[i] = 0;
+		for (int i = 0; i < bufsize; i++) buffer[i] = 0.0;
 	};
 
 	void setdamp(double val) {
