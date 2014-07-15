@@ -118,25 +118,14 @@ void changeLfo(double value) {
 
 int main(int argc, char* argv[]) {
 
-	// initialize MIDI
-	/*HMIDIOUT device;
-	int deviceId = 4; // TODO: hardcoded device Id: launchpad
-	if (midiOutOpen(&device, deviceId, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR) return 1;
-	union {
-		uint32_t word;
-		uint8_t  data[4];
-	} midiMsg;
-
-	midiMsg.data[0] = 0x90; // note-on
-	midiMsg.data[1] = 1;    // key number
-	midiMsg.data[2] = 78;   // velocity
-	midiMsg.data[3] = 0;    // unused
-	midiOutShortMsg(device, midiMsg.word);*/
+	// initialize Launchpad MIDI
 	Launchpad launchpad;
 	launchpad.initMidi();
+	// test
 	for (int x = 0; x < 4; x++) {
 		for (int y = 0; y < 4; y++) {
-			launchpad.plot(x * 2, y * 2, x, y);
+			launchpad.plot(x * 2,     y * 2,     x, y);
+			launchpad.plot(x * 2 + 1, y * 2 + 1, x, y);
 		}
 	}
 
