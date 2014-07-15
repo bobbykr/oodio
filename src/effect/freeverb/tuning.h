@@ -12,7 +12,7 @@
 const int	numCombs		= 8;
 const int	numAllpasses	= 4;
 const float	muted			= 0;
-const float	fixedgain		= 0.015f;
+const float	fixedGain		= 0.015f;
 const float scaleWet		= 3;
 const float scaleDry		= 2;
 const float scaleDamp		= 0.4f;

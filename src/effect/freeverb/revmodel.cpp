@@ -149,6 +149,67 @@ void revmodel::processMix(float *inputL, float *inputR, float *outputL, float *o
 	}
 }
 
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Process one sample only, MONO input
+ *
+ * @param {float}  input   -
+ * @param {float*} outputL -
+ * @param {float*} outputR -
+ */
+void revmodel::tick(float input, float* outputL, float* outputR) {
+	float outL  = 0;
+	float outR  = 0;
+
+	// Accumulate comb filters in parallel
+	for (int i = 0; i < numCombs; i++) {
+		outL += combL[i].process(input);
+		outR += combR[i].process(input);
+	}
+
+	// Feed through allpasses in series
+	for (i = 0; i < numAllpasses; i++) {
+		outL = allpassL[i].process(outL);
+		outR = allpassR[i].process(outR);
+	}
+
+	// Calculate output
+	*outputL = outL * wet1 + outR * wet2;
+	*outputR = outR * wet1 + outL * wet2;
+
+	return out;
+}
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Process one sample only, STEREO input
+ *
+ * @param {float}  inputL  -
+ * @param {float}  inputR  -
+ * @param {float*} outputL -
+ * @param {float*} outputR -
+ */
+void revmodel::tick(float inputL, float inputR, float* outputL, float* outputR) {
+	float outL  = 0;
+	float outR  = 0;
+
+	// Accumulate comb filters in parallel
+	for (int i = 0; i < numCombs; i++) {
+		outL += combL[i].process(inputL);
+		outR += combR[i].process(inputR);
+	}
+
+	// Feed through allpasses in series
+	for (i = 0; i < numAllpasses; i++) {
+		outL = allpassL[i].process(outL);
+		outR = allpassR[i].process(outR);
+	}
+
+	// Calculate output
+	*outputL = outL * wet1 + outR * wet2;
+	*outputR = outR * wet1 + outL * wet2;
+
+	return out;
+}
+
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Recalculate internal values after parameter change.

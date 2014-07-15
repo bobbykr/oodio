@@ -19,6 +19,8 @@ public:
 	void  mute();
 	void  processMix(float *inputL, float *inputR, float *outputL, float *outputR, long numSamples, int skip);
 	void  processReplace(float *inputL, float *inputR, float *outputL, float *outputR, long numSamples, int skip);
+	void  tick(float input, float* outputL, float* outputR);
+	void  tick(float inputL, float inputR, float* outputL, float* outputR);
 
 	void  setRoomSize(float value);
 	void  setDamp(float value);
