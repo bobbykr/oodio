@@ -43,7 +43,7 @@ public:
 	 * Process one sample
 	 * Big to inline - but crucial for speed
 	 */
-	inline float process(float input)
+	inline float process(float input) {
 		float output;
 		float bufout;
 		
