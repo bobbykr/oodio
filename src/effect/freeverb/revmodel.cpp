@@ -82,8 +82,8 @@ void revmodel::mute() {
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Calculate output REPLACING anything already there
  */
-void revmodel::processReplace(float *inputL, float *inputR, float *outputL, float *outputR, long numSamples, int skip) {
-	float outL, outR, input;
+void revmodel::processReplace(double *inputL, double *inputR, double *outputL, double *outputR, long numSamples, int skip) {
+	double outL, outR, input;
 
 	while (numSamples-- > 0) {
 		outL  = outR = 0;
@@ -91,14 +91,14 @@ void revmodel::processReplace(float *inputL, float *inputR, float *outputL, floa
 
 		// Accumulate comb filters in parallel
 		for (int i = 0; i < numCombs; i++) {
-			outL += combL[i].process(input);
-			outR += combR[i].process(input);
+			outL += combL[i].tic(input);
+			outR += combR[i].tic(input);
 		}
 
 		// Feed through allpasses in series
 		for (i = 0; i < numAllpasses; i++) {
-			outL = allpassL[i].process(outL);
-			outR = allpassR[i].process(outR);
+			outL = allpassL[i].tic(outL);
+			outR = allpassR[i].tic(outR);
 		}
 
 		// Calculate output REPLACING anything already there
@@ -117,8 +117,8 @@ void revmodel::processReplace(float *inputL, float *inputR, float *outputL, floa
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Calculate output MIXING with anything already there
  */
-void revmodel::processMix(float *inputL, float *inputR, float *outputL, float *outputR, long numSamples, int skip) {
-	float outL, outR, input;
+void revmodel::processMix(double *inputL, double *inputR, double *outputL, double *outputR, long numSamples, int skip) {
+	double outL, outR, input;
 
 	while (numSamples-- > 0) {
 		outL  = 0;
@@ -127,14 +127,14 @@ void revmodel::processMix(float *inputL, float *inputR, float *outputL, float *o
 
 		// Accumulate comb filters in parallel
 		for (int i = 0; i < numCombs; i++) {
-			outL += combL[i].process(input);
-			outR += combR[i].process(input);
+			outL += combL[i].tic(input);
+			outR += combR[i].tic(input);
 		}
 
 		// Feed through allpasses in series
 		for (i = 0; i < numAllpasses; i++) {
-			outL = allpassL[i].process(outL);
-			outR = allpassR[i].process(outR);
+			outL = allpassL[i].tic(outL);
+			outR = allpassR[i].tic(outR);
 		}
 
 		// Calculate output MIXING with anything already there
@@ -152,24 +152,24 @@ void revmodel::processMix(float *inputL, float *inputR, float *outputL, float *o
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Process one sample only, MONO input
  *
- * @param {float}  input   -
- * @param {float*} outputL -
- * @param {float*} outputR -
+ * @param {double}  input   -
+ * @param {double*} outputL -
+ * @param {double*} outputR -
  */
-void revmodel::tick(float input, float* outputL, float* outputR) {
-	float outL  = 0;
-	float outR  = 0;
+void revmodel::tic(double input, double* outputL, double* outputR) {
+	double outL = 0;
+	double outR = 0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
-		outL += combL[i].process(input);
-		outR += combR[i].process(input);
+		outL += combL[i].tic(input);
+		outR += combR[i].tic(input);
 	}
 
 	// Feed through allpasses in series
 	for (i = 0; i < numAllpasses; i++) {
-		outL = allpassL[i].process(outL);
-		outR = allpassR[i].process(outR);
+		outL = allpassL[i].tic(outL);
+		outR = allpassR[i].tic(outR);
 	}
 
 	// Calculate output
@@ -182,25 +182,25 @@ void revmodel::tick(float input, float* outputL, float* outputR) {
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Process one sample only, STEREO input
  *
- * @param {float}  inputL  -
- * @param {float}  inputR  -
- * @param {float*} outputL -
- * @param {float*} outputR -
+ * @param {double}  inputL  -
+ * @param {double}  inputR  -
+ * @param {double*} outputL -
+ * @param {double*} outputR -
  */
-void revmodel::tick(float inputL, float inputR, float* outputL, float* outputR) {
-	float outL  = 0;
-	float outR  = 0;
+void revmodel::tic(double inputL, double inputR, double* outputL, double* outputR) {
+	double outL = 0;
+	double outR = 0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
-		outL += combL[i].process(inputL);
-		outR += combR[i].process(inputR);
+		outL += combL[i].tic(inputL);
+		outR += combR[i].tic(inputR);
 	}
 
 	// Feed through allpasses in series
 	for (i = 0; i < numAllpasses; i++) {
-		outL = allpassL[i].process(outL);
-		outR = allpassR[i].process(outR);
+		outL = allpassL[i].tic(outL);
+		outR = allpassR[i].tic(outR);
 	}
 
 	// Calculate output
@@ -249,56 +249,56 @@ void revmodel::update() {
  * wish to take dynamic action when they are called.
  */
 
-void revmodel::setRoomSize(float value) {
+void revmodel::setRoomSize(double value) {
 	roomSize = (value * scaleRoom) + offsetRoom;
 	update();
 }
 
-float revmodel::getroomSize() {
+double revmodel::getroomSize() {
 	return (roomSize - offsetRoom) / scaleRoom;
 }
 
-void revmodel::setDamp(float value) {
+void revmodel::setDamp(double value) {
 	damp = value * scaleDamp;
 	update();
 }
 
-float revmodel::getDamp() {
+double revmodel::getDamp() {
 	return damp / scaleDamp;
 }
 
-void revmodel::setWet(float value) {
+void revmodel::setWet(double value) {
 	wet = value * scaleWet;
 	update();
 }
 
-float revmodel::getWet() {
+double revmodel::getWet() {
 	return wet / scaleWet;
 }
 
-void revmodel::setDry(float value) {
+void revmodel::setDry(double value) {
 	dry = value * scaleDry;
 }
 
-float revmodel::getDry() {
+double revmodel::getDry() {
 	return dry / scaleDry;
 }
 
-void revmodel::setWidth(float value) {
+void revmodel::setWidth(double value) {
 	width = value;
 	update();
 }
 
-float revmodel::getWidth() {
+double revmodel::getWidth() {
 	return width;
 }
 
-void revmodel::setMode(float value) {
+void revmodel::setMode(double value) {
 	mode = value;
 	update();
 }
 
-float revmodel::getMode() {
+double revmodel::getMode() {
 	if (mode >= freezeMode) return 1;
 	else                    return 0;
 }

@@ -13,12 +13,12 @@
 class allpass {
 
 private:
-	float	*buffer;
+	double	*buffer;
 	int		bufsize;
 	int		bufidx;
 
 public:
-	float	feedback;
+	double	feedback;
 
 	allpass() {
 		bufidx = 0;
@@ -27,7 +27,7 @@ public:
 	/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 	 * Bind buffer to all pass filter
 	 */
-	void setbuffer(float *buf, int size) {
+	void setbuffer(double *buf, int size) {
 		buffer  = buf; 
 		bufsize = size;
 	};
@@ -43,12 +43,12 @@ public:
 	 * Process one sample
 	 * Big to inline - but crucial for speed
 	 */
-	inline float process(float input) {
-		float output;
-		float bufout;
+	inline double tic(double input) {
+		double output;
+		double bufout;
 		
 		bufout = buffer[bufidx];
-		UNDENORMALISE(bufout);
+		// UNDENORMALISE(bufout);
 		
 		output = -input + bufout;
 		buffer[bufidx] = input + (bufout * feedback);
