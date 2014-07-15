@@ -24,16 +24,25 @@ public:
 		bufidx = 0;
 	};
 
+	/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+	 * Bind buffer to all pass filter
+	 */
 	void setbuffer(float *buf, int size) {
 		buffer  = buf; 
 		bufsize = size;
 	};
 
+	/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+	 * Empty data from buffer
+	 */
 	void mute() {
 		for (int i = 0; i < bufsize; i++) buffer[i] = 0;
 	};
 
-	// Big to inline - but crucial for speed
+	/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+	 * Process one sample
+	 * Big to inline - but crucial for speed
+	 */
 	inline float process(float input)
 		float output;
 		float bufout;

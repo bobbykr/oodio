@@ -9,52 +9,52 @@
 #ifndef TUNING_H
 #define TUNING_H
 
-const int	numcombs		= 8;
-const int	numallpasses	= 4;
+const int	numCombs		= 8;
+const int	numAllpasses	= 4;
 const float	muted			= 0;
 const float	fixedgain		= 0.015f;
-const float scalewet		= 3;
-const float scaledry		= 2;
-const float scaledamp		= 0.4f;
-const float scaleroom		= 0.28f;
-const float offsetroom		= 0.7f;
-const float initialroom		= 0.5f;
-const float initialdamp		= 0.5f;
-const float initialwet		= 1 / scalewet;
-const float initialdry		= 0;
-const float initialwidth	= 1;
-const float initialmode		= 0;
-const float freezemode		= 0.5f;
-const int	stereospread	= 23;
+const float scaleWet		= 3;
+const float scaleDry		= 2;
+const float scaleDamp		= 0.4f;
+const float scaleRoom		= 0.28f;
+const float offsetRoom		= 0.7f;
+const float initialRoom		= 0.5f;
+const float initialDamp		= 0.5f;
+const float initialWet		= 1 / scaleWet;
+const float initialDry		= 0;
+const float initialWidth	= 1;
+const float initialMode		= 0;
+const float freezeMode		= 0.5f;
+const int	stereoSpread	= 23;
 
 // These values assume 44.1KHz sample rate
 // they will probably be OK for 48KHz sample rate
 // but would need scaling for 96KHz (or other) sample rates.
 // The values were obtained by listening tests.
-const int combtuningL1		= 1116;
-const int combtuningR1		= 1116 + stereospread;
-const int combtuningL2		= 1188;
-const int combtuningR2		= 1188 + stereospread;
-const int combtuningL3		= 1277;
-const int combtuningR3		= 1277 + stereospread;
-const int combtuningL4		= 1356;
-const int combtuningR4		= 1356 + stereospread;
-const int combtuningL5		= 1422;
-const int combtuningR5		= 1422 + stereospread;
-const int combtuningL6		= 1491;
-const int combtuningR6		= 1491 + stereospread;
-const int combtuningL7		= 1557;
-const int combtuningR7		= 1557 + stereospread;
-const int combtuningL8		= 1617;
-const int combtuningR8		= 1617 + stereospread;
-const int allpasstuningL1	= 556;
-const int allpasstuningR1	= 556 + stereospread;
-const int allpasstuningL2	= 441;
-const int allpasstuningR2	= 441 + stereospread;
-const int allpasstuningL3	= 341;
-const int allpasstuningR3	= 341 + stereospread;
-const int allpasstuningL4	= 225;
-const int allpasstuningR4	= 225 + stereospread;
+const int combTuningL1		= 1116;
+const int combTuningR1		= 1116 + stereoSpread;
+const int combTuningL2		= 1188;
+const int combTuningR2		= 1188 + stereoSpread;
+const int combTuningL3		= 1277;
+const int combTuningR3		= 1277 + stereoSpread;
+const int combTuningL4		= 1356;
+const int combTuningR4		= 1356 + stereoSpread;
+const int combTuningL5		= 1422;
+const int combTuningR5		= 1422 + stereoSpread;
+const int combTuningL6		= 1491;
+const int combTuningR6		= 1491 + stereoSpread;
+const int combTuningL7		= 1557;
+const int combTuningR7		= 1557 + stereoSpread;
+const int combTuningL8		= 1617;
+const int combTuningR8		= 1617 + stereoSpread;
+const int allpassTuningL1	= 556;
+const int allpassTuningR1	= 556 + stereoSpread;
+const int allpassTuningL2	= 441;
+const int allpassTuningR2	= 441 + stereoSpread;
+const int allpassTuningL3	= 341;
+const int allpassTuningR3	= 341 + stereoSpread;
+const int allpassTuningL4	= 225;
+const int allpassTuningR4	= 225 + stereoSpread;
 
 #endif
 
