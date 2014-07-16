@@ -1,5 +1,17 @@
-Freeverb - Free, studio-quality reverb SOURCE CODE in the public domain
------------------------------------------------------------------------
+Modifications added to original Freeverb code
+---------------------------------------------
+- Audio process now use double precision floating point instead of simple precision.
+- Added `DOUBLE_DENORM` macro to kill denormalised number in double precision.
+- Two new functions has been added to reveb model: `tic(float input, float* outpurR, float* outputL)` and `tic(float inputR, float inputL, float* outpurR, float* outputL)`. These functions process only one audio sample returning only the wet signal of the reverberation.
+
+Cedric Stoquer, July 2014
+
+
+Original readme:
+
+Freeverb
+========
+Free, studio-quality reverb SOURCE CODE in the public domain
 
 Written by Jezar at Dreampoint - http://www.dreampoint.co.uk
 
