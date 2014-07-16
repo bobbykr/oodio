@@ -16,23 +16,36 @@
 #define round(x) ((x)>=0?(int16_t)((x)+0.5):(int16_t)((x)-0.5))
 
 #include "constants.h"
+
+// --------------- gui --------------
 #include "src/gui/RenderingContext.h"
 #include "src/gui/AmsFont.h"
 #include "src/gui/Button.h"
 #include "src/gui/Slider.h"
+
+// ----------- oscillators ----------
 #include "src/oscillator/Oscillator.h"
 #include "src/oscillator/OscRamp.h"
 #include "src/oscillator/OscPulse.h"
 #include "src/oscillator/OscTri.h"
+
+// ------------- filters ------------
 #include "src/filter/FastFilter.h"
 #include "src/filter/Analog4Poles.h"
 #include "src/filter/RCFilter.h"
+
+// ------------- effects ------------
+#include "src/effect/freeverb/Freeverb.h"
+
+// ------------ sequencer -----------
 #include "src/sequencer/FreqSeq.h"
+
+// ------------ controler -----------
 #include "src/midi/Launchpad.h"
 
 bool     filterActive = true;
 int16_t  mute = 1;
-double   amp = 0.1;
+double   amp = 0.005;
 
 OscPulse     osc1;
 OscTri       osc2;
@@ -40,6 +53,7 @@ OscTri       osc3;
 FastFilter   glide;
 RCFilter     fltr;
 FreqSeq      seq;
+Freeverb     reverb;
 
 double       fltrRawCutoff = 0.0;
 FastFilter   fltrSmoothCutoff;
@@ -80,6 +94,10 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		// if (filterActive) o = o - fltr.tic(o);
 		if (filterActive) o = fltr.tic(o);
 		o *= amp;
+
+		// apply reverb
+		double outPlaceholder;
+		reverb.tic(o, &o, &outPlaceholder);
 
 		// trim overload
 		if (o < -1) o = -1;

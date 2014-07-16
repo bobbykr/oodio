@@ -28,8 +28,8 @@ public:
 		bufidx      = 0;
 	};
 
-	void setbuffer(double *buf, int size) {
-		buffer  = buf; 
+	void setBuffer(double *buf, int size) {
+		buffer  = buf;
 		bufsize = size;
 	};
 
@@ -37,17 +37,17 @@ public:
 		for (int i = 0; i < bufsize; i++) buffer[i] = 0.0;
 	};
 
-	void setdamp(double val) {
-		damp1 = val; 
+	void setDamp(double val) {
+		damp1 = val;
 		damp2 = 1 - val;
 	};
 
-	double getdamp() {
+	double getDamp() {
 		return damp1;
 	};
 
 	// Big to inline - but crucial for speed
-	inline double tic(double inp) {
+	inline double tic(double input) {
 		double output;
 
 		output = buffer[bufidx];

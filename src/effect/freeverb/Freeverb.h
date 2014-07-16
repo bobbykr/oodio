@@ -6,16 +6,16 @@
  * This code is public domain
  */
 
-#ifndef REVMODEL_H
-#define REVMODEL_H
+#ifndef FREEVERB_H
+#define FREEVERB_H
 
-#include "comb.hpp"
-#include "allpass.hpp"
+#include "comb.h"
+#include "allpass.h"
 #include "tuning.h"
 
-class revmodel {
+class Freeverb {
 public:
-		  revmodel();
+		  Freeverb();
 	void  mute();
 	void  processMix(double *inputL, double *inputR, double *outputL, double *outputR, long numSamples, int skip);
 	void  processReplace(double *inputL, double *inputR, double *outputL, double *outputR, long numSamples, int skip);
@@ -47,7 +47,7 @@ private:
 	double width;
 	double mode;
 
-	// The following are all declared inline 
+	// The following are all declared inline
 	// to remove the need for dynamic allocation
 	// with its subsequent error-checking messiness
 

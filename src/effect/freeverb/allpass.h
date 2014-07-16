@@ -27,7 +27,7 @@ public:
 	/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 	 * Bind buffer to all pass filter
 	 */
-	void setbuffer(double *buf, int size) {
+	void setBuffer(double *buf, int size) {
 		buffer  = buf; 
 		bufsize = size;
 	};
