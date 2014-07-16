@@ -51,10 +51,10 @@ public:
 		double output;
 
 		output = buffer[bufidx];
-		// UNDENORMALISE(output);
+		DOUBLE_DENORM(output);
 
 		filterstore = (output * damp2) + (filterstore * damp1);
-		// UNDENORMALISE(filterstore);
+		DOUBLE_DENORM(filterstore);
 
 		buffer[bufidx] = input + (filterstore * feedback);
 

@@ -48,7 +48,7 @@ public:
 		double bufout;
 		
 		bufout = buffer[bufidx];
-		// UNDENORMALISE(bufout);
+		DOUBLE_DENORM(bufout);
 		
 		output = -input + bufout;
 		buffer[bufidx] = input + (bufout * feedback);
