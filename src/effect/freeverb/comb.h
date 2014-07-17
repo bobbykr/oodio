@@ -28,7 +28,7 @@ public:
 		bufidx      = 0;
 	};
 
-	void setbuffer(double *buf, int size) {
+	void setbuffer(double* buf, int size) {
 		buffer  = buf; 
 		bufsize = size;
 	};

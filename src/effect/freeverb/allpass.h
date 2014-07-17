@@ -13,9 +13,9 @@
 class allpass {
 
 private:
-	double	*buffer;
-	int		bufsize;
-	int		bufidx;
+	double* buffer;
+	int     bufsize;
+	int     bufidx;
 
 public:
 	double	feedback;
@@ -27,7 +27,7 @@ public:
 	/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 	 * Bind buffer to all pass filter
 	 */
-	void setbuffer(double *buf, int size) {
+	void setbuffer(double* buf, int size) {
 		buffer  = buf; 
 		bufsize = size;
 	};
