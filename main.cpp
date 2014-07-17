@@ -48,7 +48,7 @@
 
 bool     filterActive = true;
 int16_t  mute = 1;
-double   amp = 0.005;
+double   amp = 0.05;
 
 OscPulse      osc1;
 OscTri        osc2;
@@ -101,12 +101,16 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		// if (filterActive) o = o - fltr.tic(o);
 		fltr.cutoff = e * fltrSmoothCutoff.tic(fltrRawCutoff);
 		if (filterActive) o = fltr.tic(o);
+		o *= e;
+
+		// main amplification
 		o *= amp;
 
 		// apply reverb
+		double revWet;
 		double outPlaceholder;
-		// reverb.tic(o, &o, &outPlaceholder);
-		o *= e;
+		reverb.tic(o, &revWet, &outPlaceholder);
+		o += revWet * 0.3;
 
 		// trim overload
 		if (o < -1) o = -1;
