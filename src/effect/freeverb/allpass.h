@@ -27,8 +27,8 @@ public:
 	/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 	 * Bind buffer to all pass filter
 	 */
-	void setbuffer(double* buf, int size) {
-		buffer  = buf; 
+	void setBuffer(double* buf, int size) {
+		buffer  = buf;
 		bufsize = size;
 	};
 
@@ -48,7 +48,7 @@ public:
 		double bufout;
 		
 		bufout = buffer[bufidx];
-		// UNDENORMALISE(bufout);
+		DOUBLE_DENORM(bufout);
 		
 		output = -input + bufout;
 		buffer[bufidx] = input + (bufout * feedback);
