@@ -15,8 +15,8 @@ private:
 		// FIXME: if parameters changes while envelope playing,
 		//        there will be an audio glich.
 		//        process should only use previous output value, not t.
-		a = (2 - 4 * curvature) / (releaseTime * releaseTime);
-		b = (4 * p - 3) / releaseTime;
+		a = (2 - 4 * curvature) / (double)(releaseTime * releaseTime);
+		b = (4 * curvature - 3) / (double)releaseTime;
 	};
 
 public:
@@ -50,7 +50,7 @@ public:
 		update();
 	};
 
-	void setReleaseTime(double r) {
+	void setReleaseTime(int r) {
 		releaseTime = r;
 		update();
 	};

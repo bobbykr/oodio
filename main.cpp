@@ -34,6 +34,9 @@
 #include "src/filter/Analog4Poles.h"
 #include "src/filter/RCFilter.h"
 
+// ------------- envelopes ------------
+#include "src/envelope/DecayEnvelope.h"
+
 // ------------- effects ------------
 #include "src/effect/freeverb/Freeverb.h"
 
@@ -47,13 +50,14 @@ bool     filterActive = true;
 int16_t  mute = 1;
 double   amp = 0.005;
 
-OscPulse     osc1;
-OscTri       osc2;
-OscTri       osc3;
-FastFilter   glide;
-RCFilter     fltr;
-FreqSeq      seq;
-Freeverb     reverb;
+OscPulse      osc1;
+OscTri        osc2;
+OscTri        osc3;
+FastFilter    glide;
+RCFilter      fltr;
+FreqSeq       seq;
+Freeverb      reverb;
+DecayEnvelope env;
 
 double       fltrRawCutoff = 0.0;
 FastFilter   fltrSmoothCutoff;
@@ -69,7 +73,6 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 	for (len >>= 1; len; len--) {
 		// update controls
-		fltr.cutoff = fltrSmoothCutoff.tic(fltrRawCutoff);
 
 		// update sequencer
 		double f = seq.tic();
@@ -90,14 +93,20 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		// simple mix + amplification
 		double o = (o1 + o2);
 
+		// envelope
+		double e = env.tic();
+		if (e == 0) env.trigger();
+
 		// apply filter
 		// if (filterActive) o = o - fltr.tic(o);
+		fltr.cutoff = e * fltrSmoothCutoff.tic(fltrRawCutoff);
 		if (filterActive) o = fltr.tic(o);
 		o *= amp;
 
 		// apply reverb
 		double outPlaceholder;
-		reverb.tic(o, &o, &outPlaceholder);
+		// reverb.tic(o, &o, &outPlaceholder);
+		o *= e;
 
 		// trim overload
 		if (o < -1) o = -1;
@@ -168,6 +177,7 @@ int main(int argc, char* argv[]) {
 	osc3.width = 0.9;
 	glide.freq = 0.005;
 	fltrSmoothCutoff.freq = 0.001;
+	env.setReleaseTime(12000);
 
 	SDL_PauseAudio(0); // start audio
 
