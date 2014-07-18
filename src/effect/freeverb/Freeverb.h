@@ -53,12 +53,12 @@ private:
 	// with its subsequent error-checking messiness
 
 	// Comb filters
-	comb  combL[numCombs];
-	comb  combR[numCombs];
+	Comb  combL[numCombs];
+	Comb  combR[numCombs];
 
 	// Allpass filters
-	allpass	allpassL[numAllpasses];
-	allpass	allpassR[numAllpasses];
+	Allpass	allpassL[numAllpasses];
+	Allpass	allpassR[numAllpasses];
 
 	// Buffers for the combs
 	double bufCombL1[combTuningL1];

@@ -11,7 +11,7 @@
 
 #include "denormals.h"
 
-class comb {
+class Comb {
 private:
 	double	filterstore;
 	double	damp1;
@@ -23,7 +23,7 @@ private:
 public:
 	double	feedback;
 
-	comb() {
+	Comb() {
 		filterstore = 0.0;
 		bufidx      = 0;
 	};

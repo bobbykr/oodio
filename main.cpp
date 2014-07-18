@@ -38,7 +38,7 @@
 #include "src/envelope/DecayEnvelope.h"
 
 // ------------- effects ------------
-#include "src/effect/freeverb/Freeverb.h"
+#include "src/effect/freeverb/FreeverbMono.h"
 
 // ------------ sequencer -----------
 #include "src/sequencer/Clock.h"
@@ -59,7 +59,7 @@ FastFilter    glide;
 RCFilter      fltr;
 Clock         clk;
 FreqSeq       seq;
-Freeverb      reverb;
+FreeverbMono  reverb;
 DecayEnvelope env;
 
 double       fltrRawCutoff = 0.0;
@@ -114,7 +114,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 		// apply reverb
 		reverb.tic(o);
-		o += reverb.outR * 0.3;
+		o += reverb.out * 0.02;
 
 		// trim overload
 		if (o < -1) o = -1;

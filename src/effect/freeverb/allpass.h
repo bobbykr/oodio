@@ -10,7 +10,7 @@
 #define ALLPASS_H
 #include "denormals.h"
 
-class allpass {
+class Allpass {
 
 private:
 	double* buffer;
@@ -20,7 +20,7 @@ private:
 public:
 	double	feedback;
 
-	allpass() {
+	Allpass() {
 		bufidx = 0;
 	};
 
