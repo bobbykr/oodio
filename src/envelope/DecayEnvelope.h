@@ -36,12 +36,26 @@ public:
 	};
 
     double tic() {
-    	if (stopped) return 0;
-    	if (t++ > releaseTime) {
-    		stopped = true;
-    		out = 0;
-    	}
-    	out = a * (double)(t * t) + b * (double)t + 1;
+		if (stopped) return 0;
+		if (t++ > releaseTime) {
+			stopped = true;
+			out = 0;
+		}
+		out = a * (double)(t * t) + b * (double)t + 1;
+		return out;
+	};
+
+	double tic(double trig) {
+		if (trig > 0.8) {
+			stopped = false;
+			t = 0;
+		}
+		if (stopped) return 0;
+		if (t++ > releaseTime) {
+			stopped = true;
+			out = 0;
+		}
+		out = a * (double)(t * t) + b * (double)t + 1;
 		return out;
 	};
 

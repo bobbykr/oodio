@@ -41,6 +41,7 @@
 #include "src/effect/freeverb/Freeverb.h"
 
 // ------------ sequencer -----------
+#include "src/sequencer/Clock.h"
 #include "src/sequencer/FreqSeq.h"
 
 // ------------ controler -----------
@@ -49,12 +50,14 @@
 bool     filterActive = true;
 int16_t  mute = 1;
 double   amp = 0.05;
+double   tempo = 80;
 
 OscPulse      osc1;
 OscTri        osc2;
 OscTri        osc3;
 FastFilter    glide;
 RCFilter      fltr;
+Clock         clk;
 FreqSeq       seq;
 Freeverb      reverb;
 DecayEnvelope env;
@@ -72,6 +75,8 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 	int16_t* stream = (int16_t*) stream0;
 
 	for (len >>= 1; len; len--) {
+		double trig = clk.tic();
+
 		// update controls
 
 		// update sequencer
@@ -94,13 +99,14 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		double o = (o1 + o2);
 
 		// envelope
-		double e = env.tic();
-		if (e == 0) env.trigger();
+		double e = env.tic(trig);
+		// if (e == 0) env.trigger();
 
 		// apply filter
-		// if (filterActive) o = o - fltr.tic(o);
 		fltr.cutoff = e * fltrSmoothCutoff.tic(fltrRawCutoff);
-		if (filterActive) o = fltr.tic(o);
+		if (filterActive) o = fltr.tic(o); // low-pass fliter
+		// if (filterActive) o = o - fltr.tic(o); // hi-pass filter
+
 		o *= e;
 
 		// main amplification
@@ -108,8 +114,8 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 		// apply reverb
 		double revWet;
-		double outPlaceholder;
-		reverb.tic(o, &revWet, &outPlaceholder);
+		double placeholder;
+		reverb.tic(o, &revWet,  &placeholder);
 		o += revWet * 0.3;
 
 		// trim overload
@@ -166,7 +172,17 @@ int main(int argc, char* argv[]) {
 	// make sure SDL cleans up before exit
 	atexit(SDL_Quit);
 
-	// init audio
+
+	// init synth
+	osc3.freq  = 0.03;
+	osc3.width = 0.9;
+	glide.freq = 0.005;
+	fltrSmoothCutoff.freq = 0.001;
+	env.setReleaseTime(12000);
+	clk.setTempo(tempo);
+	seq.setTempo(tempo);
+
+	// init SDL audio
 	{
 		SDL_AudioSpec audioSpec;
 		audioSpec.freq     = SAMPLE_RATE;
@@ -176,12 +192,6 @@ int main(int argc, char* argv[]) {
 		audioSpec.callback = audioCallback;
 		SDL_OpenAudio(&audioSpec, NULL);
 	}
-
-	osc3.freq  = 0.03;
-	osc3.width = 0.9;
-	glide.freq = 0.005;
-	fltrSmoothCutoff.freq = 0.001;
-	env.setReleaseTime(12000);
 
 	SDL_PauseAudio(0); // start audio
 

@@ -5,19 +5,21 @@
 
 class Clock {
 private:
-	double  pos;
+	double pos;
+	double tempo;
+	double inc;
+
 
 public:
 	double out;
-	double tempo;
 
 	Clock() {
-		out   = 1;
-		tempo = 140;
+		out = 0;
+		setTempo(140);
 	};
 
 	double tic() {
-		pos += tempo / (120 * SAMPLE_RATE);
+		pos += inc;
 		if (pos >= 1) {
 			out = 1;
 			pos -= 1;
@@ -26,6 +28,11 @@ public:
 		}
 
 		return out;
+	};
+
+	void setTempo(double t) {
+		tempo = t;
+		inc = tempo / (30 * SAMPLE_RATE);
 	};
 };
 

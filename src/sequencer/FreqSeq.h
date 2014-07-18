@@ -4,17 +4,19 @@
 
 class FreqSeq {
 private:
-	int    length;
+	int     length;
 	double  pos;
 	double* steps;
+	double  tempo;
+	double  inc;
 
 public:
 	double out;
-	double tempo;
 
 	FreqSeq();
 	~FreqSeq();
 	double tic();
+	void   setTempo(double);
 };
 
 #endif

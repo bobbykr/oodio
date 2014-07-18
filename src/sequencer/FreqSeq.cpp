@@ -7,9 +7,8 @@ double noteToFreq(double noteNumber) {
 }
 
 FreqSeq::FreqSeq() {
-	tempo  = 140; // bpm
-	pos    = 0;
 	length = 8;
+	pos    = 0;
 	steps  = new double[length];
 
 	// TODO: add a method to set step by note number
@@ -21,6 +20,8 @@ FreqSeq::FreqSeq() {
 	steps[5] = noteToFreq(57); //220.00;
 	steps[6] = noteToFreq(52); //164.81;
 	steps[7] = noteToFreq(62); //293.66;
+
+	setTempo(140); // bpm
 }
 
 FreqSeq::~FreqSeq() {
@@ -29,11 +30,16 @@ FreqSeq::~FreqSeq() {
 
 
 double FreqSeq::tic() {
-	pos += length * tempo / (120 * SAMPLE_RATE);
+	pos += inc;
 	if (pos > length) pos -= length;
 	int p = (int) pos;
 	// if (p < 0) p = 0;
 	// if (p > 7) p = 7;
 	out = steps[p];
 	return out;
+}
+
+void FreqSeq::setTempo(double t) {
+	tempo = t;
+	inc = length * tempo / (120 * SAMPLE_RATE);
 }
