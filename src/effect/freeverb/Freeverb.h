@@ -17,10 +17,8 @@ class Freeverb {
 public:
 		  Freeverb();
 	void  mute();
-	void  processMix(double *inputL, double *inputR, double *outputL, double *outputR, long numSamples, int skip);
-	void  processReplace(double *inputL, double *inputR, double *outputL, double *outputR, long numSamples, int skip);
-	void  tic(double input, double* outputL, double* outputR);
-	void  tic(double inputL, double inputR, double* outputL, double* outputR);
+	void  tic(double input);
+	void  tic(double inputL, double inputR);
 
 	void  setRoomSize(double value);
 	void  setDamp(double value);
@@ -35,6 +33,9 @@ public:
 	double getDry();
 	double getWidth();
 	double getMode();
+
+	double outR;
+	double outL;
 
 private:
 	void update();

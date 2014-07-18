@@ -2,7 +2,7 @@ Modifications added to original Freeverb code
 ---------------------------------------------
 - Audio process now use double precision floating point instead of simple precision.
 - Added `DOUBLE_DENORM` macro to kill denormalised number in double precision.
-- Two new functions has been added to reveb model: `tic(float input, float* outpurR, float* outputL)` and `tic(float inputR, float inputL, float* outpurR, float* outputL)`. These functions process only one audio sample returning only the wet signal of the reverberation.
+- Processing functions has been simplified to process only one audio sample: `tic(double input)` and `tic(double inputR, double inputL)`. Only the wet signal of the reverberation is computed.
 
 Cedric Stoquer, July 2014
 

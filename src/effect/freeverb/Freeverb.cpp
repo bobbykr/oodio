@@ -80,102 +80,29 @@ void Freeverb::mute() {
 
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
- * Calculate output REPLACING anything already there
- */
-void Freeverb::processReplace(double *inputL, double *inputR, double *outputL, double *outputR, long numSamples, int skip) {
-	double outL, outR, input;
-
-	while (numSamples-- > 0) {
-		outL  = 0.0;
-		outR  = 0.0;
-		input = (*inputL + *inputR) * gain;
-
-		// Accumulate comb filters in parallel
-		for (int i = 0; i < numCombs; i++) {
-			outL += combL[i].tic(input);
-			outR += combR[i].tic(input);
-		}
-
-		// Feed through allpasses in series
-		for (int i = 0; i < numAllpasses; i++) {
-			outL = allpassL[i].tic(outL);
-			outR = allpassR[i].tic(outR);
-		}
-
-		// Calculate output REPLACING anything already there
-		*outputL = outL * wet1 + outR * wet2 + *inputL * dry;
-		*outputR = outR * wet1 + outL * wet2 + *inputR * dry;
-
-		// Increment sample pointers, allowing for interleave (if any)
-		inputL  += skip;
-		inputR  += skip;
-		outputL += skip;
-		outputR += skip;
-	}
-}
-
-
-/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
- * Calculate output MIXING with anything already there
- */
-void Freeverb::processMix(double *inputL, double *inputR, double *outputL, double *outputR, long numSamples, int skip) {
-	double outL, outR, input;
-
-	while (numSamples-- > 0) {
-		outL  = 0.0;
-		outR  = 0.0;
-		input = (*inputL + *inputR) * gain;
-
-		// Accumulate comb filters in parallel
-		for (int i = 0; i < numCombs; i++) {
-			outL += combL[i].tic(input);
-			outR += combR[i].tic(input);
-		}
-
-		// Feed through allpasses in series
-		for (int i = 0; i < numAllpasses; i++) {
-			outL = allpassL[i].tic(outL);
-			outR = allpassR[i].tic(outR);
-		}
-
-		// Calculate output MIXING with anything already there
-		*outputL += outL * wet1 + outR * wet2 + *inputL * dry;
-		*outputR += outR * wet1 + outL * wet2 + *inputR * dry;
-
-		// Increment sample pointers, allowing for interleave (if any)
-		inputL  += skip;
-		inputR  += skip;
-		outputL += skip;
-		outputR += skip;
-	}
-}
-
-/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Process one sample only, MONO input
  *
  * @param {double}  input   -
- * @param {double*} outputL -
- * @param {double*} outputR -
  */
-void Freeverb::tic(double input, double* outputL, double* outputR) {
-	double outL = 0.0;
-	double outR = 0.0;
+void Freeverb::tic(double input) {
+	double l = 0.0;
+	double r = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
-		outL += combL[i].tic(input);
-		outR += combR[i].tic(input);
+		l += combL[i].tic(input);
+		r += combR[i].tic(input);
 	}
 
 	// Feed through allpasses in series
 	for (int i = 0; i < numAllpasses; i++) {
-		outL = allpassL[i].tic(outL);
-		outR = allpassR[i].tic(outR);
+		l = allpassL[i].tic(l);
+		r = allpassR[i].tic(r);
 	}
 
 	// Calculate output
-	*outputL = outL * wet1 + outR * wet2;
-	*outputR = outR * wet1 + outL * wet2;
+	outL = l * wet1 + r * wet2;
+	outR = r * wet1 + l * wet2;
 }
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -183,28 +110,26 @@ void Freeverb::tic(double input, double* outputL, double* outputR) {
  *
  * @param {double}  inputL  -
  * @param {double}  inputR  -
- * @param {double*} outputL -
- * @param {double*} outputR -
  */
-void Freeverb::tic(double inputL, double inputR, double* outputL, double* outputR) {
-	double outL = 0.0;
-	double outR = 0.0;
+void Freeverb::tic(double inputL, double inputR) {
+	double l = 0.0;
+	double r = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
-		outL += combL[i].tic(inputL);
-		outR += combR[i].tic(inputR);
+		l += combL[i].tic(inputL);
+		r += combR[i].tic(inputR);
 	}
 
 	// Feed through allpasses in series
 	for (int i = 0; i < numAllpasses; i++) {
-		outL = allpassL[i].tic(outL);
-		outR = allpassR[i].tic(outR);
+		l = allpassL[i].tic(l);
+		r = allpassR[i].tic(r);
 	}
 
 	// Calculate output
-	*outputL = outL * wet1 + outR * wet2;
-	*outputR = outR * wet1 + outL * wet2;
+	outL = l * wet1 + r * wet2;
+	outR = r * wet1 + l * wet2;
 }
 
 

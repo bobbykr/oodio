@@ -50,7 +50,7 @@
 bool     filterActive = true;
 int16_t  mute = 1;
 double   amp = 0.05;
-double   tempo = 80;
+double   tempo = 88;
 
 OscPulse      osc1;
 OscTri        osc2;
@@ -113,10 +113,8 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		o *= amp;
 
 		// apply reverb
-		double revWet;
-		double placeholder;
-		reverb.tic(o, &revWet,  &placeholder);
-		o += revWet * 0.3;
+		reverb.tic(o);
+		o += reverb.outR * 0.3;
 
 		// trim overload
 		if (o < -1) o = -1;
@@ -159,12 +157,12 @@ int main(int argc, char* argv[]) {
 	Launchpad launchpad;
 	launchpad.initMidi();
 	// test
-	for (int x = 0; x < 4; x++) {
+	/*for (int x = 0; x < 4; x++) {
 		for (int y = 0; y < 4; y++) {
 			launchpad.plot(x * 2,     y * 2,     x, y);
 			launchpad.plot(x * 2 + 1, y * 2 + 1, x, y);
 		}
-	}
+	}*/
 
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return 1;
@@ -176,9 +174,9 @@ int main(int argc, char* argv[]) {
 	// init synth
 	osc3.freq  = 0.03;
 	osc3.width = 0.9;
-	glide.freq = 0.005;
+	glide.freq = 0.004;
 	fltrSmoothCutoff.freq = 0.001;
-	env.setReleaseTime(12000);
+	env.setReleaseTime(9000);
 	clk.setTempo(tempo);
 	seq.setTempo(tempo);
 
