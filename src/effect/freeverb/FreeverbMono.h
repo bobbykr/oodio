@@ -17,7 +17,8 @@ class FreeverbMono {
 public:
 		  FreeverbMono();
 	void  mute();
-	void  tic(float input);
+	void  tic();
+	void  connect(float* in);
 
 	void  setRoomSize(float value);
 	void  setDamp(float value);
@@ -31,6 +32,8 @@ public:
 
 private:
 	void update();
+
+	float* input;
 
 	float gain;
 	float roomSize, _roomSize;

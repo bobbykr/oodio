@@ -54,6 +54,7 @@ FreeverbMono  reverb;
 DecayEnvelope env;
 
 float mix;
+float dry;
 
 float        fltrRawCutoff = 0.0;
 FastFilter   fltrSmoothCutoff;
@@ -105,18 +106,22 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		// apply filter
 		fltrSmoothCutoff.tic();
 		fltr.cutoff = e * fltrSmoothCutoff.out;
-		if (filterActive) fltr.tic(); // low-pass filter
-		// if (filterActive) o = o - fltr.tic(o); // hi-pass filter
+		fltr.tic();
+		
+		// if (filterActive) dry = mix - fltr.out;  // hi-pass filter
+		if (filterActive) dry = fltr.out;        // low-pass filter
+		else dry = mix;
 
-		float o = fltr.out;
+		
 
-		o *= e;
+		dry *= e;
 
 		// main amplification
-		o *= amp;
+		dry *= amp;
 
 		// apply reverb
-		reverb.tic(o);
+		reverb.tic();
+		float o = dry;
 		o += reverb.out * 0.02;
 
 		// trim overload
@@ -190,6 +195,7 @@ int main(int argc, char* argv[]) {
 	glide.connect(&(seq.out));
 	fltrSmoothCutoff.connect(&fltrRawCutoff);
 	env.connect(&(clk.out));
+	reverb.connect(&dry);
 
 	// init SDL audio
 	{

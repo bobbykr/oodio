@@ -58,18 +58,21 @@ void FreeverbMono::mute() {
 	}
 }
 
+void FreeverbMono::connect(float* in) {
+	input = in;
+}
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Process one sample
  *
  * @param {float} input
  */
-void FreeverbMono::tic(float input) {
+void FreeverbMono::tic() {
 	float o = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
-		o += comb[i].tic(input);
+		o += comb[i].tic(*input);
 	}
 
 	// Feed through allpasses in series
