@@ -176,9 +176,12 @@ int main(int argc, char* argv[]) {
 	osc3.width = 0.9;
 	glide.freq = 0.004;
 	fltrSmoothCutoff.freq = 0.001;
-	env.setReleaseTime(9000);
+	env.setReleaseTime(11000);
+	env.setCurvature(0.8);
 	clk.setTempo(tempo);
 	seq.setTempo(tempo);
+	reverb.setRoomSize(0.8);
+	reverb.setDamp(0.3);
 
 	// init SDL audio
 	{

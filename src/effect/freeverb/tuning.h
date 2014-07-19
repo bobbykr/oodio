@@ -15,17 +15,20 @@ const int    stereoSpread   = 23;
 
 const double muted          = 0.0;
 const double fixedGain      = 0.015;
+
 const double scaleWet       = 3.0;
 const double scaleDry       = 2.0;
 const double scaleDamp      = 0.4;
 const double scaleRoom      = 0.28;
 const double offsetRoom     = 0.7;
+
 const double initialRoom    = 0.5;
 const double initialDamp    = 0.5;
 const double initialWet     = 0.1 / scaleWet;
 const double initialDry     = 0.0;
 const double initialWidth   = 1.0;
 const double initialMode    = 0.0;
+
 const double freezeMode     = 0.5;
 
 
@@ -49,6 +52,7 @@ const int combTuningL7      = 1557;
 const int combTuningR7      = 1557 + stereoSpread;
 const int combTuningL8      = 1617;
 const int combTuningR8      = 1617 + stereoSpread;
+
 const int allpassTuningL1   = 556;
 const int allpassTuningR1   = 556 + stereoSpread;
 const int allpassTuningL2   = 441;
