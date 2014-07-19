@@ -16,11 +16,10 @@ public:
 		width = 0.5;
 	};
 
-    float tic() {
+    void tic() {
 		pos += freq / SAMPLE_RATE;
 		if (pos > 1) pos -= 1;
 		out = (pos > width) ? 1 : -1;
-		return out;
 	};
 };
 

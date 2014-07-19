@@ -4,7 +4,8 @@
 class RCFilter {
 
 private:
-	float state;
+	float  state;
+	float* input;
 
 public:
 	float reso;
@@ -21,10 +22,14 @@ public:
 	void setCutoff(int value);
 	void setReso(int value);
 
-	inline float tic(float in) {
+	void setInput(float* in) {
+		input = in;
+	}
+
+	inline void tic() {
+		float in = *input;
 		state = (1 - reso * cutoff) * state - cutoff * out + cutoff * in;
 		out   = (1 - reso * cutoff) * out   + cutoff * state;
-		return out;
 	}
 };
 

@@ -18,7 +18,7 @@ public:
 		setTempo(140);
 	};
 
-	float tic() {
+	void tic() {
 		pos += inc;
 		if (pos >= 1) {
 			out = 1;
@@ -26,8 +26,6 @@ public:
 		} else {
 			out = 0;
 		}
-
-		return out;
 	};
 
 	void setTempo(float t) {

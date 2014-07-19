@@ -53,6 +53,8 @@ FreqSeq       seq;
 FreeverbMono  reverb;
 DecayEnvelope env;
 
+float mix;
+
 float        fltrRawCutoff = 0.0;
 FastFilter   fltrSmoothCutoff;
 
@@ -66,20 +68,27 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 	int16_t* stream = (int16_t*) stream0;
 
 	for (len >>= 1; len; len--) {
-		float trig = clk.tic();
+		clk.tic();
+		float trig = clk.out;
 
 		// update controls
 
 		// update sequencer
-		float f = seq.tic();
+		seq.tic();
+		float f = seq.out;
 		f = glide.tic(f);
 		osc1.freq = f;
 		osc2.freq = f / 3.01;
 
 		// update oscillators
-		float o1 = osc1.tic();
-		float o2 = osc2.tic();
-		float o3 = osc3.tic();
+		osc1.tic();
+		osc2.tic();
+		osc3.tic();
+
+		float o1 = osc1.out;
+		float o2 = osc2.out;
+		float o3 = osc3.out;
+
 
 		// o3 = (1 - o3) / 2;
 		o3 = map(o3, -1, 1, 0, 0.5);
@@ -87,7 +96,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		osc2.width = o3;
 
 		// simple mix + amplification
-		float o = (o1 + o2);
+		mix = (o1 + o2);
 
 		// envelope
 		float e = env.tic(trig);
@@ -95,8 +104,10 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 		// apply filter
 		fltr.cutoff = e * fltrSmoothCutoff.tic(fltrRawCutoff);
-		if (filterActive) o = fltr.tic(o); // low-pass fliter
+		if (filterActive) fltr.tic(); // low-pass fliter
 		// if (filterActive) o = o - fltr.tic(o); // hi-pass filter
+
+		float o = fltr.out;
 
 		o *= e;
 
@@ -173,6 +184,8 @@ int main(int argc, char* argv[]) {
 	seq.setTempo(tempo);
 	reverb.setRoomSize(0.8);
 	reverb.setDamp(0.3);
+	mix = 0.0;
+	fltr.setInput(&mix);
 
 	// init SDL audio
 	{

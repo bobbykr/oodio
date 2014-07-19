@@ -23,8 +23,7 @@ public:
 
 	// virtual ~Oscillator();
 
-	virtual float tic() {
-		return 0.0;
+	virtual void tic() {
 	};
 };
 

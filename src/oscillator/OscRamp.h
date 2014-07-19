@@ -10,11 +10,10 @@ private:
 
 public:
 
-	float tic() {
+	void tic() {
 		pos += freq / SAMPLE_RATE;
 		if (pos > 1) pos -= 1;
 		out = 2 * pos - 1;
-		return out;
 	};
 };
 

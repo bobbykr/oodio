@@ -38,14 +38,13 @@ public:
 		delete[] steps;
 	};
 
-	float tic() {
+	void tic() {
 		pos += inc;
 		if (pos > length) pos -= length;
 		int p = (int) pos;
 		// if (p < 0) p = 0;
 		// if (p > 7) p = 7;
 		out = steps[p];
-		return out;
 	};
 
 	void setTempo(float t) {
