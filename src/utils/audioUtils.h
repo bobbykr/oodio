@@ -2,7 +2,7 @@
 #define AUDIO_UTILS_H
 
 
-double noteToFreq(double);
+float noteToFreq(float);
 
 
 #endif

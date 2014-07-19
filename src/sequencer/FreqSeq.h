@@ -8,18 +8,18 @@
 class FreqSeq {
 private:
 	int     length;
-	double  pos;
-	double* steps;
-	double  tempo;
-	double  inc;
+	float  pos;
+	float* steps;
+	float  tempo;
+	float  inc;
 
 public:
-	double out;
+	float out;
 
 	FreqSeq() {
 		length = 8;
 		pos    = 0;
-		steps  = new double[length];
+		steps  = new float[length];
 
 		// TODO: add a method to set step by note number
 		steps[0] = noteToFreq(69); //440;
@@ -38,7 +38,7 @@ public:
 		delete[] steps;
 	};
 
-	double tic() {
+	float tic() {
 		pos += inc;
 		if (pos > length) pos -= length;
 		int p = (int) pos;
@@ -48,7 +48,7 @@ public:
 		return out;
 	};
 
-	void   setTempo(double t) {
+	void   setTempo(float t) {
 		tempo = t;
 		inc = length * tempo / (120 * SAMPLE_RATE);
 	};

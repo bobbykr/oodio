@@ -13,23 +13,23 @@ const int    numCombs       = 8;
 const int    numAllpasses   = 4;
 const int    stereoSpread   = 23;
 
-const double muted          = 0.0;
-const double fixedGain      = 0.015;
+const float muted          = 0.0;
+const float fixedGain      = 0.015;
 
-const double scaleWet       = 3.0;
-const double scaleDry       = 2.0;
-const double scaleDamp      = 0.4;
-const double scaleRoom      = 0.28;
-const double offsetRoom     = 0.7;
+const float scaleWet       = 3.0;
+const float scaleDry       = 2.0;
+const float scaleDamp      = 0.4;
+const float scaleRoom      = 0.28;
+const float offsetRoom     = 0.7;
 
-const double initialRoom    = 0.5;
-const double initialDamp    = 0.5;
-const double initialWet     = 0.1 / scaleWet;
-const double initialDry     = 0.0;
-const double initialWidth   = 1.0;
-const double initialMode    = 0.0;
+const float initialRoom    = 0.5;
+const float initialDamp    = 0.5;
+const float initialWet     = 0.1 / scaleWet;
+const float initialDry     = 0.0;
+const float initialWidth   = 1.0;
+const float initialMode    = 0.0;
 
-const double freezeMode     = 0.5;
+const float freezeMode     = 0.5;
 
 
 // These values assume 44.1KHz sample rate

@@ -4,15 +4,15 @@
 class CombFilter {
 
 private:
-	double delay1;
-	double delay2;
+	float delay1;
+	float delay2;
 
 public:
-	double out;
+	float out;
 
-	double gain;
-	double feedback;
-	double feedforward;
+	float gain;
+	float feedback;
+	float feedforward;
 
 	CombFilter() {
 		out         = 0.0;
@@ -25,7 +25,7 @@ public:
 
 	};
 
-    double tic(double in) {
+    float tic(float in) {
 		delay2 = out;
 		out = in * gain + feedforward * delay1 - feedback * delay2;
 		delay1 = in;

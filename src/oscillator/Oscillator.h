@@ -7,12 +7,12 @@
 class Oscillator {
 
 protected:
-	double pos;
+	float pos;
 
 public:
-	double freq;
-	double phase;
-	double out;
+	float freq;
+	float phase;
+	float out;
 
 	Oscillator() {
 		freq  = 440.0;
@@ -23,7 +23,7 @@ public:
 
 	// virtual ~Oscillator();
 
-	virtual double tic() {
+	virtual float tic() {
 		return 0.0;
 	};
 };

@@ -13,22 +13,22 @@
 
 class Comb {
 private:
-	double	filterstore;
-	double	damp1;
-	double	damp2;
-	double	*buffer;
+	float	filterstore;
+	float	damp1;
+	float	damp2;
+	float	*buffer;
 	int		bufsize;
 	int		bufidx;
 
 public:
-	double	feedback;
+	float	feedback;
 
 	Comb() {
 		filterstore = 0.0;
 		bufidx      = 0;
 	};
 
-	void setBuffer(double* buf, int size) {
+	void setBuffer(float* buf, int size) {
 		buffer  = buf;
 		bufsize = size;
 	};
@@ -37,24 +37,24 @@ public:
 		for (int i = 0; i < bufsize; i++) buffer[i] = 0.0;
 	};
 
-	void setDamp(double val) {
+	void setDamp(float val) {
 		damp1 = val;
 		damp2 = 1 - val;
 	};
 
-	double getDamp() {
+	float getDamp() {
 		return damp1;
 	};
 
 	// Big to inline - but crucial for speed
-	inline double tic(double input) {
-		double output;
+	inline float tic(float input) {
+		float output;
 
 		output = buffer[bufidx];
-		DOUBLE_DENORM(output);
+		UNDENORMALISE(output);
 
 		filterstore = (output * damp2) + (filterstore * damp1);
-		DOUBLE_DENORM(filterstore);
+		UNDENORMALISE(filterstore);
 
 		buffer[bufidx] = input + (filterstore * feedback);
 

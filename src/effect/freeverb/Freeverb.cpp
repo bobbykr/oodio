@@ -82,11 +82,11 @@ void Freeverb::mute() {
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Process one sample only, MONO input
  *
- * @param {double}  input   -
+ * @param {float}  input   -
  */
-void Freeverb::tic(double input) {
-	double l = 0.0;
-	double r = 0.0;
+void Freeverb::tic(float input) {
+	float l = 0.0;
+	float r = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
@@ -108,12 +108,12 @@ void Freeverb::tic(double input) {
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Process one sample only, STEREO input
  *
- * @param {double}  inputL  -
- * @param {double}  inputR  -
+ * @param {float}  inputL  -
+ * @param {float}  inputR  -
  */
-void Freeverb::tic(double inputL, double inputR) {
-	double l = 0.0;
-	double r = 0.0;
+void Freeverb::tic(float inputL, float inputR) {
+	float l = 0.0;
+	float r = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
@@ -171,56 +171,56 @@ void Freeverb::update() {
  * wish to take dynamic action when they are called.
  */
 
-void Freeverb::setRoomSize(double value) {
+void Freeverb::setRoomSize(float value) {
 	roomSize = (value * scaleRoom) + offsetRoom;
 	update();
 }
 
-double Freeverb::getRoomSize() {
+float Freeverb::getRoomSize() {
 	return (roomSize - offsetRoom) / scaleRoom;
 }
 
-void Freeverb::setDamp(double value) {
+void Freeverb::setDamp(float value) {
 	damp = value * scaleDamp;
 	update();
 }
 
-double Freeverb::getDamp() {
+float Freeverb::getDamp() {
 	return damp / scaleDamp;
 }
 
-void Freeverb::setWet(double value) {
+void Freeverb::setWet(float value) {
 	wet = value * scaleWet;
 	update();
 }
 
-double Freeverb::getWet() {
+float Freeverb::getWet() {
 	return wet / scaleWet;
 }
 
-void Freeverb::setDry(double value) {
+void Freeverb::setDry(float value) {
 	dry = value * scaleDry;
 }
 
-double Freeverb::getDry() {
+float Freeverb::getDry() {
 	return dry / scaleDry;
 }
 
-void Freeverb::setWidth(double value) {
+void Freeverb::setWidth(float value) {
 	width = value;
 	update();
 }
 
-double Freeverb::getWidth() {
+float Freeverb::getWidth() {
 	return width;
 }
 
-void Freeverb::setMode(double value) {
+void Freeverb::setMode(float value) {
 	mode = value;
 	update();
 }
 
-double Freeverb::getMode() {
+float Freeverb::getMode() {
 	if (mode >= freezeMode) return 1;
 	else                    return 0;
 }

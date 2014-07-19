@@ -7,24 +7,24 @@ class Slider {
 
 public:
 
-	Slider(int, int, int, double, double);
+	Slider(int, int, int, float, float);
 
 	void clic(int, int);
 	void move(int, int);
 	void unclic(int, int);
 
 	void draw(AmsFont*);
-	void onChange(void (*)(double));
+	void onChange(void (*)(float));
 
 private:
 	bool     tapped;
-	double   value;
-	double   min;
-	double   max;
+	float   value;
+	float   min;
+	float   max;
 	int      x;
 	int      y;
 	int      width;
-	void    (*cb) (double);
+	void    (*cb) (float);
 };
 
 #endif

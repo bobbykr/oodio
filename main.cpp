@@ -40,8 +40,8 @@
 
 bool     filterActive = true;
 int16_t  mute = 1;
-double   amp = 0.05;
-double   tempo = 88;
+float   amp = 0.05;
+float   tempo = 88;
 
 OscPulse      osc1;
 OscTri        osc2;
@@ -53,10 +53,10 @@ FreqSeq       seq;
 FreeverbMono  reverb;
 DecayEnvelope env;
 
-double       fltrRawCutoff = 0.0;
+float       fltrRawCutoff = 0.0;
 FastFilter   fltrSmoothCutoff;
 
-double map(double value, double iMin, double iMax, double oMin, double oMax) {
+float map(float value, float iMin, float iMax, float oMin, float oMax) {
 	return oMin + (oMax - oMin) * (value - iMin) / (iMax - iMin);
 }
 
@@ -66,20 +66,20 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 	int16_t* stream = (int16_t*) stream0;
 
 	for (len >>= 1; len; len--) {
-		double trig = clk.tic();
+		float trig = clk.tic();
 
 		// update controls
 
 		// update sequencer
-		double f = seq.tic();
+		float f = seq.tic();
 		f = glide.tic(f);
 		osc1.freq = f;
 		osc2.freq = f / 3.01;
 
 		// update oscillators
-		double o1 = osc1.tic();
-		double o2 = osc2.tic();
-		double o3 = osc3.tic();
+		float o1 = osc1.tic();
+		float o2 = osc2.tic();
+		float o3 = osc3.tic();
 
 		// o3 = (1 - o3) / 2;
 		o3 = map(o3, -1, 1, 0, 0.5);
@@ -87,10 +87,10 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		osc2.width = o3;
 
 		// simple mix + amplification
-		double o = (o1 + o2);
+		float o = (o1 + o2);
 
 		// envelope
-		double e = env.tic(trig);
+		float e = env.tic(trig);
 		// if (e == 0) env.trigger();
 
 		// apply filter
@@ -127,17 +127,17 @@ void activateFilter() {
 	filterActive = !filterActive;
 }
 
-void cutoff(double value) {
+void cutoff(float value) {
 	fltrRawCutoff = value;
 	// fltr.freq = value;
 	// fltr.cutoff = value;
 }
 
-void resonance(double value) {
+void resonance(float value) {
 	fltr.reso = value;
 }
 
-void changeLfo(double value) {
+void changeLfo(float value) {
 	osc3.freq = value;
 }
 

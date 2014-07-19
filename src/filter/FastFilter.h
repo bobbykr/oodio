@@ -7,15 +7,15 @@ private:
 
 public:
 
-	double out;
-	double freq;
+	float out;
+	float freq;
 
 	FastFilter() {
 		out  = 0.0;
 		freq = 0.1;
 	};
 
-    inline double tic(double in) {
+    inline float tic(float in) {
 		out = in * freq + out * (1 - freq);
 		return out;
 	};

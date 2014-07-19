@@ -4,24 +4,24 @@
 class Analog4Poles {
 
 private:
-	double pole1;
-	double pole2;
-	double pole3;
-	double pole4;
-	double feed1;
-	double feed2;
+	float pole1;
+	float pole2;
+	float pole3;
+	float pole4;
+	float feed1;
+	float feed2;
 
-	double resLevel;
-	double modMax;
-	double modDepth;
-	double modScale;
-	double levCorrect;
+	float resLevel;
+	float modMax;
+	float modDepth;
+	float modScale;
+	float levCorrect;
 
 public:
-	double reso;
-	double dist;
-	double freq;
-	double out;
+	float reso;
+	float dist;
+	float freq;
+	float out;
 
 	Analog4Poles() {
 		pole1 =  0.0;
@@ -43,9 +43,9 @@ public:
 		out   =  0.0;
 	}
 
-	double tic(double in) {
+	float tic(float in) {
 
-		double s = freq; // TODO: logarithmic curve
+		float s = freq; // TODO: logarithmic curve
 
 		pole4 = pole3 * s + pole4 * (1 - s); // pole4 = pole4Filter(pole3);
 		pole3 = pole2 * s + pole3 * (1 - s); // pole3 = pole3Filter(pole2);

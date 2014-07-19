@@ -62,10 +62,10 @@ void FreeverbMono::mute() {
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Process one sample
  *
- * @param {double} input
+ * @param {float} input
  */
-void FreeverbMono::tic(double input) {
-	double o = 0.0;
+void FreeverbMono::tic(float input) {
+	float o = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
@@ -115,30 +115,30 @@ void FreeverbMono::update() {
  * wish to take dynamic action when they are called.
  */
 
-void FreeverbMono::setRoomSize(double value) {
+void FreeverbMono::setRoomSize(float value) {
 	roomSize = (value * scaleRoom) + offsetRoom;
 	update();
 }
 
-double FreeverbMono::getRoomSize() {
+float FreeverbMono::getRoomSize() {
 	return (roomSize - offsetRoom) / scaleRoom;
 }
 
-void FreeverbMono::setDamp(double value) {
+void FreeverbMono::setDamp(float value) {
 	damp = value * scaleDamp;
 	update();
 }
 
-double FreeverbMono::getDamp() {
+float FreeverbMono::getDamp() {
 	return damp / scaleDamp;
 }
 
-void FreeverbMono::setMode(double value) {
+void FreeverbMono::setMode(float value) {
 	mode = value;
 	update();
 }
 
-double FreeverbMono::getMode() {
+float FreeverbMono::getMode() {
 	if (mode >= freezeMode) return 1;
 	else                    return 0;
 }

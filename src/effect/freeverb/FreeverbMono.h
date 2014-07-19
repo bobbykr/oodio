@@ -17,25 +17,25 @@ class FreeverbMono {
 public:
 		  FreeverbMono();
 	void  mute();
-	void  tic(double input);
+	void  tic(float input);
 
-	void  setRoomSize(double value);
-	void  setDamp(double value);
-	void  setMode(double value);
+	void  setRoomSize(float value);
+	void  setDamp(float value);
+	void  setMode(float value);
 
-	double getRoomSize();
-	double getDamp();
-	double getMode();
+	float getRoomSize();
+	float getDamp();
+	float getMode();
 
-	double out;
+	float out;
 
 private:
 	void update();
 
-	double gain;
-	double roomSize, _roomSize;
-	double damp, _damp;
-	double mode;
+	float gain;
+	float roomSize, _roomSize;
+	float damp, _damp;
+	float mode;
 
 	// The following are all declared inline
 	// to remove the need for dynamic allocation
@@ -48,20 +48,20 @@ private:
 	Allpass	allpass[numAllpasses];
 
 	// Buffers for the combs
-	double bufComb1[combTuningL1];
-	double bufComb2[combTuningL2];
-	double bufComb3[combTuningL3];
-	double bufComb4[combTuningL4];
-	double bufComb5[combTuningL5];
-	double bufComb6[combTuningL6];
-	double bufComb7[combTuningL7];
-	double bufComb8[combTuningL8];
+	float bufComb1[combTuningL1];
+	float bufComb2[combTuningL2];
+	float bufComb3[combTuningL3];
+	float bufComb4[combTuningL4];
+	float bufComb5[combTuningL5];
+	float bufComb6[combTuningL6];
+	float bufComb7[combTuningL7];
+	float bufComb8[combTuningL8];
 
 	// Buffers for the allpasses
-	double bufAllpass1[allpassTuningL1];
-	double bufAllpass2[allpassTuningL2];
-	double bufAllpass3[allpassTuningL3];
-	double bufAllpass4[allpassTuningL4];
+	float bufAllpass1[allpassTuningL1];
+	float bufAllpass2[allpassTuningL2];
+	float bufAllpass3[allpassTuningL3];
+	float bufAllpass4[allpassTuningL4];
 };
 
 #endif
