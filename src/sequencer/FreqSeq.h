@@ -7,7 +7,7 @@
 
 class FreqSeq {
 private:
-	int     length;
+	int    length;
 	float  pos;
 	float* steps;
 	float  tempo;
@@ -48,7 +48,7 @@ public:
 		return out;
 	};
 
-	void   setTempo(float t) {
+	void setTempo(float t) {
 		tempo = t;
 		inc = length * tempo / (120 * SAMPLE_RATE);
 	};

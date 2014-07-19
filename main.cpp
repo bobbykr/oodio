@@ -40,8 +40,8 @@
 
 bool     filterActive = true;
 int16_t  mute = 1;
-float   amp = 0.05;
-float   tempo = 88;
+float    amp = 0.05;
+float    tempo = 88;
 
 OscPulse      osc1;
 OscTri        osc2;
@@ -53,7 +53,7 @@ FreqSeq       seq;
 FreeverbMono  reverb;
 DecayEnvelope env;
 
-float       fltrRawCutoff = 0.0;
+float        fltrRawCutoff = 0.0;
 FastFilter   fltrSmoothCutoff;
 
 float map(float value, float iMin, float iMax, float oMin, float oMax) {
