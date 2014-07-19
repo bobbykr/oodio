@@ -75,8 +75,8 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 		// update sequencer
 		seq.tic();
-		float f = seq.out;
-		f = glide.tic(f);
+		glide.tic();
+		float f = glide.out;
 		osc1.freq = f;
 		osc2.freq = f / 3.01;
 
@@ -103,8 +103,9 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		// if (e == 0) env.trigger();
 
 		// apply filter
-		fltr.cutoff = e * fltrSmoothCutoff.tic(fltrRawCutoff);
-		if (filterActive) fltr.tic(); // low-pass fliter
+		fltrSmoothCutoff.tic();
+		fltr.cutoff = e * fltrSmoothCutoff.out;
+		if (filterActive) fltr.tic(); // low-pass filter
 		// if (filterActive) o = o - fltr.tic(o); // hi-pass filter
 
 		float o = fltr.out;
@@ -186,6 +187,8 @@ int main(int argc, char* argv[]) {
 	reverb.setDamp(0.3);
 	mix = 0.0;
 	fltr.setInput(&mix);
+	glide.setInput(&(seq.out));
+	fltrSmoothCutoff.setInput(&fltrRawCutoff);
 
 	// init SDL audio
 	{

@@ -27,8 +27,7 @@ public:
 	}
 
 	inline void tic() {
-		float in = *input;
-		state = (1 - reso * cutoff) * state - cutoff * out + cutoff * in;
+		state = (1 - reso * cutoff) * state - cutoff * out + cutoff * (*input);
 		out   = (1 - reso * cutoff) * out   + cutoff * state;
 	}
 };

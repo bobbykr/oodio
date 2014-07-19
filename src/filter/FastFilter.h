@@ -4,6 +4,7 @@
 class FastFilter {
 
 private:
+	float* input;
 
 public:
 
@@ -15,9 +16,12 @@ public:
 		freq = 0.1;
 	};
 
-    inline float tic(float in) {
-		out = in * freq + out * (1 - freq);
-		return out;
+	void setInput(float* in) {
+		input = in;
+	}
+
+	inline void tic() {
+		out = (*input) * freq + out * (1 - freq);
 	};
 
 };
