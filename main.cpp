@@ -7,6 +7,7 @@
 #define round(x) ((x)>=0?(int16_t)((x)+0.5):(int16_t)((x)-0.5))
 
 #include "constants.h"
+#include "src/utils/audioUtils.h"
 
 // --------------- gui --------------
 #include "src/gui/RenderingContext.h"
@@ -30,6 +31,7 @@
 
 // ------------- effects ------------
 #include "src/effect/freeverb/FreeverbMono.h"
+#include "src/effect/freeverb/Freeverb.h"
 
 // ------------ sequencer -----------
 #include "src/sequencer/Clock.h"
@@ -50,7 +52,8 @@ FastFilter    glide;
 RCFilter      fltr;
 Clock         clk;
 FreqSeq       seq;
-FreeverbMono  reverb;
+// FreeverbMono  reverb;
+Freeverb      reverb;
 DecayEnvelope env;
 
 float mix;
@@ -59,16 +62,14 @@ float dry;
 float        fltrRawCutoff = 0.0;
 FastFilter   fltrSmoothCutoff;
 
-float map(float value, float iMin, float iMax, float oMin, float oMax) {
-	return oMin + (oMax - oMin) * (value - iMin) / (iMax - iMin);
-}
+
 
 
 void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 	int16_t* stream = (int16_t*) stream0;
 
-	for (len >>= 1; len; len--) {
+	for (len >>= 2; len; len--) {
 		clk.tic();
 
 		// update controls
@@ -101,7 +102,6 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		// envelope
 		env.tic();
 		float e = env.out;
-		// if (e == 0) env.trigger();
 
 		// apply filter
 		fltrSmoothCutoff.tic();
@@ -110,10 +110,9 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		
 		// if (filterActive) dry = mix - fltr.out;  // hi-pass filter
 		if (filterActive) dry = fltr.out;        // low-pass filter
-		else dry = mix;
+		else dry = mix; // no filter
 
-		
-
+		// amplification envelope
 		dry *= e;
 
 		// main amplification
@@ -121,18 +120,27 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 		// apply reverb
 		reverb.tic();
-		float o = dry;
-		o += reverb.out * 0.02;
+
+		float outL = dry + reverb.outL * 0.11;
+		float outR = dry * 0.9 + reverb.outR * 0.14;
 
 		// trim overload
-		if (o < -1) o = -1;
-		if (o >  1) o =  1;
+		if (outL < -1) outL = -1;
+		if (outL >  1) outL =  1;
+
+		if (outR < -1) outR = -1;
+		if (outR >  1) outR =  1;
 
 		// convert to output format
-		o = 0x8000 * o * mute;
+		outL = 0x8000 * outL * mute;
+		outL = round(outL);
+
+		outR = 0x8000 * outR * mute;
+		outR = round(outR);
 
 		// write in buffer
-		*stream++ = round(o);
+		*stream++ = outL;
+		*stream++ = outR;
 	}
 }
 
@@ -200,10 +208,10 @@ int main(int argc, char* argv[]) {
 	// init SDL audio
 	{
 		SDL_AudioSpec audioSpec;
-		audioSpec.freq     = SAMPLE_RATE;
-		audioSpec.format   = AUDIO_S16;
-		audioSpec.channels = 1;
-		audioSpec.samples  = 512;
+		audioSpec.freq     = SAMPLE_RATE;   // 44.1 kHz
+		audioSpec.format   = AUDIO_S16;     // signed 16 bit
+		audioSpec.channels = 2;             // stereo
+		audioSpec.samples  = 512;           // buffer size: 512
 		audioSpec.callback = audioCallback;
 		SDL_OpenAudio(&audioSpec, NULL);
 	}

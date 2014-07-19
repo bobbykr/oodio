@@ -3,6 +3,6 @@
 
 
 float noteToFreq(float);
-
+float map(float, float, float, float, float);
 
 #endif

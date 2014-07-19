@@ -17,8 +17,9 @@ class Freeverb {
 public:
 		  Freeverb();
 	void  mute();
-	void  tic(float input);
-	void  tic(float inputL, float inputR);
+	void  tic();
+	void  connect(float*);
+	void  connect(float*, float*);
 
 	void  setRoomSize(float value);
 	void  setDamp(float value);
@@ -38,6 +39,9 @@ public:
 	float outL;
 
 private:
+	float* inputL;
+	float* inputR;
+
 	void update();
 
 	float gain;

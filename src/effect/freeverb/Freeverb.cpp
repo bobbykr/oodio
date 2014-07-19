@@ -84,14 +84,14 @@ void Freeverb::mute() {
  *
  * @param {float}  input   -
  */
-void Freeverb::tic(float input) {
+void Freeverb::tic() {
 	float l = 0.0;
 	float r = 0.0;
 
 	// Accumulate comb filters in parallel
 	for (int i = 0; i < numCombs; i++) {
-		l += combL[i].tic(input);
-		r += combR[i].tic(input);
+		l += combL[i].tic(*inputL);
+		r += combR[i].tic(*inputR);
 	}
 
 	// Feed through allpasses in series
@@ -106,30 +106,16 @@ void Freeverb::tic(float input) {
 }
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
- * Process one sample only, STEREO input
- *
- * @param {float}  inputL  -
- * @param {float}  inputR  -
+ * Connect freeverb input to a source.
  */
-void Freeverb::tic(float inputL, float inputR) {
-	float l = 0.0;
-	float r = 0.0;
+void Freeverb::connect(float* in) {
+	inputL = in;
+	inputR = in;
+}
 
-	// Accumulate comb filters in parallel
-	for (int i = 0; i < numCombs; i++) {
-		l += combL[i].tic(inputL);
-		r += combR[i].tic(inputR);
-	}
-
-	// Feed through allpasses in series
-	for (int i = 0; i < numAllpasses; i++) {
-		l = allpassL[i].tic(l);
-		r = allpassR[i].tic(r);
-	}
-
-	// Calculate output
-	outL = l * wet1 + r * wet2;
-	outR = r * wet1 + l * wet2;
+void Freeverb::connect(float* inL, float* inR) {
+	inputL = inL;
+	inputR = inR;
 }
 
 
