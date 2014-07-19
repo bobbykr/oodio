@@ -186,9 +186,9 @@ int main(int argc, char* argv[]) {
 	reverb.setRoomSize(0.8);
 	reverb.setDamp(0.3);
 	mix = 0.0;
-	fltr.setInput(&mix);
-	glide.setInput(&(seq.out));
-	fltrSmoothCutoff.setInput(&fltrRawCutoff);
+	fltr.connectInput(&mix);
+	glide.connectInput(&(seq.out));
+	fltrSmoothCutoff.connectInput(&fltrRawCutoff);
 
 	// init SDL audio
 	{

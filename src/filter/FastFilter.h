@@ -16,7 +16,7 @@ public:
 		freq = 0.1;
 	};
 
-	void setInput(float* in) {
+	void connectInput(float* in) {
 		input = in;
 	}
 

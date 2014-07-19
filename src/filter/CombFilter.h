@@ -6,6 +6,7 @@ class CombFilter {
 private:
 	float delay1;
 	float delay2;
+	float* input;
 
 public:
 	float out;
@@ -25,11 +26,14 @@ public:
 
 	};
 
-    float tic(float in) {
+	void connectInput(float* in) {
+		input = in;
+	}
+
+    void tic() {
 		delay2 = out;
-		out = in * gain + feedforward * delay1 - feedback * delay2;
-		delay1 = in;
-		return out;
+		out = (*input) * gain + feedforward * delay1 - feedback * delay2;
+		delay1 = (*input);
 	};
 };
 

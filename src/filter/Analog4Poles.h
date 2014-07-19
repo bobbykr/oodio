@@ -43,7 +43,11 @@ public:
 		out   =  0.0;
 	}
 
-	float tic(float in) {
+	void connectInput(float* in) {
+		input = in;
+	}
+
+	void tic() {
 
 		float s = freq; // TODO: logarithmic curve
 
@@ -52,16 +56,15 @@ public:
 		pole2 = pole1 * s + pole2 * (1 - s); // pole2 = pole2Filter(pole1);
 		pole1 = feed1 * s + pole1 * (1 - s); // pole1 = pole1Filter(feed1);
 
-		feed1    = in - resLevel;
+		feed1    = (*input) - resLevel;
 		resLevel = feed2 * modMax;
 		modMax   = reso + 0.5 * modDepth;
 		modDepth = dist * modScale;
 		modScale = reso * pole4;
 		feed2    = pole4 - 0.5 * levCorrect + 0.695 * feed2;
-		levCorrect = in * reso;
+		levCorrect = (*input) * reso;
 
 		out = pole4;
-		return out;
 	}
 };
 
