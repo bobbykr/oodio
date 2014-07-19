@@ -1,11 +1,7 @@
 #ifndef RENDERING_CONTEXT_H
 #define RENDERING_CONTEXT_H
 
-#ifdef __APPLE__
-#include <SDL/SDL.h>
-#else
 #include <SDL.h>
-#endif
 
 class RenderingContext {
 

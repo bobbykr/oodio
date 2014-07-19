@@ -1,11 +1,7 @@
 #ifndef ASSETS_H
 #define ASSETS_H
 
-#ifdef __APPLE__
-#include <SDL/SDL.h>
-#else
 #include <SDL.h>
-#endif
 
 class Assets {
 
@@ -20,6 +16,6 @@ public:
 private:
 	int size;
 
-}
+};
 
 #endif

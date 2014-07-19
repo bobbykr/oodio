@@ -1,15 +1,6 @@
-#include <stdint.h>
-#ifdef __cplusplus
-	#include <cstdlib>
-#else
-	#include <stdlib.h>
-#endif
-#ifdef __APPLE__
-#include <SDL/SDL.h>
-#else
-#include <SDL.h>
-#endif
-
+#include <stdint.h>      // integer type aliases
+#include <cstdlib>       // standard library
+#include <SDL.h>         // sdl library
 #include <windows.h>     // required before including mmsystem
 #include <mmsystem.h>    // multimedia functions for windows
 

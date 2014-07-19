@@ -1,5 +1,5 @@
 #include "Assets.h"
-#include <stdlib.h>
+#include <cstdlib.h>
 
 Assets::Assets(int s) {
 	length = 0;

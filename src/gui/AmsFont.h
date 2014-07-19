@@ -1,12 +1,7 @@
 #ifndef AMS_FONT_H
 #define AMS_FONT_H
 
-#ifdef __APPLE__
-#include <SDL/SDL.h>
-#else
 #include <SDL.h>
-#endif
-
 #include "RenderingContext.h"
 
 class AmsFont {
