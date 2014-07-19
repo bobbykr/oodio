@@ -19,12 +19,12 @@ public:
 		phase = 0.0;
 		pos   = 0.0;
 		out   = 0.0;
-	};
+	}
 
 	// virtual ~Oscillator();
 
 	virtual void tic() {
-	};
+	}
 };
 
 #endif

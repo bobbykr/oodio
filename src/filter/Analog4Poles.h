@@ -17,6 +17,8 @@ private:
 	float modScale;
 	float levCorrect;
 
+	float* input;
+
 public:
 	float reso;
 	float dist;

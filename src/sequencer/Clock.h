@@ -16,7 +16,7 @@ public:
 	Clock() {
 		out = 0;
 		setTempo(140);
-	};
+	}
 
 	void tic() {
 		pos += inc;
@@ -26,12 +26,12 @@ public:
 		} else {
 			out = 0;
 		}
-	};
+	}
 
 	void setTempo(float t) {
 		tempo = t;
 		inc = tempo / (30 * SAMPLE_RATE);
-	};
+	}
 };
 
 #endif

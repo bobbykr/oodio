@@ -14,15 +14,15 @@ public:
 	FastFilter() {
 		out  = 0.0;
 		freq = 0.1;
-	};
+	}
 
-	void connectInput(float* in) {
+	void connect(float* in) {
 		input = in;
 	}
 
 	inline void tic() {
 		out = (*input) * freq + out * (1 - freq);
-	};
+	}
 
 };
 

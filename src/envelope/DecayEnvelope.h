@@ -4,11 +4,12 @@
 class DecayEnvelope {
 
 private:
+	float* trig;
 	int    t;
-	float a;
-	float b;
-	float releaseTime;
-	float curvature;
+	float  a;
+	float  b;
+	float  releaseTime;
+	float  curvature;
 	bool   stopped;
 
 	void update() {
@@ -17,7 +18,7 @@ private:
 		//        process should only use previous output value, not t.
 		a = (2 - 4 * curvature) / (float)(releaseTime * releaseTime);
 		b = (4 * curvature - 3) / (float)releaseTime;
-	};
+	}
 
 public:
 	float out;
@@ -28,46 +29,34 @@ public:
 		stopped = true;
 		t = 0;
 		update();
-	};
+	}
 
-	void trigger() {
-		stopped = false;
-		t = 0;
-	};
+	void connect(float* input) {
+		trig = input;
+	}
 
-    float tic() {
-		if (stopped) return 0;
-		if (t++ > releaseTime) {
-			stopped = true;
-			out = 0;
-		}
-		out = a * (float)(t * t) + b * (float)t + 1;
-		return out;
-	};
-
-	float tic(float trig) {
-		if (trig > 0.8) {
+	void tic() {
+		if (*trig > 0.8) {
 			stopped = false;
 			t = 0;
 		}
-		if (stopped) return 0;
+		if (stopped) return;
 		if (t++ > releaseTime) {
 			stopped = true;
 			out = 0;
 		}
 		out = a * (float)(t * t) + b * (float)t + 1;
-		return out;
-	};
+	}
 
 	void setCurvature(float c) {
 		curvature = c;
 		update();
-	};
+	}
 
 	void setReleaseTime(int r) {
 		releaseTime = r;
 		update();
-	};
+	}
 };
 
 #endif

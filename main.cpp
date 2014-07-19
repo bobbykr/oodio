@@ -69,7 +69,6 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 	for (len >>= 1; len; len--) {
 		clk.tic();
-		float trig = clk.out;
 
 		// update controls
 
@@ -99,7 +98,8 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		mix = (o1 + o2);
 
 		// envelope
-		float e = env.tic(trig);
+		env.tic();
+		float e = env.out;
 		// if (e == 0) env.trigger();
 
 		// apply filter
@@ -186,9 +186,10 @@ int main(int argc, char* argv[]) {
 	reverb.setRoomSize(0.8);
 	reverb.setDamp(0.3);
 	mix = 0.0;
-	fltr.connectInput(&mix);
-	glide.connectInput(&(seq.out));
-	fltrSmoothCutoff.connectInput(&fltrRawCutoff);
+	fltr.connect(&mix);
+	glide.connect(&(seq.out));
+	fltrSmoothCutoff.connect(&fltrRawCutoff);
+	env.connect(&(clk.out));
 
 	// init SDL audio
 	{

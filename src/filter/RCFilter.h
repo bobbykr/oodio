@@ -22,7 +22,7 @@ public:
 	void setCutoff(int value);
 	void setReso(int value);
 
-	void connectInput(float* in) {
+	void connect(float* in) {
 		input = in;
 	}
 

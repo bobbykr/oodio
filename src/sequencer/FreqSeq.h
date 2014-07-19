@@ -32,11 +32,11 @@ public:
 		steps[7] = noteToFreq(62); //293.66;
 
 		setTempo(140); // bpm
-	};
+	}
 
 	~FreqSeq() {
 		delete[] steps;
-	};
+	}
 
 	void tic() {
 		pos += inc;
@@ -45,12 +45,12 @@ public:
 		// if (p < 0) p = 0;
 		// if (p > 7) p = 7;
 		out = steps[p];
-	};
+	}
 
 	void setTempo(float t) {
 		tempo = t;
 		inc = length * tempo / (120 * SAMPLE_RATE);
-	};
+	}
 };
 
 
