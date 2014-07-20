@@ -90,7 +90,7 @@ void NanoKontrol::initMidi() {
 	for (int i = 0; i < numDevices; i++) {
 		MIDIOUTCAPS deviceInfo;
 		midiOutGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
-		if (strcmp(deviceInfo.szPname, "nanoKONTROL2 1 SLIDER/KNOB") == 0) {
+		if (strcmp(deviceInfo.szPname, "nanoKONTROL2 1 CTRL") == 0) {
 			if (midiOutOpen(&midiOut, i, 0, 0, CALLBACK_NULL) == MMSYSERR_NOERROR) {
 				midiOutOpened = true;
 			};
