@@ -184,6 +184,7 @@ int main(int argc, char* argv[]) {
 	NanoKontrol nanoKontrol;
 	nanoKontrol.initMidi();
 	nanoKontrol.bindControl(16, &fltrRawCutoff);
+	nanoKontrol.bindControl(17, &(fltr.reso));
 
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return 1;
