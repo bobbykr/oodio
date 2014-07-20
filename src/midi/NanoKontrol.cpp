@@ -99,3 +99,24 @@ void NanoKontrol::initMidi() {
 	}
 }
 
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * send a midi message to change nanoKontrol's LED status
+ */
+void NanoKontrol::_plot(int cc, bool status) {
+	if (!midiOutOpened) return;
+	uint16_t value = status ? 127 : 0;
+	uint32_t msg =  0xB0 | cc << 8 | value << 16;
+	midiOutShortMsg(midiOut, msg);
+}
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * set LED status
+ */
+void NanoKontrol::plot(int x, int y, bool status) {
+	if      (y == 0) _plot(nk_Sbt[x], status);
+	else if (y == 1) _plot(nk_Mbt[x], status);
+	else if (y == 2) _plot(nk_Rbt[x], status);
+	else if (y == 3) _plot(nk_nav[x], status);
+	else if (y == 4) _plot(nk_trp[x], status);
+	else             _plot(nk_cycle,  status);
+}
