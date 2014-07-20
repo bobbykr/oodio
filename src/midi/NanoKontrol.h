@@ -17,7 +17,9 @@ class NanoKontrol {
 	
 private:
 	bool     midiInOpened;
+	bool     midiOutOpened;
 	HMIDIIN  midiIn;
+	HMIDIOUT midiOut;
 
 
 public:

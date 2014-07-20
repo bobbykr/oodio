@@ -7,7 +7,9 @@
  */
 NanoKontrol::NanoKontrol() {
 	midiIn  = NULL;
+	midiOut = NULL;
 	midiInOpened  = false;
+	midiOutOpened = false;
 	for (int i = 0; i < 120; i++) bindFloat[i] = NULL;
 }
 
@@ -20,6 +22,11 @@ NanoKontrol::~NanoKontrol() {
 		midiInStop(midiIn);
 		midiInReset(midiIn);
 		midiInClose(midiIn);
+	}
+
+	if (midiOutOpened) {
+		midiOutReset(midiOut);
+		midiOutClose(midiOut);
 	}
 }
 
@@ -63,6 +70,7 @@ void NanoKontrol::bindControl(int cc, float* bind) {
 void NanoKontrol::initMidi() {
 	int numDevices;
 	int inId;
+	int inOut;
 
 	// search for "NanoKontrol" device
 	numDevices = midiInGetNumDevs();
@@ -73,6 +81,18 @@ void NanoKontrol::initMidi() {
 			if (midiInOpen(&midiIn, i, (DWORD)MidiInCb, (DWORD)this, CALLBACK_FUNCTION) == MMSYSERR_NOERROR) {
 				midiInOpened = true;
 				midiInStart(midiIn);
+			};
+			break;
+		};
+	}
+
+	numDevices = midiOutGetNumDevs();
+	for (int i = 0; i < numDevices; i++) {
+		MIDIOUTCAPS deviceInfo;
+		midiOutGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
+		if (strcmp(deviceInfo.szPname, "nanoKONTROL2 1 SLIDER/KNOB") == 0) {
+			if (midiOutOpen(&midiOut, i, 0, 0, CALLBACK_NULL) == MMSYSERR_NOERROR) {
+				midiOutOpened = true;
 			};
 			break;
 		};
