@@ -192,7 +192,6 @@ int main(int argc, char* argv[]) {
 	// make sure SDL cleans up before exit
 	atexit(SDL_Quit);
 
-
 	// init synth
 	osc3.freq  = 0.03;
 	osc3.width = 0.9;
