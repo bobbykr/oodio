@@ -19,10 +19,10 @@ private:
 	bool     midiInOpened;
 	HMIDIIN  midiIn;
 
-	void push(int, int, int, int);
-	float* bindFloat[128];
 
 public:
+	void push(int, int, int, int);
+	float* bindFloat[120]; // nota: cc 120 ~ 127 are reserved as "Channel Mode Messages"
 	NanoKontrol();
 	~NanoKontrol();
 	void initMidi();

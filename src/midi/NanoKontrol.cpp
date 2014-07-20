@@ -8,7 +8,7 @@
 NanoKontrol::NanoKontrol() {
 	midiIn  = NULL;
 	midiInOpened  = false;
-	for (int i = 0; i < 128) bindFloat[i] = NULL;
+	for (int i = 0; i < 120; i++) bindFloat[i] = NULL;
 }
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -34,13 +34,15 @@ void CALLBACK MidiInCb(HMIDIIN device, uint16_t msg, NanoKontrol* self,
 
 	int chan = (data >> 0)  & 0x0F; // channel.
 	int type = (data >> 4)  & 0x0F; // event type.
-	int prm1 = (data >> 8)  & 0xFF; // midi note number.
-	int prm2 = (data >> 16) & 0x8F; // velocity.
+	int prm1 = (data >> 8)  & 0x7F; // note number / cc number
+	int prm2 = (data >> 16) & 0x7F; // velocity    / cc value
 
 	// store event
 	// self->push(chan, type, prm1, prm2);
-	if (bindFloat[prm1] != NULL) {
-		*(bindFloat[prm1]) = prm2 / 127;
+
+	// if type is a contol change (11) then check if it is bind.
+	if (type == 11 && prm1 < 120 && self->bindFloat[prm1] != NULL) {
+		*(self->bindFloat[prm1]) = (float)prm2 / 127.0;
 	}
 }
 

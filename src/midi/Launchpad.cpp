@@ -41,8 +41,8 @@ void CALLBACK MidiInCb(HMIDIIN device, uint16_t msg, Launchpad* launchpad,
 
 	int chan = (data >> 0)  & 0x0F; // channel.           should be 0 or 1.
 	int type = (data >> 4)  & 0x0F; // event type.        should be noteOn (9)
-	int note = (data >> 8)  & 0xFF; // midi note number.
-	int velo = (data >> 16) & 0x8F; // velocity.          should be 0 or 127
+	int note = (data >> 8)  & 0x7F; // midi note number.
+	int velo = (data >> 16) & 0x7F; // velocity.          should be 0 or 127
 
 	int x = note % 16;
 	int y = note / 16;

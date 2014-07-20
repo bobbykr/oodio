@@ -39,6 +39,7 @@
 
 // ------------ controler -----------
 #include "src/midi/Launchpad.h"
+#include "src/midi/NanoKontrol.h"
 
 bool     filterActive = true;
 int16_t  mute = 1;
@@ -107,7 +108,7 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		fltrSmoothCutoff.tic();
 		fltr.cutoff = e * fltrSmoothCutoff.out;
 		fltr.tic();
-		
+
 		// if (filterActive) dry = mix - fltr.out;  // hi-pass filter
 		if (filterActive) dry = fltr.out;        // low-pass filter
 		else dry = mix; // no filter
@@ -179,6 +180,10 @@ int main(int argc, char* argv[]) {
 			launchpad.plot(x * 2 + 1, y * 2 + 1, x, y);
 		}
 	}*/
+
+	NanoKontrol nanoKontrol;
+	nanoKontrol.initMidi();
+	nanoKontrol.bindControl(16, &fltrRawCutoff);
 
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return 1;
