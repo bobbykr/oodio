@@ -275,6 +275,9 @@ int main(int argc, char* argv[]) {
 	font.pen(24);
 
 
+	int nkx = 0;
+	int nky = 0;
+
 	// program main loop
 	bool run = true;
 	while (run) {
@@ -333,6 +336,19 @@ int main(int argc, char* argv[]) {
 		res.draw(&font);
 		ctx.drawImage(font.getImage(), 0, 0);
 		ctx.update();
+
+
+		//----------------------------------
+		// nanoKontrol light show
+		nkx--;
+		if (nkx < 0) nkx = 15;
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 3; y++) {
+				bool value = ((nkx + x + y) % 16) < 2; 
+				nanoKontrol.plot(x, y, value);
+			}
+		}
+		//----------------------------------
 
 		SDL_Delay(40); // 25 FPS
 	}
