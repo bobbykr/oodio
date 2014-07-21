@@ -180,10 +180,9 @@ int main(int argc, char* argv[]) {
 
 	for (int x = 0; x < 8; x++) {
 		for (int y = 0; y < 3; y++) {
-			nanoKontrol.plot(x, y, true);
+			nanoKontrol.plot(x, y, false);
 		}
 	}
-	nanoKontrol.plot(0, 2, false);
 
 
 	// initialize SDL video and audio
