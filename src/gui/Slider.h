@@ -14,17 +14,20 @@ public:
 	void unclic(int, int);
 
 	void draw(AmsFont*);
-	void onChange(void (*)(float));
+	void onChange(void (*)(float)); // bind to a function
+	void onChange(float*);          // bind to a variable
 
 private:
 	bool     tapped;
-	float   value;
-	float   min;
-	float   max;
+	float    value;
+	float    min;
+	float    max;
 	int      x;
 	int      y;
 	int      width;
-	void    (*cb) (float);
+
+	void     (*cb) (float); // onChange callback
+	float*   bind;          // onChange binded variable
 };
 
 #endif

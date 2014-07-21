@@ -12,6 +12,7 @@ Slider::Slider(int _x, int _y, int _width, float _min, float _max) {
 	value  = _min + (_max - _min) * 0.5;
 
 	cb     = NULL;
+	bind   = NULL;
 	tapped = false;
 }
 
@@ -29,15 +30,15 @@ void Slider::move(int mouseX, int mouseY) {
 	if (v < min) v = min;
 	if (v > max) v = max;
 	value = v;
-	if (cb == NULL) return;
-	cb(value);
+	if (bind != NULL) *bind = value;
+	else if (cb != NULL) cb(value);
 }
 
 void Slider::unclic(int mouseX, int mouseY) {
 	if (!tapped) return;
 	tapped = false;
-	if (cb == NULL) return;
-	cb(value);
+	if (bind != NULL) *bind = value;
+	else if (cb == NULL) cb(value);
 }
 
 void Slider::draw(AmsFont* ctx) {
@@ -55,5 +56,11 @@ void Slider::draw(AmsFont* ctx) {
 }
 
 void Slider::onChange(void (*callback) (float)) {
-	cb = callback;
+	cb   = callback;
+	bind = NULL;
+}
+
+void Slider::onChange(float* b) {
+	cb   = NULL;
+	bind = b;
 }

@@ -153,18 +153,8 @@ void activateFilter() {
 	filterActive = !filterActive;
 }
 
-void cutoff(float value) {
-	fltrRawCutoff = value;
-	// fltr.freq = value;
-	// fltr.cutoff = value;
-}
-
-void resonance(float value) {
-	fltr.reso = value;
-}
-
-void changeLfo(float value) {
-	osc3.freq = value;
+void changeRoom(float value) {
+	reverb.setRoomSize(value);
 }
 
 
@@ -185,7 +175,16 @@ int main(int argc, char* argv[]) {
 	nanoKontrol.initMidi();
 	nanoKontrol.bindControl(16, &fltrRawCutoff);
 	nanoKontrol.bindControl(17, &(fltr.reso));
-	nanoKontrol.plot(1, 1, true);
+	nanoKontrol.bindControl(18, &changeRoom);
+
+
+	for (int x = 0; x < 8; x++) {
+		for (int y = 0; y < 3; y++) {
+			nanoKontrol.plot(x, y, true);
+		}
+	}
+	nanoKontrol.plot(0, 2, false);
+
 
 	// initialize SDL video and audio
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return 1;
@@ -238,9 +237,9 @@ int main(int argc, char* argv[]) {
 	Slider  res(16, 23, 26, 0.0, 0.7);
 	btn.onClic(&playStop);
 	btnf.onClic(&activateFilter);
-	sld.onChange(&changeLfo);
-	cut.onChange(&cutoff);
-	res.onChange(&resonance);
+	sld.onChange(&(osc3.freq));
+	cut.onChange(&fltrRawCutoff);
+	res.onChange(&(fltr.reso));
 
 	int midiOutNumDevices = midiOutGetNumDevs();
 	int midiInNumDevices  = midiInGetNumDevs();
