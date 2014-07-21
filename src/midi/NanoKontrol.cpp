@@ -10,7 +10,10 @@ NanoKontrol::NanoKontrol() {
 	midiOut = NULL;
 	midiInOpened  = false;
 	midiOutOpened = false;
-	for (int i = 0; i < 120; i++) bindFloat[i] = NULL;
+	for (int i = 0; i < 120; i++) {
+		bindFloat[i] = NULL;
+		bindFunc[i]  = NULL;
+	}
 }
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -48,8 +51,12 @@ void CALLBACK MidiInCb(HMIDIIN device, uint16_t msg, NanoKontrol* self,
 	// self->push(chan, type, prm1, prm2);
 
 	// if type is a contol change (11) then check if it is bind.
-	if (type == 11 && prm1 < 120 && self->bindFloat[prm1] != NULL) {
-		*(self->bindFloat[prm1]) = (float)prm2 / 127.0;
+	if (type == 11 && prm1 < 120) {
+		if (self->bindFloat[prm1] != NULL) {
+			*(self->bindFloat[prm1]) = (float)prm2 / 127.0;
+		} else if (self->bindFunc[prm1] != NULL) {
+			self->bindFunc[prm1]((float)prm2 / 127.0);
+		}
 	}
 }
 
@@ -58,11 +65,16 @@ void NanoKontrol::push(int channel, int type, int param1, int param2) {
 }
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
- * Bind a control change to a variable
+ * Bind a control change
  */
 void NanoKontrol::bindControl(int cc, float* bind) {
 	bindFloat[cc] = bind;
 }
+
+void NanoKontrol::bindControl(int cc, void(*cb)(float)) {
+	bindFunc[cc] = cb;
+}
+
 
 /**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  * Initialise midi in and out.
@@ -105,6 +117,7 @@ void NanoKontrol::initMidi() {
 void NanoKontrol::_plot(int cc, bool status) {
 	if (!midiOutOpened) return;
 	uint16_t value = status ? 127 : 0;
+	// control change on channel 0 (1011cccc)
 	uint32_t msg =  0xB0 | cc << 8 | value << 16;
 	midiOutShortMsg(midiOut, msg);
 }
