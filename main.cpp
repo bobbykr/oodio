@@ -157,6 +157,14 @@ void changeRoom(float value) {
 	reverb.setRoomSize(value);
 }
 
+void changeDecay(float value) {
+	env.setReleaseTime((int)(value * 16000));
+}
+
+void changeCurve(float value) {
+	env.setCurvature(value);
+}
+
 
 int main(int argc, char* argv[]) {
 
@@ -176,6 +184,8 @@ int main(int argc, char* argv[]) {
 	nanoKontrol.bindControl(16, &fltrRawCutoff);
 	nanoKontrol.bindControl(17, &(fltr.reso));
 	nanoKontrol.bindControl(18, &changeRoom);
+	nanoKontrol.bindControl(20, &changeDecay);
+	nanoKontrol.bindControl(21, &changeCurve);
 
 
 	for (int x = 0; x < 8; x++) {
