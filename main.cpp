@@ -210,7 +210,7 @@ int main(int argc, char* argv[]) {
 	env.setCurvature(0.8);
 	clk.setTempo(tempo);
 	seq.setTempo(tempo);
-	reverb.setRoomSize(0.8);
+	reverb.setRoomSize(0.3);
 	reverb.setDamp(0.3);
 	mix = 0.0;
 	fltr.connect(&mix);
