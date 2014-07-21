@@ -1,6 +1,8 @@
 #ifndef DECAY_ENVELOPE_H
 #define DECAY_ENVELOPE_H
 
+#include "../utils/audioUtils.h"
+
 const float _decEnvSmooth = 0.02;
 const float _decEnvSmoothInv = 1 - _decEnvSmooth;
 
@@ -58,7 +60,8 @@ public:
 	}
 
 	void setCurvature(float c) {
-		curvature = c;
+		// bound curvature in range [0.3 .. 0.7] (or envelope becomes instable)
+		curvature = map(c, 0, 1, 0.3, 0.7);
 		update();
 	}
 

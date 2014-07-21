@@ -161,6 +161,10 @@ void changeDecay(float value) {
 	env.setReleaseTime((int)(value * 16000));
 }
 
+void changeDamp(float value) {
+	reverb.setDamp(value);
+}
+
 void changeCurve(float value) {
 	env.setCurvature(value);
 }
@@ -184,6 +188,7 @@ int main(int argc, char* argv[]) {
 	nanoKontrol.bindControl(16, &fltrRawCutoff);
 	nanoKontrol.bindControl(17, &(fltr.reso));
 	nanoKontrol.bindControl(18, &changeRoom);
+	nanoKontrol.bindControl(19, &changeDamp);
 	nanoKontrol.bindControl(20, &changeDecay);
 	nanoKontrol.bindControl(21, &changeCurve);
 
