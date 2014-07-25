@@ -14,7 +14,8 @@ private:
 	float  a;
 	float  b;
 	float  raw;
-	float  releaseTime;
+	float  release;
+	int    releaseTime; 
 	float  curvature;
 	bool   stopped;
 
@@ -22,15 +23,17 @@ private:
 		// FIXME: if parameters changes while envelope playing,
 		//        there will be an audio glich.
 		//        process should only use previous output value, not t.
-		a = (2 - 4 * curvature) / (float)(releaseTime * releaseTime);
-		b = (4 * curvature - 3) / (float)releaseTime;
+		float r = 3000 + release * 47000;
+		releaseTime = (int)r - 1;
+		a = (2 - 4 * curvature) / (r * r);
+		b = (4 * curvature - 3) / r;
 	}
 
 public:
 	float out;
 
 	DecayEnvelope() {
-		releaseTime = 500; // TODO: release time in ms, not in tick
+		release = 0.5;
 		curvature = 0.3;
 		stopped = true;
 		t = 0;
@@ -51,7 +54,7 @@ public:
 		if (stopped) return;
 		if (t++ > releaseTime) {
 			stopped = true;
-			out = 0;
+			out = 0.0;
 		}
 		raw = a * (float)(t * t) + b * (float)t + 1;
 
@@ -65,8 +68,8 @@ public:
 		update();
 	}
 
-	void setReleaseTime(int r) {
-		releaseTime = r;
+	void setReleaseTime(float r) {
+		release = r;
 		update();
 	}
 };
