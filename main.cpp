@@ -41,6 +41,8 @@
 #include "src/midi/Launchpad.h"
 #include "src/midi/NanoKontrol.h"
 
+#include "src/midi/midiPortDisplay.h"
+
 bool     filterActive = true;
 int16_t  mute = 1;
 float    amp = 0.05;
@@ -158,7 +160,7 @@ void changeRoom(float value) {
 }
 
 void changeDecay(float value) {
-	env.setReleaseTime((int)(value * 16000));
+	env.setReleaseTime(value);
 }
 
 void changeDamp(float value) {
@@ -168,6 +170,9 @@ void changeDamp(float value) {
 void changeCurve(float value) {
 	env.setCurvature(value);
 }
+
+
+
 
 
 int main(int argc, char* argv[]) {
@@ -211,7 +216,7 @@ int main(int argc, char* argv[]) {
 	osc3.width = 0.9;
 	glide.freq = 0.004;
 	fltrSmoothCutoff.freq = 0.001;
-	env.setReleaseTime(11000);
+	env.setReleaseTime(0.3);
 	env.setCurvature(0.8);
 	clk.setTempo(tempo);
 	seq.setTempo(tempo);
@@ -255,34 +260,7 @@ int main(int argc, char* argv[]) {
 	cut.onChange(&fltrRawCutoff);
 	res.onChange(&(fltr.reso));
 
-	int midiOutNumDevices = midiOutGetNumDevs();
-	int midiInNumDevices  = midiInGetNumDevs();
-	font.paper(24); font.pen(1);
-	font.print("-------- CONNECTED MIDI OUT DEVICES ---------\n");
-	font.paper(1); font.pen(24);
-	for (int i = 0; i < midiOutNumDevices; i++) {
-		font.print(" ");
-		font.printNumber(i);
-		font.print(": ");
-		MIDIOUTCAPS deviceInfo;
-		midiOutGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
-		font.print(deviceInfo.szPname);
-		font.print("\n");
-	}
-	font.print("\n");
-
-	font.paper(24); font.pen(1);
-	font.print("-------- CONNECTED MIDI IN DEVICES ----------\n");
-	font.paper(1); font.pen(24);
-	for (int i = 0; i < midiInNumDevices; i++) {
-		font.print(" ");
-		font.printNumber(i);
-		font.print(": ");
-		MIDIINCAPS deviceInfo;
-		midiInGetDevCaps(i, &deviceInfo, sizeof deviceInfo);
-		font.print(deviceInfo.szPname);
-		font.print("\n");
-	}
+	displayMidiPorts(&font);
 
 	btn.draw(&font);
 	btnf.draw(&font);
