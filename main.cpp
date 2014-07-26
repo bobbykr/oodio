@@ -1,3 +1,6 @@
+#define _WIN32_WINNT 0x0501
+#define WINVER 0x0501
+
 #include <stdint.h>      // integer type aliases
 #include <cstdlib>       // standard library
 #include <SDL.h>         // sdl library
@@ -42,6 +45,7 @@
 #include "src/midi/NanoKontrol.h"
 
 #include "src/midi/midiPortDisplay.h"
+#include "src/midi/hidDeviceDisplay.h"
 
 bool     filterActive = true;
 int16_t  mute = 1;
@@ -260,7 +264,8 @@ int main(int argc, char* argv[]) {
 	cut.onChange(&fltrRawCutoff);
 	res.onChange(&(fltr.reso));
 
-	displayMidiPorts(&font);
+	// displayMidiPorts(&font);
+	displayHidDevices(&font);
 
 	btn.draw(&font);
 	btnf.draw(&font);
