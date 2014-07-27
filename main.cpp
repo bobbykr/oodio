@@ -264,8 +264,8 @@ int main(int argc, char* argv[]) {
 	cut.onChange(&fltrRawCutoff);
 	res.onChange(&(fltr.reso));
 
-	// displayMidiPorts(&font);
-	displayHidDevices(&font);
+	displayMidiPorts(&font);
+	// displayHidDevices(&font);
 
 	btn.draw(&font);
 	btnf.draw(&font);
