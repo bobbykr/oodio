@@ -11,9 +11,9 @@ KontrolF1::KontrolF1() {
 	midiInOpened  = false;
 	midiOutOpened = false;
 	for (int i = 0; i < 16; i++) {
-		padH[i] = 0;
-		padS[i] = 0;
-		padB[i] = 0;
+		padH[i] = 128;
+		padS[i] = 128;
+		padB[i] = 128;
 	}
 }
 
@@ -44,10 +44,19 @@ void CALLBACK MidiInCb(HMIDIIN device, uint16_t msg, KontrolF1* self,
 
 	int chan = (data >> 0)  & 0x0F; // channel.
 	int type = (data >> 4)  & 0x0F; // event type.
-	int note = (data >> 8)  & 0x7F; // event number.
-	int velo = (data >> 16) & 0x7F; // velocity / value.
+	int prm1 = (data >> 8)  & 0x7F; // event number.
+	int prm2 = (data >> 16) & 0x7F; // velocity / value.
 
-	// TODO
+	// if type is a contol change (11) then check if it is bind.
+	if (chan == 0 && type == 11 && prm1 < 120) {
+		if (prm1 < 16 && self->bindPadsFunc != NULL) {
+			self->bindPadsFunc(prm1, (bool)prm2);
+		} else if (self->bindFloat[prm1] != NULL) {
+			*(self->bindFloat[prm1]) = (float)prm2 / 127.0;
+		} else if (self->bindFunc[prm1] != NULL) {
+			self->bindFunc[prm1]((float)prm2 / 127.0);
+		}
+	}
 };
 
 
@@ -104,19 +113,31 @@ void KontrolF1::sendNote(int channel, int note, int velocity) {
 void KontrolF1::setPadColor(int pad, int hue, int saturation, int brightness) {
 	if (!midiOutOpened) return;
 	uint32_t base = 0xB0 | pad << 8;
-	if (padH[pad] != hue) {
-		padH[pad] = hue;
-		uint32_t h = base | 0 | hue << 16;
-		midiOutShortMsg(midiOut, h);
-	}
-	if (padS[pad] != saturation) {
-		padS[pad] = saturation;
-		uint32_t s = base | 1 | saturation << 16;
-		midiOutShortMsg(midiOut, s);
-	}
-	if (padB[pad] != brightness) {
-		padB[pad] = brightness;
-		uint32_t b = base | 2 | brightness << 16;
-		midiOutShortMsg(midiOut, b);
-	}
+
+	uint32_t h = base | 0 | hue << 16;
+	midiOutShortMsg(midiOut, h);
+
+	uint32_t s = base | 1 | saturation << 16;
+	midiOutShortMsg(midiOut, s);
+
+	uint32_t b = base | 2 | brightness << 16;
+	midiOutShortMsg(midiOut, b);
+}
+
+
+/**▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ * Bind a control change
+ *
+ * TODO: add channel
+ */
+void KontrolF1::bindControl(int cc, float* bind) {
+	bindFloat[cc] = bind;
+}
+
+void KontrolF1::bindControl(int cc, void(*cb)(float)) {
+	bindFunc[cc] = cb;
+}
+
+void KontrolF1::bindPads(void(*cb)(int, bool)) {
+	bindPadsFunc = cb;
 }

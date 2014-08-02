@@ -43,13 +43,14 @@
 // ------------ controler -----------
 #include "src/midi/Launchpad.h"
 #include "src/midi/NanoKontrol.h"
+#include "src/midi/KontrolF1.h"
 
 #include "src/midi/midiPortDisplay.h"
 #include "src/midi/hidDeviceDisplay.h"
 
 bool     filterActive = true;
 int16_t  mute = 1;
-float    amp = 0.05;
+float    amp = 0.5;
 float    tempo = 88;
 
 OscPulse      osc1;
@@ -69,7 +70,7 @@ float dry;
 float        fltrRawCutoff = 0.0;
 FastFilter   fltrSmoothCutoff;
 
-
+KontrolF1 kontrolF1;
 
 
 void audioCallback(void* udata, uint8_t* stream0, int len) {
@@ -132,17 +133,17 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		float outR = dry * 0.9 + reverb.outR * 0.14;
 
 		// trim overload
-		if (outL < -1) outL = -1;
-		if (outL >  1) outL =  1;
+		if (outL < -2) outL = -2;
+		if (outL >  2) outL =  2;
 
-		if (outR < -1) outR = -1;
-		if (outR >  1) outR =  1;
+		if (outR < -2) outR = -2;
+		if (outR >  2) outR =  2;
 
 		// convert to output format
-		outL = 0x8000 * outL * mute;
+		outL = 0xFFF * outL * mute;
 		outL = round(outL);
 
-		outR = 0x8000 * outR * mute;
+		outR = 0xFFF * outR * mute;
 		outR = round(outR);
 
 		// write in buffer
@@ -175,8 +176,27 @@ void changeCurve(float value) {
 	env.setCurvature(value);
 }
 
+int padSelected = 0;
+int currentH = 0;
+int currentS = 0;
+int currentB = 0;
 
+void f1ChangeH(float value) {
+	currentH = (int)(value * 127);
+	kontrolF1.setPadColor(padSelected, currentH, currentS, currentB);
+}
+void f1ChangeS(float value) {
+	currentS = (int)(value * 127);
+	kontrolF1.setPadColor(padSelected, currentH, currentS, currentB);
+}
+void f1ChangeB(float value) {
+	currentB = (int)(value * 127);
+	kontrolF1.setPadColor(padSelected, currentH, currentS, currentB);
+}
 
+void selectPad(int pad, bool isPressed) {
+	if (isPressed) padSelected = pad;
+}
 
 
 int main(int argc, char* argv[]) {
@@ -193,13 +213,20 @@ int main(int argc, char* argv[]) {
 	}*/
 
 	NanoKontrol nanoKontrol;
-	nanoKontrol.initMidi();
+	/*nanoKontrol.initMidi();
 	nanoKontrol.bindControl(16, &fltrRawCutoff);
 	nanoKontrol.bindControl(17, &(fltr.reso));
 	nanoKontrol.bindControl(18, &changeRoom);
 	nanoKontrol.bindControl(19, &changeDamp);
 	nanoKontrol.bindControl(20, &changeDecay);
-	nanoKontrol.bindControl(21, &changeCurve);
+	nanoKontrol.bindControl(21, &changeCurve);*/
+
+	kontrolF1.bindControl(30, &fltrRawCutoff);
+	kontrolF1.bindControl(31, &(fltr.reso));
+	kontrolF1.bindControl(32, &changeRoom);
+	kontrolF1.bindControl(33, &changeDamp);
+	kontrolF1.bindControl(37, &changeDecay);
+	// kontrolF1.bindControl(21, &changeCurve);
 
 
 	for (int x = 0; x < 8; x++) {
@@ -207,6 +234,14 @@ int main(int argc, char* argv[]) {
 			nanoKontrol.plot(x, y, false);
 		}
 	}
+
+
+	kontrolF1.initMidi();
+	kontrolF1.bindControl(34, &f1ChangeH);
+	kontrolF1.bindControl(35, &f1ChangeS);
+	kontrolF1.bindControl(36, &f1ChangeB);
+
+	kontrolF1.bindPads(&selectPad);
 
 
 	// initialize SDL video and audio
@@ -274,7 +309,6 @@ int main(int argc, char* argv[]) {
 
 
 	int nkx = 0;
-	int nky = 0;
 
 	// program main loop
 	bool run = true;
@@ -338,14 +372,14 @@ int main(int argc, char* argv[]) {
 
 		//----------------------------------
 		// nanoKontrol light show
-		nkx--;
+		/*nkx--;
 		if (nkx < 0) nkx = 15;
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 3; y++) {
-				bool value = ((nkx + x + y) % 16) < 2; 
+				bool value = ((nkx + x + y) % 16) < 2;
 				nanoKontrol.plot(x, y, value);
 			}
-		}
+		}*/
 		//----------------------------------
 
 		SDL_Delay(40); // 25 FPS

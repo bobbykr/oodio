@@ -60,6 +60,7 @@ public:
 	void push(int, int, int, int);
 
 	// binds on control changes 0~119.
+	// theses variable are set public because it will be used by midi callback
 	// These are public because called in midi callback (TODO: protected?)
 	// NOTA: cc 120 ~ 127 are reserved as "Channel Mode Messages"
 	float* bindFloat[120];         // binds to variables
