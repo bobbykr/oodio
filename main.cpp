@@ -73,6 +73,18 @@ FastFilter   fltrSmoothCutoff;
 KontrolF1 kontrolF1;
 
 
+inline float mainLimiterDisto(float x) {
+	const float m =  2.00;
+	const float b = -0.25;
+	const float c =  1.50;
+
+	if      (x <= -3) return -2;
+	else if (x <  -1) return -b * x * x + c * x - b;
+	else if (x <=  1) return  x;
+	else if (x <   3) return  b * x * x + c * x + b;
+	else              return  2;
+}
+
 void audioCallback(void* udata, uint8_t* stream0, int len) {
 
 	int16_t* stream = (int16_t*) stream0;
@@ -133,11 +145,13 @@ void audioCallback(void* udata, uint8_t* stream0, int len) {
 		float outR = dry * 0.9 + reverb.outR * 0.14;
 
 		// trim overload
-		if (outL < -2) outL = -2;
+		outL = mainLimiterDisto(outL);
+		outR = mainLimiterDisto(outR);
+		/*if (outL < -2) outL = -2;
 		if (outL >  2) outL =  2;
 
 		if (outR < -2) outR = -2;
-		if (outR >  2) outR =  2;
+		if (outR >  2) outR =  2;*/
 
 		// convert to output format
 		outL = 0xFFF * outL * mute;
