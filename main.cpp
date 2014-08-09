@@ -74,7 +74,6 @@ KontrolF1 kontrolF1;
 
 
 inline float mainLimiterDisto(float x) {
-	const float m =  2.00;
 	const float b = -0.25;
 	const float c =  1.50;
 
