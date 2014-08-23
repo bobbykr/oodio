@@ -20,7 +20,7 @@ const int nk_rot[8] = {16, 17, 18, 19, 20, 21, 22, 23}; // rotary potentiometers
 const int nk_Sbt[8] = {32, 33, 34, 35, 36, 37, 38, 39}; // "S" buttons / LEDs
 const int nk_Mbt[8] = {48, 49, 50, 51, 52, 53, 54, 55}; // "M" buttons / LEDs
 const int nk_Rbt[8] = {64, 65, 66, 67, 68, 69, 70, 71}; // "R" buttons / LEDs
-const int nk_trp[5] = {12, 13, 14, 15, 16};             // transport  buttons / LEDs
+const int nk_trp[5] = {11, 12, 13, 14, 15};             // transport  buttons / LEDs
 const int nk_nav[5] = {58, 59, 60, 61, 62};             // navigation buttons / LEDs
 const int nk_cycle  = 46;                               // cycle button / LED 
 
@@ -37,7 +37,7 @@ const int nk_cycle  = 46;                               // cycle button / LED
  *     ├────┼────┼────┬────┬────┼────┼────┼────┼────┼────┼────┼────┼────┤
  *   5 │ 46 │ ░░ │ 60 │ 61 │ 62 │ 64 │ 65 │ 66 │ 67 │ 68 │ 69 │ 70 │ 71 │ 2
  *     ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
- *   4 │ 12 │ 13 │ 14 │ 15 │ 16 │    │    │    │    │    │    │    │    │
+ *   4 │ 11 │ 12 │ 13 │ 14 │ 15 │    │    │    │    │    │    │    │    │
  *     ├────┴────┴────┴────┴────┤  0 │  1 │  2 │  3 │  4 │  5 │  6 │  7 │ 
  *     │                        │    │    │    │    │    │    │    │    │ 
  *     └────────────────────────┴────┴────┴────┴────┴────┴────┴────┴────┘(y)
